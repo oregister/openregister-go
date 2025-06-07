@@ -1,7 +1,7 @@
 package sentinel
 
 import (
-	"github.com/stainless-sdks/openregister-go/internal/encoding/json/shims"
+	"github.com/oregister/openregister-go/internal/encoding/json/shims"
 	"reflect"
 	"sync"
 )

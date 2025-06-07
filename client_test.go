@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stainless-sdks/openregister-go"
-	"github.com/stainless-sdks/openregister-go/internal"
-	"github.com/stainless-sdks/openregister-go/option"
+	"github.com/oregister/openregister-go"
+	"github.com/oregister/openregister-go/internal"
+	"github.com/oregister/openregister-go/option"
 )
 
 type closureTransport struct {

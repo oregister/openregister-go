@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/openregister-go"
-	"github.com/stainless-sdks/openregister-go/internal/testutil"
-	"github.com/stainless-sdks/openregister-go/option"
+	"github.com/oregister/openregister-go"
+	"github.com/oregister/openregister-go/internal/testutil"
+	"github.com/oregister/openregister-go/option"
 )
 
 func TestSearchFindCompaniesWithOptionalParams(t *testing.T) {

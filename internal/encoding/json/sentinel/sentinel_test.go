@@ -1,7 +1,7 @@
 package sentinel_test
 
 import (
-	"github.com/stainless-sdks/openregister-go/internal/encoding/json/sentinel"
+	"github.com/oregister/openregister-go/internal/encoding/json/sentinel"
 	"reflect"
 	"slices"
 	"testing"
