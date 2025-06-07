@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/stainless-sdks/openregister-go/internal/apijson"
-	"github.com/stainless-sdks/openregister-go/packages/respjson"
+	"github.com/oregister/openregister-go/internal/apijson"
+	"github.com/oregister/openregister-go/packages/respjson"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is

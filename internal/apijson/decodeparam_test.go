@@ -3,8 +3,8 @@ package apijson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stainless-sdks/openregister-go/internal/apijson"
-	"github.com/stainless-sdks/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/internal/apijson"
+	"github.com/oregister/openregister-go/packages/param"
 	"reflect"
 	"testing"
 )

@@ -1,7 +1,7 @@
 package paramutil
 
 import (
-	"github.com/stainless-sdks/openregister-go/internal/encoding/json/sentinel"
+	"github.com/oregister/openregister-go/internal/encoding/json/sentinel"
 )
 
 // NullPtr returns a pointer to the zero value of the type T.

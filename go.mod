@@ -1,4 +1,4 @@
-module github.com/stainless-sdks/openregister-go
+module github.com/oregister/openregister-go
 
 go 1.21
 

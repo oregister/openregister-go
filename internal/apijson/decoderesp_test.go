@@ -2,8 +2,8 @@ package apijson_test
 
 import (
 	"encoding/json"
-	"github.com/stainless-sdks/openregister-go/internal/apijson"
-	"github.com/stainless-sdks/openregister-go/packages/respjson"
+	"github.com/oregister/openregister-go/internal/apijson"
+	"github.com/oregister/openregister-go/packages/respjson"
 	"testing"
 )
 
