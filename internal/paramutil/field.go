@@ -1,8 +1,8 @@
 package paramutil
 
 import (
-	"github.com/stainless-sdks/openregister-go/packages/param"
-	"github.com/stainless-sdks/openregister-go/packages/respjson"
+	"github.com/oregister/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/packages/respjson"
 )
 
 func AddrIfPresent[T comparable](v param.Opt[T]) *T {

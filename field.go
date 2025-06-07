@@ -1,7 +1,7 @@
 package openregister
 
 import (
-	"github.com/stainless-sdks/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/packages/param"
 	"io"
 	"time"
 )

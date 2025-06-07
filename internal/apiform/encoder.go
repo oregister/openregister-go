@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stainless-sdks/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/packages/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc

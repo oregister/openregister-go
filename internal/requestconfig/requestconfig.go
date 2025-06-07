@@ -18,10 +18,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stainless-sdks/openregister-go/internal"
-	"github.com/stainless-sdks/openregister-go/internal/apierror"
-	"github.com/stainless-sdks/openregister-go/internal/apiform"
-	"github.com/stainless-sdks/openregister-go/internal/apiquery"
+	"github.com/oregister/openregister-go/internal"
+	"github.com/oregister/openregister-go/internal/apierror"
+	"github.com/oregister/openregister-go/internal/apiform"
+	"github.com/oregister/openregister-go/internal/apiquery"
 )
 
 func getDefaultHeaders() map[string]string {

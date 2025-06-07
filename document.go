@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/stainless-sdks/openregister-go/internal/apijson"
-	"github.com/stainless-sdks/openregister-go/internal/requestconfig"
-	"github.com/stainless-sdks/openregister-go/option"
-	"github.com/stainless-sdks/openregister-go/packages/respjson"
+	"github.com/oregister/openregister-go/internal/apijson"
+	"github.com/oregister/openregister-go/internal/requestconfig"
+	"github.com/oregister/openregister-go/option"
+	"github.com/oregister/openregister-go/packages/respjson"
 )
 
 // DocumentService contains methods and other services that help with interacting

@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/openregister-go"
-	"github.com/stainless-sdks/openregister-go/internal/testutil"
-	"github.com/stainless-sdks/openregister-go/option"
+	"github.com/oregister/openregister-go"
+	"github.com/oregister/openregister-go/internal/testutil"
+	"github.com/oregister/openregister-go/option"
 )
 
 func TestUsage(t *testing.T) {
@@ -24,9 +24,13 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	response, err := client.Search.FindCompanies(context.TODO(), openregister.SearchFindCompaniesParams{})
+	company, err := client.Company.Get(
+		context.TODO(),
+		"company_id",
+		openregister.CompanyGetParams{},
+	)
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.Results)
+	t.Logf("%+v\n", company.ID)
 }

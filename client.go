@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/stainless-sdks/openregister-go/internal/requestconfig"
-	"github.com/stainless-sdks/openregister-go/option"
+	"github.com/oregister/openregister-go/internal/requestconfig"
+	"github.com/oregister/openregister-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with

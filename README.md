@@ -1,25 +1,33 @@
 # Openregister Go API Library
 
-<a href="https://pkg.go.dev/github.com/stainless-sdks/openregister-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/openregister-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/oregister/openregister-go"><img src="https://pkg.go.dev/badge/github.com/oregister/openregister-go.svg" alt="Go Reference"></a>
 
-The Openregister Go library provides convenient access to the Openregister REST API
+The Openregister Go library provides convenient access to the [Openregister REST API](docs.openregister.de)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
+<!-- x-release-please-start-version -->
+
 ```go
 import (
-	"github.com/stainless-sdks/openregister-go" // imported as openregister
+	"github.com/oregister/openregister-go" // imported as openregister
 )
 ```
 
+<!-- x-release-please-end -->
+
 Or to pin the version:
 
+<!-- x-release-please-start-version -->
+
 ```sh
-go get -u 'github.com/stainless-sdks/openregister-go@v0.0.1-alpha.0'
+go get -u 'github.com/oregister/openregister-go@v0.1.0-alpha.1'
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -36,19 +44,23 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stainless-sdks/openregister-go"
-	"github.com/stainless-sdks/openregister-go/option"
+	"github.com/oregister/openregister-go"
+	"github.com/oregister/openregister-go/option"
 )
 
 func main() {
 	client := openregister.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("OPENREGISTER_API_KEY")
 	)
-	response, err := client.Search.FindCompanies(context.TODO(), openregister.SearchFindCompaniesParams{})
+	company, err := client.Company.Get(
+		context.TODO(),
+		"company_id",
+		openregister.CompanyGetParams{},
+	)
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", response.Results)
+	fmt.Printf("%+v\n", company.ID)
 }
 
 ```
@@ -254,7 +266,7 @@ client := openregister.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.Search.FindCompanies(context.TODO(), ...,
+client.Company.Get(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -262,7 +274,7 @@ client.Search.FindCompanies(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/openregister-go/option).
+See the [full list of request options](https://pkg.go.dev/github.com/oregister/openregister-go/option).
 
 ### Pagination
 
@@ -283,14 +295,18 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Search.FindCompanies(context.TODO(), openregister.SearchFindCompaniesParams{})
+_, err := client.Company.Get(
+	context.TODO(),
+	"company_id",
+	openregister.CompanyGetParams{},
+)
 if err != nil {
 	var apierr *openregister.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v0/search/company": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/v0/company/{company_id}": 400 Bad Request { ... }
 }
 ```
 
@@ -308,9 +324,10 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Search.FindCompanies(
+client.Company.Get(
 	ctx,
-	openregister.SearchFindCompaniesParams{},
+	"company_id",
+	openregister.CompanyGetParams{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -344,9 +361,10 @@ client := openregister.NewClient(
 )
 
 // Override per-request:
-client.Search.FindCompanies(
+client.Company.Get(
 	context.TODO(),
-	openregister.SearchFindCompaniesParams{},
+	"company_id",
+	openregister.CompanyGetParams{},
 	option.WithMaxRetries(5),
 )
 ```
@@ -359,15 +377,16 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-response, err := client.Search.FindCompanies(
+company, err := client.Company.Get(
 	context.TODO(),
-	openregister.SearchFindCompaniesParams{},
+	"company_id",
+	openregister.CompanyGetParams{},
 	option.WithResponseInto(&response),
 )
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", response)
+fmt.Printf("%+v\n", company)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
@@ -468,7 +487,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/openregister-go/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/oregister/openregister-go/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 
