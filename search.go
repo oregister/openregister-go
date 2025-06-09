@@ -98,11 +98,12 @@ const (
 )
 
 type SearchFindCompaniesResponse struct {
-	// List of companies matching the search criteria. Limited to a maximum of 10
-	// results per query.
+	Pagination SearchFindCompaniesResponsePagination `json:"pagination,required"`
+	// List of companies matching the search criteria.
 	Results []SearchFindCompaniesResponseResult `json:"results,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
+		Pagination  respjson.Field
 		Results     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -112,6 +113,32 @@ type SearchFindCompaniesResponse struct {
 // Returns the unmodified JSON received from the API
 func (r SearchFindCompaniesResponse) RawJSON() string { return r.JSON.raw }
 func (r *SearchFindCompaniesResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindCompaniesResponsePagination struct {
+	// Current page number.
+	Page int64 `json:"page,required"`
+	// Number of results per page.
+	PerPage int64 `json:"per_page,required"`
+	// Total number of pages.
+	TotalPages int64 `json:"total_pages,required"`
+	// Total number of results.
+	TotalResults int64 `json:"total_results,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Page         respjson.Field
+		PerPage      respjson.Field
+		TotalPages   respjson.Field
+		TotalResults respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindCompaniesResponsePagination) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindCompaniesResponsePagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -190,6 +217,13 @@ type SearchFindCompaniesParams struct {
 	// Filter for active or inactive companies. Set to true for active companies only,
 	// false for inactive only.
 	Active param.Opt[bool] `query:"active,omitzero" json:"-"`
+	// Date of incorporation of the company. Format: ISO 8601 (YYYY-MM-DD) Example:
+	// "2022-01-01"
+	IncorporationDate param.Opt[string] `query:"incorporation_date,omitzero" json:"-"`
+	// Page number for pagination.
+	Page param.Opt[int64] `query:"page,omitzero" json:"-"`
+	// Number of results per page (max 50).
+	PerPage param.Opt[int64] `query:"per_page,omitzero" json:"-"`
 	// Text search query to find companies by name. Example: "Descartes Technologies
 	// UG"
 	Query param.Opt[string] `query:"query,omitzero" json:"-"`

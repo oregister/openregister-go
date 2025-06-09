@@ -27,12 +27,15 @@ func TestSearchFindCompaniesWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Search.FindCompanies(context.TODO(), openregister.SearchFindCompaniesParams{
-		Active:         openregister.Bool(true),
-		LegalForm:      openregister.CompanyLegalFormAg,
-		Query:          openregister.String("query"),
-		RegisterCourt:  openregister.String("register_court"),
-		RegisterNumber: openregister.String("register_number"),
-		RegisterType:   openregister.CompanyRegisterTypeHrb,
+		Active:            openregister.Bool(true),
+		IncorporationDate: openregister.String("incorporation_date"),
+		LegalForm:         openregister.CompanyLegalFormAg,
+		Page:              openregister.Int(0),
+		PerPage:           openregister.Int(0),
+		Query:             openregister.String("query"),
+		RegisterCourt:     openregister.String("register_court"),
+		RegisterNumber:    openregister.String("register_number"),
+		RegisterType:      openregister.CompanyRegisterTypeHrb,
 	})
 	if err != nil {
 		var apierr *openregister.Error
