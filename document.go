@@ -45,6 +45,19 @@ func (r *DocumentService) Get(ctx context.Context, documentID string, opts ...op
 	return
 }
 
+// Download document
+func (r *DocumentService) Download(ctx context.Context, documentID string, opts ...option.RequestOption) (res *http.Response, err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/pdf")}, opts...)
+	if documentID == "" {
+		err = errors.New("missing required document_id parameter")
+		return
+	}
+	path := fmt.Sprintf("v0/document/%s/download", documentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 type DocumentGetResponse struct {
 	// The unique identifier for the document. E.g.
 	// "f47ac10b-58cc-4372-a567-0e02b2c3d479"
