@@ -3,8 +3,12 @@
 package openregister_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
@@ -33,5 +37,40 @@ func TestDocumentGet(t *testing.T) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
 		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestDocumentDownload(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+		w.Write([]byte("abc"))
+	}))
+	defer server.Close()
+	baseURL := server.URL
+	client := openregister.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	resp, err := client.Document.Download(context.TODO(), "document_id")
+	if err != nil {
+		var apierr *openregister.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+	defer resp.Body.Close()
+
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		var apierr *openregister.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+	if !bytes.Equal(b, []byte("abc")) {
+		t.Fatalf("return value not %s: %s", "abc", b)
 	}
 }
