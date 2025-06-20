@@ -48,7 +48,7 @@ func (r *DocumentService) Get(ctx context.Context, documentID string, opts ...op
 // Download document
 func (r *DocumentService) Download(ctx context.Context, documentID string, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/pdf")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
 	if documentID == "" {
 		err = errors.New("missing required document_id parameter")
 		return
