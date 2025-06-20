@@ -55,6 +55,7 @@ func (r *JobDocumentService) Get(ctx context.Context, id string, opts ...option.
 }
 
 type JobDocumentNewResponse struct {
+	// Unique job identifier. Example: f47ac10b-58cc-4372-a567-0e02b2c3d479
 	ID string `json:"id,required" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -98,10 +99,11 @@ const (
 )
 
 type JobDocumentNewParams struct {
+	// Unique company identifier. Example: DE-HRB-F1103-267645
+	CompanyID string `json:"company_id,required"`
 	// Any of "current_printout", "chronological_printout", "historical_printout",
 	// "structured_information", "shareholder_list", "articles_of_association".
 	DocumentCategory JobDocumentNewParamsDocumentCategory `json:"document_category,omitzero,required"`
-	RegisterID       string                               `json:"register_id,required"`
 	paramObj
 }
 
