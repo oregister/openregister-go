@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.5 (2025-06-20)
+
+Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
+
+### Features
+
+* **api:** update via SDK Studio ([cd0bca8](https://github.com/oregister/openregister-go/commit/cd0bca843416780ca00e83c52a22dfe34f82e0e2))
+
 ## 0.1.0-alpha.4 (2025-06-20)
 
 Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
