@@ -27,8 +27,8 @@ func TestJobDocumentNew(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Jobs.Document.New(context.TODO(), openregister.JobDocumentNewParams{
+		CompanyID:        "company_id",
 		DocumentCategory: openregister.JobDocumentNewParamsDocumentCategoryCurrentPrintout,
-		RegisterID:       "register_id",
 	})
 	if err != nil {
 		var apierr *openregister.Error
