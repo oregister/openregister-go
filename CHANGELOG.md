@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.0-alpha.4 (2025-06-20)
+
+Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
+
+### Features
+
+* **api:** update via SDK Studio ([e0a9975](https://github.com/oregister/openregister-go/commit/e0a997505737deb803596410672ab2605cb0e5c7))
+* **api:** update via SDK Studio ([eee534e](https://github.com/oregister/openregister-go/commit/eee534ef2a51d1f0503a45501efa4f0b52ce9832))
+* **client:** add debug log helper ([761ea6f](https://github.com/oregister/openregister-go/commit/761ea6ffb0515c33ce241261805678b8071886b7))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([4486c97](https://github.com/oregister/openregister-go/commit/4486c979fc49ffd32bc2b8b953ca41124a9decbf))
+
 ## 0.1.0-alpha.3 (2025-06-09)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
