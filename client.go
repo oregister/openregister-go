@@ -19,6 +19,7 @@ type Client struct {
 	Search   SearchService
 	Company  CompanyService
 	Document DocumentService
+	Jobs     JobService
 }
 
 // DefaultClientOptions read from the environment (OPENREGISTER_API_KEY,
@@ -46,6 +47,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Search = NewSearchService(opts...)
 	r.Company = NewCompanyService(opts...)
 	r.Document = NewDocumentService(opts...)
+	r.Jobs = NewJobService(opts...)
 
 	return
 }

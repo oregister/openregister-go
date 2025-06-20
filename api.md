@@ -47,3 +47,17 @@ Methods:
 
 - <code title="get /v0/document/{document_id}">client.Document.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#DocumentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, documentID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#DocumentGetResponse">DocumentGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v0/document/{document_id}/download">client.Document.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#DocumentService.Download">Download</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, documentID <a href="https://pkg.go.dev/builtin#string">string</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+# Jobs
+
+## Document
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentNewResponse">JobDocumentNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentGetResponse">JobDocumentGetResponse</a>
+
+Methods:
+
+- <code title="post /v0/jobs/document">client.Jobs.Document.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentNewParams">JobDocumentNewParams</a>) (<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentNewResponse">JobDocumentNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v0/jobs/document/{id}">client.Jobs.Document.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentGetResponse">JobDocumentGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
