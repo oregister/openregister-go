@@ -24,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/oregister/openregister-go@v0.1.0-alpha.3'
+go get -u 'github.com/oregister/openregister-go@v0.1.0-alpha.4'
 ```
 
 <!-- x-release-please-end -->
@@ -273,6 +273,8 @@ client.Company.Get(context.TODO(), ...,
 	option.WithJSONSet("some.json.path", map[string]string{"my": "object"}),
 )
 ```
+
+The request option `option.WithDebugLog(nil)` may be helpful while debugging.
 
 See the [full list of request options](https://pkg.go.dev/github.com/oregister/openregister-go/option).
 
