@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.6 (2025-06-21)
+
+Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
+
+### Features
+
+* **client:** add escape hatch for null slice & maps ([0bb7e0d](https://github.com/oregister/openregister-go/commit/0bb7e0d86ea696755e8491dcb4475eeded0c1338))
+
+
+### Chores
+
+* fix documentation of null map ([6e8a154](https://github.com/oregister/openregister-go/commit/6e8a1542dc39faff86f8232cb564dbe0a35f0d0b))
+
 ## 0.1.0-alpha.5 (2025-06-20)
 
 Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
