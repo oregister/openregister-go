@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.0-alpha.6 (2025-06-24)
+
+Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
+
+### Features
+
+* **api:** update via SDK Studio ([8129223](https://github.com/oregister/openregister-go/commit/8129223c54dccd56f42b0bbd54a863ac84433170))
+* **api:** update via SDK Studio ([d744c4f](https://github.com/oregister/openregister-go/commit/d744c4f1ef945b4f89a28c6ed88461d8c072231e))
+* **api:** update via SDK Studio ([2476f21](https://github.com/oregister/openregister-go/commit/2476f215d0604e9cdedd34e37fa79063ea06932a))
+* **client:** add escape hatch for null slice & maps ([0bb7e0d](https://github.com/oregister/openregister-go/commit/0bb7e0d86ea696755e8491dcb4475eeded0c1338))
+
+
+### Chores
+
+* fix documentation of null map ([6e8a154](https://github.com/oregister/openregister-go/commit/6e8a1542dc39faff86f8232cb564dbe0a35f0d0b))
+
 ## 0.1.0-alpha.5 (2025-06-20)
 
 Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
