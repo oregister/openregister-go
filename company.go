@@ -351,16 +351,16 @@ type CompanyGetResponseRepresentation struct {
 	ID string `json:"id"`
 	// Date of birth of the representative. Only set for type=natural_person. Format:
 	// ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
-	DateOfBirth string `json:"date_of_birth"`
+	DateOfBirth string `json:"date_of_birth,nullable"`
 	// Date when this representative role ended (if applicable). Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
 	EndDate string `json:"end_date"`
 	// First name of the representative. Only set for type=natural_person. Example:
 	// "Max"
-	FirstName string `json:"first_name"`
+	FirstName string `json:"first_name,nullable"`
 	// Last name of the representative. Only set for type=natural_person. Example:
 	// "Mustermann"
-	LastName string `json:"last_name"`
+	LastName string `json:"last_name,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		City        respjson.Field
