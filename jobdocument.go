@@ -74,10 +74,14 @@ func (r *JobDocumentNewResponse) UnmarshalJSON(data []byte) error {
 type JobDocumentGetResponse struct {
 	// Any of "pending", "completed", "failed".
 	Status JobDocumentGetResponseStatus `json:"status,required"`
-	URL    string                       `json:"url" format:"uri"`
+	// Date when the job was created. Format: ISO 8601 (YYYY-MM-DD) Example:
+	// "2022-01-01"
+	Date string `json:"date"`
+	URL  string `json:"url" format:"uri"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
+		Date        respjson.Field
 		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
