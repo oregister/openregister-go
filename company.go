@@ -349,9 +349,19 @@ type CompanyGetResponseRepresentation struct {
 	// company_id pattern For individuals: UUID Example: "DE-HRB-F1103-267645" or UUID
 	// May be null for certain representatives.
 	ID string `json:"id"`
+	// Date of birth of the representative. Only provided for type=natural_person. May
+	// still be null for natural persons if it is not available. Format: ISO 8601
+	// (YYYY-MM-DD) Example: "1990-01-01"
+	DateOfBirth string `json:"date_of_birth"`
 	// Date when this representative role ended (if applicable). Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
 	EndDate string `json:"end_date"`
+	// First name of the representative. Only provided for type=natural_person.
+	// Example: "Max"
+	FirstName string `json:"first_name"`
+	// Last name of the representative. Only provided for type=natural_person. Example:
+	// "Mustermann"
+	LastName string `json:"last_name"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		City        respjson.Field
@@ -361,7 +371,10 @@ type CompanyGetResponseRepresentation struct {
 		StartDate   respjson.Field
 		Type        respjson.Field
 		ID          respjson.Field
+		DateOfBirth respjson.Field
 		EndDate     respjson.Field
+		FirstName   respjson.Field
+		LastName    respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
