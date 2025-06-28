@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.8 (2025-06-28)
+
+Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)
+
+### Bug Fixes
+
+* don't try to deserialize as json when ResponseBodyInto is []byte ([5dcb8f1](https://github.com/oregister/openregister-go/commit/5dcb8f133eebbc50ab0522d083b2a9b75c277ab2))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([7fb99ec](https://github.com/oregister/openregister-go/commit/7fb99eca2046bf09587e43c0d984932eab6075f8))
+
 ## 0.1.0-alpha.7 (2025-06-24)
 
 Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
