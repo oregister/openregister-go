@@ -35,10 +35,18 @@ func NewSearchService(opts ...option.RequestOption) (r SearchService) {
 }
 
 // Search for companies
-func (r *SearchService) FindCompanies(ctx context.Context, query SearchFindCompaniesParams, opts ...option.RequestOption) (res *SearchFindCompaniesResponse, err error) {
+func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCompaniesV0Params, opts ...option.RequestOption) (res *SearchFindCompaniesV0Response, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/search/company"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
+}
+
+// Search for companies
+func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindCompaniesV1Params, opts ...option.RequestOption) (res *SearchFindCompaniesV1Response, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v1/search/company"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
@@ -97,10 +105,10 @@ const (
 	CompanyRegisterTypeVr  CompanyRegisterType = "VR"
 )
 
-type SearchFindCompaniesResponse struct {
-	Pagination SearchFindCompaniesResponsePagination `json:"pagination,required"`
+type SearchFindCompaniesV0Response struct {
+	Pagination SearchFindCompaniesV0ResponsePagination `json:"pagination,required"`
 	// List of companies matching the search criteria.
-	Results []SearchFindCompaniesResponseResult `json:"results,required"`
+	Results []SearchFindCompaniesV0ResponseResult `json:"results,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Pagination  respjson.Field
@@ -111,12 +119,12 @@ type SearchFindCompaniesResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesResponse) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesResponse) UnmarshalJSON(data []byte) error {
+func (r SearchFindCompaniesV0Response) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindCompaniesV0Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindCompaniesResponsePagination struct {
+type SearchFindCompaniesV0ResponsePagination struct {
 	// Current page number.
 	Page int64 `json:"page,required"`
 	// Number of results per page.
@@ -137,12 +145,12 @@ type SearchFindCompaniesResponsePagination struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesResponsePagination) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesResponsePagination) UnmarshalJSON(data []byte) error {
+func (r SearchFindCompaniesV0ResponsePagination) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindCompaniesV0ResponsePagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindCompaniesResponseResult struct {
+type SearchFindCompaniesV0ResponseResult struct {
 	// Company status - true if active, false if inactive.
 	Active bool `json:"active,required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
@@ -182,8 +190,98 @@ type SearchFindCompaniesResponseResult struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesResponseResult) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesResponseResult) UnmarshalJSON(data []byte) error {
+func (r SearchFindCompaniesV0ResponseResult) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindCompaniesV0ResponseResult) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindCompaniesV1Response struct {
+	Pagination SearchFindCompaniesV1ResponsePagination `json:"pagination,required"`
+	// List of companies matching the search criteria.
+	Results []SearchFindCompaniesV1ResponseResult `json:"results,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Pagination  respjson.Field
+		Results     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindCompaniesV1Response) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindCompaniesV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindCompaniesV1ResponsePagination struct {
+	// Current page number.
+	Page int64 `json:"page,required"`
+	// Number of results per page.
+	PerPage int64 `json:"per_page,required"`
+	// Total number of pages.
+	TotalPages int64 `json:"total_pages,required"`
+	// Total number of results.
+	TotalResults int64 `json:"total_results,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Page         respjson.Field
+		PerPage      respjson.Field
+		TotalPages   respjson.Field
+		TotalResults respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindCompaniesV1ResponsePagination) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindCompaniesV1ResponsePagination) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindCompaniesV1ResponseResult struct {
+	// Company status - true if active, false if inactive.
+	Active bool `json:"active,required"`
+	// Unique company identifier. Example: DE-HRB-F1103-267645
+	CompanyID string `json:"company_id,required"`
+	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
+	// Haftung
+	//
+	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
+	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
+	LegalForm CompanyLegalForm `json:"legal_form,required"`
+	// Official registered company name. Example: "Max Mustermann GmbH"
+	Name string `json:"name,required"`
+	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
+	RegisterCourt string `json:"register_court,required"`
+	// Registration number in the company register. Example: "230633"
+	RegisterNumber string `json:"register_number,required"`
+	// Type of company register. Example: "HRB" for Commercial Register B
+	//
+	// Any of "HRB", "HRA", "PR", "GnR", "VR".
+	RegisterType CompanyRegisterType `json:"register_type,required"`
+	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
+	// "DE" for Germany
+	Country string `json:"country"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Active         respjson.Field
+		CompanyID      respjson.Field
+		LegalForm      respjson.Field
+		Name           respjson.Field
+		RegisterCourt  respjson.Field
+		RegisterNumber respjson.Field
+		RegisterType   respjson.Field
+		Country        respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindCompaniesV1ResponseResult) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindCompaniesV1ResponseResult) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -213,7 +311,7 @@ func (r *SearchLookupCompanyByURLResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindCompaniesParams struct {
+type SearchFindCompaniesV0Params struct {
 	// Filter for active or inactive companies. Set to true for active companies only,
 	// false for inactive only.
 	Active param.Opt[bool] `query:"active,omitzero" json:"-"`
@@ -244,13 +342,125 @@ type SearchFindCompaniesParams struct {
 	paramObj
 }
 
-// URLQuery serializes [SearchFindCompaniesParams]'s query parameters as
+// URLQuery serializes [SearchFindCompaniesV0Params]'s query parameters as
 // `url.Values`.
-func (r SearchFindCompaniesParams) URLQuery() (v url.Values, err error) {
+func (r SearchFindCompaniesV0Params) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type SearchFindCompaniesV1Params struct {
+	// Filters to filter companies.
+	Filters []SearchFindCompaniesV1ParamsFilter `json:"filters,omitzero"`
+	// Location to filter companies.
+	Location SearchFindCompaniesV1ParamsLocation `json:"location,omitzero"`
+	// Pagination parameters.
+	Pagination SearchFindCompaniesV1ParamsPagination `json:"pagination,omitzero"`
+	// Search query to filter companies.
+	Query SearchFindCompaniesV1ParamsQuery `json:"query,omitzero"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1Params) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1Params
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1Params) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindCompaniesV1ParamsFilter struct {
+	// Maximum value to filter on.
+	Max param.Opt[string] `json:"max,omitzero"`
+	// Minimum value to filter on.
+	Min param.Opt[string] `json:"min,omitzero"`
+	// Value to filter on.
+	Value param.Opt[string] `json:"value,omitzero"`
+	// Field to filter on.
+	//
+	// Any of "status", "legal_form", "register_number", "register_court",
+	// "register_type", "city", "active", "incorporated_at", "zip", "address",
+	// "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate",
+	// "materials", "pension_provisions", "salaries", "taxes", "liabilities",
+	// "capital_reserves", "net_income", "industry_codes", "capital_amount",
+	// "capital_currency".
+	Field string `json:"field,omitzero"`
+	// Keywords to filter on.
+	Keywords []string `json:"keywords,omitzero"`
+	// Values to filter on.
+	Values []string `json:"values,omitzero"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1ParamsFilter) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1ParamsFilter
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1ParamsFilter) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func init() {
+	apijson.RegisterFieldValidator[SearchFindCompaniesV1ParamsFilter](
+		"field", "status", "legal_form", "register_number", "register_court", "register_type", "city", "active", "incorporated_at", "zip", "address", "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate", "materials", "pension_provisions", "salaries", "taxes", "liabilities", "capital_reserves", "net_income", "industry_codes", "capital_amount", "capital_currency",
+	)
+}
+
+// Location to filter companies.
+//
+// The properties Latitude, Longitude are required.
+type SearchFindCompaniesV1ParamsLocation struct {
+	// Latitude to filter on.
+	Latitude float64 `json:"latitude,required"`
+	// Longitude to filter on.
+	Longitude float64 `json:"longitude,required"`
+	// Radius in kilometers to filter on. Example: 10
+	Radius param.Opt[float64] `json:"radius,omitzero"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1ParamsLocation) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1ParamsLocation
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1ParamsLocation) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination parameters.
+type SearchFindCompaniesV1ParamsPagination struct {
+	// Page number to return.
+	Page param.Opt[int64] `json:"page,omitzero"`
+	// Number of results per page.
+	PerPage param.Opt[int64] `json:"per_page,omitzero"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1ParamsPagination) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1ParamsPagination
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1ParamsPagination) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Search query to filter companies.
+//
+// The property Value is required.
+type SearchFindCompaniesV1ParamsQuery struct {
+	// Search query to filter companies.
+	Value string `json:"value,required"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1ParamsQuery) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1ParamsQuery
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1ParamsQuery) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type SearchLookupCompanyByURLParams struct {

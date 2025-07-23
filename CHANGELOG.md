@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.1.0-alpha.8 (2025-07-23)
+
+Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)
+
+### Features
+
+* **api:** update via SDK Studio ([889a62e](https://github.com/oregister/openregister-go/commit/889a62e6d07717d532d3a5653c17aabaf3726d89))
+
+
+### Bug Fixes
+
+* **client:** process custom base url ahead of time ([3d3805a](https://github.com/oregister/openregister-go/commit/3d3805aef579b5bb05b4e23cd78d58b96f3b2889))
+* don't try to deserialize as json when ResponseBodyInto is []byte ([5dcb8f1](https://github.com/oregister/openregister-go/commit/5dcb8f133eebbc50ab0522d083b2a9b75c277ab2))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([7fb99ec](https://github.com/oregister/openregister-go/commit/7fb99eca2046bf09587e43c0d984932eab6075f8))
+* **internal:** fix lint script for tests ([b0b6545](https://github.com/oregister/openregister-go/commit/b0b65450eaebab5f8275822d18242bffecf8f830))
+* lint tests ([b7b4ad8](https://github.com/oregister/openregister-go/commit/b7b4ad8cf0ead498fb9a8a35d8c5f952a3b33c62))
+* lint tests in subpackages ([9dfb96f](https://github.com/oregister/openregister-go/commit/9dfb96feebef60217b9b5ed09506f5c20dee6f4e))
+
 ## 0.1.0-alpha.7 (2025-06-24)
 
 Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
