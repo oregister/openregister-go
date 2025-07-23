@@ -371,6 +371,8 @@ func (r *SearchFindCompaniesV1Params) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Filter by field. The properties values, value, keywords and min/max are mutually
+// exclusive. Dates must be in the format YYYY-MM-DD.
 type SearchFindCompaniesV1ParamsFilter struct {
 	// Maximum value to filter on.
 	Max param.Opt[string] `json:"max,omitzero"`
