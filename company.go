@@ -254,6 +254,15 @@ func (r *CompanyRegister) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type CompanyRelationType string
+
+const (
+	CompanyRelationTypeShareholder    CompanyRelationType = "shareholder"
+	CompanyRelationTypeStockholder    CompanyRelationType = "stockholder"
+	CompanyRelationTypeLimitedPartner CompanyRelationType = "limited_partner"
+	CompanyRelationTypeGeneralPartner CompanyRelationType = "general_partner"
+)
+
 type EntityType string
 
 const (
@@ -568,7 +577,7 @@ type CompanyGetHoldingsResponseHolding struct {
 	// Type of relationship between the entity and the company.
 	//
 	// Any of "shareholder", "stockholder", "limited_partner", "general_partner".
-	RelationType string `json:"relation_type,required"`
+	RelationType CompanyRelationType `json:"relation_type,required"`
 	// Date when the ownership ended. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
 	End string `json:"end"`
@@ -624,7 +633,7 @@ type CompanyGetOwnersResponseOwner struct {
 	// Type of relationship between the entity and the company.
 	//
 	// Any of "shareholder", "stockholder", "limited_partner", "general_partner".
-	RelationType string `json:"relation_type,required"`
+	RelationType CompanyRelationType `json:"relation_type,required"`
 	// The type of shareholder.
 	//
 	// Any of "natural_person", "legal_person".
