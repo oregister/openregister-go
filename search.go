@@ -42,6 +42,14 @@ func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCom
 	return
 }
 
+// Search for companies
+func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindCompaniesV1Params, opts ...option.RequestOption) (res *CompanySearch, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v1/search/company"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
 // Find company by website URL
 func (r *SearchService) LookupCompanyByURL(ctx context.Context, query SearchLookupCompanyByURLParams, opts ...option.RequestOption) (res *SearchLookupCompanyByURLResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -251,6 +259,120 @@ func (r SearchFindCompaniesV0Params) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type SearchFindCompaniesV1Params struct {
+	// Filters to filter companies.
+	Filters []SearchFindCompaniesV1ParamsFilter `json:"filters,omitzero"`
+	// Location to filter companies.
+	Location SearchFindCompaniesV1ParamsLocation `json:"location,omitzero"`
+	// Pagination parameters.
+	Pagination SearchFindCompaniesV1ParamsPagination `json:"pagination,omitzero"`
+	// Search query to filter companies.
+	Query SearchFindCompaniesV1ParamsQuery `json:"query,omitzero"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1Params) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1Params
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1Params) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Filter by field. The properties values, value, keywords and min/max are mutually
+// exclusive. Dates must be in the format YYYY-MM-DD.
+type SearchFindCompaniesV1ParamsFilter struct {
+	// Maximum value to filter on.
+	Max param.Opt[string] `json:"max,omitzero"`
+	// Minimum value to filter on.
+	Min param.Opt[string] `json:"min,omitzero"`
+	// Value to filter on.
+	Value param.Opt[string] `json:"value,omitzero"`
+	// Field to filter on.
+	//
+	// Any of "status", "legal_form", "register_number", "register_court",
+	// "register_type", "city", "active", "incorporated_at", "zip", "address",
+	// "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate",
+	// "materials", "pension_provisions", "salaries", "taxes", "liabilities",
+	// "capital_reserves", "net_income", "industry_codes", "capital_amount",
+	// "capital_currency".
+	Field string `json:"field,omitzero"`
+	// Keywords to filter on.
+	Keywords []string `json:"keywords,omitzero"`
+	// Values to filter on.
+	Values []string `json:"values,omitzero"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1ParamsFilter) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1ParamsFilter
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1ParamsFilter) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func init() {
+	apijson.RegisterFieldValidator[SearchFindCompaniesV1ParamsFilter](
+		"field", "status", "legal_form", "register_number", "register_court", "register_type", "city", "active", "incorporated_at", "zip", "address", "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate", "materials", "pension_provisions", "salaries", "taxes", "liabilities", "capital_reserves", "net_income", "industry_codes", "capital_amount", "capital_currency",
+	)
+}
+
+// Location to filter companies.
+//
+// The properties Latitude, Longitude are required.
+type SearchFindCompaniesV1ParamsLocation struct {
+	// Latitude to filter on.
+	Latitude float64 `json:"latitude,required"`
+	// Longitude to filter on.
+	Longitude float64 `json:"longitude,required"`
+	// Radius in kilometers to filter on. Example: 10
+	Radius param.Opt[float64] `json:"radius,omitzero"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1ParamsLocation) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1ParamsLocation
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1ParamsLocation) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination parameters.
+type SearchFindCompaniesV1ParamsPagination struct {
+	// Page number to return.
+	Page param.Opt[int64] `json:"page,omitzero"`
+	// Number of results per page.
+	PerPage param.Opt[int64] `json:"per_page,omitzero"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1ParamsPagination) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1ParamsPagination
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1ParamsPagination) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Search query to filter companies.
+//
+// The property Value is required.
+type SearchFindCompaniesV1ParamsQuery struct {
+	// Search query to filter companies.
+	Value string `json:"value,required"`
+	paramObj
+}
+
+func (r SearchFindCompaniesV1ParamsQuery) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindCompaniesV1ParamsQuery
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindCompaniesV1ParamsQuery) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type SearchLookupCompanyByURLParams struct {
