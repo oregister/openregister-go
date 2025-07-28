@@ -50,6 +50,14 @@ func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindComp
 	return
 }
 
+// Autocomplete company search
+func (r *SearchService) LookupCompanyByName(ctx context.Context, query SearchLookupCompanyByNameParams, opts ...option.RequestOption) (res *SearchLookupCompanyByNameResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v1/autocomplete/company"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
+}
+
 // Find company by website URL
 func (r *SearchService) LookupCompanyByURL(ctx context.Context, query SearchLookupCompanyByURLParams, opts ...option.RequestOption) (res *SearchLookupCompanyByURLResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -194,6 +202,8 @@ func (r CompanySearchResult) RawJSON() string { return r.JSON.raw }
 func (r *CompanySearchResult) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type SearchLookupCompanyByNameResponse = any
 
 type SearchLookupCompanyByURLResponse struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
@@ -373,6 +383,22 @@ func (r SearchFindCompaniesV1ParamsQuery) MarshalJSON() (data []byte, err error)
 }
 func (r *SearchFindCompaniesV1ParamsQuery) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchLookupCompanyByNameParams struct {
+	// Text search query to find companies by name. Example: "Descartes Technologies
+	// UG"
+	Query string `query:"query,required" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [SearchLookupCompanyByNameParams]'s query parameters as
+// `url.Values`.
+func (r SearchLookupCompanyByNameParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type SearchLookupCompanyByURLParams struct {
