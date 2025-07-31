@@ -34,6 +34,14 @@ func NewSearchService(opts ...option.RequestOption) (r SearchService) {
 	return
 }
 
+// Autocomplete company search
+func (r *SearchService) AutocompleteCompaniesV1(ctx context.Context, query SearchAutocompleteCompaniesV1Params, opts ...option.RequestOption) (res *SearchAutocompleteCompaniesV1Response, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v1/autocomplete/company"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
+}
+
 // Search for companies
 func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCompaniesV0Params, opts ...option.RequestOption) (res *CompanySearch, err error) {
 	opts = append(r.Options[:], opts...)
@@ -195,6 +203,68 @@ func (r *CompanySearchResult) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SearchAutocompleteCompaniesV1Response struct {
+	// List of companies matching the search criteria.
+	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Results     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchAutocompleteCompaniesV1Response) RawJSON() string { return r.JSON.raw }
+func (r *SearchAutocompleteCompaniesV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchAutocompleteCompaniesV1ResponseResult struct {
+	// Company status - true if active, false if inactive.
+	Active bool `json:"active,required"`
+	// Unique company identifier. Example: DE-HRB-F1103-267645
+	CompanyID string `json:"company_id,required"`
+	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
+	// Haftung
+	//
+	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
+	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
+	LegalForm CompanyLegalForm `json:"legal_form,required"`
+	// Official registered company name. Example: "Max Mustermann GmbH"
+	Name string `json:"name,required"`
+	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
+	RegisterCourt string `json:"register_court,required"`
+	// Registration number in the company register. Example: "230633"
+	RegisterNumber string `json:"register_number,required"`
+	// Type of company register. Example: "HRB" for Commercial Register B
+	//
+	// Any of "HRB", "HRA", "PR", "GnR", "VR".
+	RegisterType CompanyRegisterType `json:"register_type,required"`
+	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
+	// "DE" for Germany
+	Country string `json:"country"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Active         respjson.Field
+		CompanyID      respjson.Field
+		LegalForm      respjson.Field
+		Name           respjson.Field
+		RegisterCourt  respjson.Field
+		RegisterNumber respjson.Field
+		RegisterType   respjson.Field
+		Country        respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchAutocompleteCompaniesV1ResponseResult) RawJSON() string { return r.JSON.raw }
+func (r *SearchAutocompleteCompaniesV1ResponseResult) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type SearchLookupCompanyByURLResponse struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id,required"`
@@ -219,6 +289,22 @@ type SearchLookupCompanyByURLResponse struct {
 func (r SearchLookupCompanyByURLResponse) RawJSON() string { return r.JSON.raw }
 func (r *SearchLookupCompanyByURLResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchAutocompleteCompaniesV1Params struct {
+	// Text search query to find companies by name. Example: "Descartes Technologies
+	// UG"
+	Query string `query:"query,required" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [SearchAutocompleteCompaniesV1Params]'s query parameters as
+// `url.Values`.
+func (r SearchAutocompleteCompaniesV1Params) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type SearchFindCompaniesV0Params struct {
