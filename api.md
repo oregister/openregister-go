@@ -67,3 +67,13 @@ Methods:
 
 - <code title="post /v0/jobs/document">client.Jobs.Document.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentNewParams">JobDocumentNewParams</a>) (<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentNewResponse">JobDocumentNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v0/jobs/document/{id}">client.Jobs.Document.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentGetResponse">JobDocumentGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+# Autocomplete
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#AutocompleteAutocompleteCompaniesV1Response">AutocompleteAutocompleteCompaniesV1Response</a>
+
+Methods:
+
+- <code title="get /v1/autocomplete/company">client.Autocomplete.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#AutocompleteService.AutocompleteCompaniesV1">AutocompleteCompaniesV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#AutocompleteAutocompleteCompaniesV1Params">AutocompleteAutocompleteCompaniesV1Params</a>) (<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#AutocompleteAutocompleteCompaniesV1Response">AutocompleteAutocompleteCompaniesV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
