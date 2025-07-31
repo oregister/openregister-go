@@ -361,6 +361,9 @@ func (r *CompanyGetResponse) UnmarshalJSON(data []byte) error {
 type CompanyGetResponseRepresentation struct {
 	// City where the representative is located. Example: "Berlin"
 	City string `json:"city,required"`
+	// Country where the representative is located, in ISO 3166-1 alpha-2 format.
+	// Example: "DE" for Germany
+	Country string `json:"country,required"`
 	// The name of the representative. E.g. "Max Mustermann" or "Max Mustermann GmbH"
 	Name string `json:"name,required"`
 	// The role of the representation. E.g. "DIRECTOR"
@@ -379,9 +382,6 @@ type CompanyGetResponseRepresentation struct {
 	// company_id pattern For individuals: UUID Example: "DE-HRB-F1103-267645" or UUID
 	// May be null for certain representatives.
 	ID string `json:"id"`
-	// Country where the representative is located, in ISO 3166-1 alpha-2 format.
-	// Example: "DE" for Germany
-	Country string `json:"country"`
 	// Date of birth of the representative. Only provided for type=natural_person. May
 	// still be null for natural persons if it is not available. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "1990-01-01"
@@ -398,12 +398,12 @@ type CompanyGetResponseRepresentation struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		City        respjson.Field
+		Country     respjson.Field
 		Name        respjson.Field
 		Role        respjson.Field
 		StartDate   respjson.Field
 		Type        respjson.Field
 		ID          respjson.Field
-		Country     respjson.Field
 		DateOfBirth respjson.Field
 		EndDate     respjson.Field
 		FirstName   respjson.Field
