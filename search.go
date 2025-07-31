@@ -34,8 +34,16 @@ func NewSearchService(opts ...option.RequestOption) (r SearchService) {
 	return
 }
 
+// Autocomplete company search
+func (r *SearchService) AutocompleteCompaniesV1(ctx context.Context, query SearchAutocompleteCompaniesV1Params, opts ...option.RequestOption) (res *SearchAutocompleteCompaniesV1Response, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v1/autocomplete/company"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
+}
+
 // Search for companies
-func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCompaniesV0Params, opts ...option.RequestOption) (res *SearchFindCompaniesV0Response, err error) {
+func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCompaniesV0Params, opts ...option.RequestOption) (res *CompanySearch, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/search/company"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -43,7 +51,7 @@ func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCom
 }
 
 // Search for companies
-func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindCompaniesV1Params, opts ...option.RequestOption) (res *SearchFindCompaniesV1Response, err error) {
+func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindCompaniesV1Params, opts ...option.RequestOption) (res *CompanySearch, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v1/search/company"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -105,10 +113,10 @@ const (
 	CompanyRegisterTypeVr  CompanyRegisterType = "VR"
 )
 
-type SearchFindCompaniesV0Response struct {
-	Pagination SearchFindCompaniesV0ResponsePagination `json:"pagination,required"`
+type CompanySearch struct {
+	Pagination CompanySearchPagination `json:"pagination,required"`
 	// List of companies matching the search criteria.
-	Results []SearchFindCompaniesV0ResponseResult `json:"results,required"`
+	Results []CompanySearchResult `json:"results,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Pagination  respjson.Field
@@ -119,12 +127,12 @@ type SearchFindCompaniesV0Response struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesV0Response) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesV0Response) UnmarshalJSON(data []byte) error {
+func (r CompanySearch) RawJSON() string { return r.JSON.raw }
+func (r *CompanySearch) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindCompaniesV0ResponsePagination struct {
+type CompanySearchPagination struct {
 	// Current page number.
 	Page int64 `json:"page,required"`
 	// Number of results per page.
@@ -145,12 +153,12 @@ type SearchFindCompaniesV0ResponsePagination struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesV0ResponsePagination) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesV0ResponsePagination) UnmarshalJSON(data []byte) error {
+func (r CompanySearchPagination) RawJSON() string { return r.JSON.raw }
+func (r *CompanySearchPagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindCompaniesV0ResponseResult struct {
+type CompanySearchResult struct {
 	// Company status - true if active, false if inactive.
 	Active bool `json:"active,required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
@@ -190,18 +198,16 @@ type SearchFindCompaniesV0ResponseResult struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesV0ResponseResult) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesV0ResponseResult) UnmarshalJSON(data []byte) error {
+func (r CompanySearchResult) RawJSON() string { return r.JSON.raw }
+func (r *CompanySearchResult) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindCompaniesV1Response struct {
-	Pagination SearchFindCompaniesV1ResponsePagination `json:"pagination,required"`
+type SearchAutocompleteCompaniesV1Response struct {
 	// List of companies matching the search criteria.
-	Results []SearchFindCompaniesV1ResponseResult `json:"results,required"`
+	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Pagination  respjson.Field
 		Results     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -209,38 +215,12 @@ type SearchFindCompaniesV1Response struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesV1Response) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesV1Response) UnmarshalJSON(data []byte) error {
+func (r SearchAutocompleteCompaniesV1Response) RawJSON() string { return r.JSON.raw }
+func (r *SearchAutocompleteCompaniesV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindCompaniesV1ResponsePagination struct {
-	// Current page number.
-	Page int64 `json:"page,required"`
-	// Number of results per page.
-	PerPage int64 `json:"per_page,required"`
-	// Total number of pages.
-	TotalPages int64 `json:"total_pages,required"`
-	// Total number of results.
-	TotalResults int64 `json:"total_results,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Page         respjson.Field
-		PerPage      respjson.Field
-		TotalPages   respjson.Field
-		TotalResults respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesV1ResponsePagination) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesV1ResponsePagination) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SearchFindCompaniesV1ResponseResult struct {
+type SearchAutocompleteCompaniesV1ResponseResult struct {
 	// Company status - true if active, false if inactive.
 	Active bool `json:"active,required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
@@ -280,8 +260,8 @@ type SearchFindCompaniesV1ResponseResult struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindCompaniesV1ResponseResult) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindCompaniesV1ResponseResult) UnmarshalJSON(data []byte) error {
+func (r SearchAutocompleteCompaniesV1ResponseResult) RawJSON() string { return r.JSON.raw }
+func (r *SearchAutocompleteCompaniesV1ResponseResult) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -309,6 +289,22 @@ type SearchLookupCompanyByURLResponse struct {
 func (r SearchLookupCompanyByURLResponse) RawJSON() string { return r.JSON.raw }
 func (r *SearchLookupCompanyByURLResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchAutocompleteCompaniesV1Params struct {
+	// Text search query to find companies by name. Example: "Descartes Technologies
+	// UG"
+	Query string `query:"query,required" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [SearchAutocompleteCompaniesV1Params]'s query parameters as
+// `url.Values`.
+func (r SearchAutocompleteCompaniesV1Params) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type SearchFindCompaniesV0Params struct {

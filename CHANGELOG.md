@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.0-alpha.10 (2025-07-31)
+
+Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
+
+### Features
+
+* **api:** update via SDK Studio ([9dd3702](https://github.com/oregister/openregister-go/commit/9dd3702dfd9e5874ed048f9c9479081261dcc6f4))
+* **api:** update via SDK Studio ([9e22185](https://github.com/oregister/openregister-go/commit/9e22185c1e6c282410c4f8e35c2843ed024fb551))
+* **api:** update via SDK Studio ([351b67d](https://github.com/oregister/openregister-go/commit/351b67d8c7c4c76e83776014173d35ec4ad725ec))
+* **api:** update via SDK Studio ([ffadfd8](https://github.com/oregister/openregister-go/commit/ffadfd882679e591a7686bcbcfafc5a4ad8dc145))
+* **api:** update via SDK Studio ([735aeca](https://github.com/oregister/openregister-go/commit/735aecaa44a33de089f4bda1bc2519943840e026))
+* **api:** update via SDK Studio ([5c81f59](https://github.com/oregister/openregister-go/commit/5c81f59cb92dc4d48a5cea142b083c6cfe3f34d0))
+* **api:** update via SDK Studio ([ea890da](https://github.com/oregister/openregister-go/commit/ea890da1160562eb24449455d153c498441f0dea))
+* **api:** update via SDK Studio ([fbfb60d](https://github.com/oregister/openregister-go/commit/fbfb60d05b7e9fddefe0a2ae6f727435d698ac78))
+* **api:** update via SDK Studio ([75c41d8](https://github.com/oregister/openregister-go/commit/75c41d8c40561a0f6b9738a27a2cbce0902e5ee2))
+* **api:** update via SDK Studio ([56d2486](https://github.com/oregister/openregister-go/commit/56d2486fda9bcbb28c30f1b42f06c5bc27aeae3c))
+* **api:** update via SDK Studio ([a679486](https://github.com/oregister/openregister-go/commit/a679486eaaf3f95c6dc55366ee16d655095e09a6))
+* **api:** update via SDK Studio ([749caa2](https://github.com/oregister/openregister-go/commit/749caa2541c5c49cb677b34a7d0de4a7ecc046c9))
+
 ## 0.1.0-alpha.9 (2025-07-28)
 
 Full Changelog: [v0.1.0-alpha.8...v0.1.0-alpha.9](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.8...v0.1.0-alpha.9)
