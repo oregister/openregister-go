@@ -376,15 +376,13 @@ type SearchFindCompaniesV1ParamsFilter struct {
 	Min param.Opt[string] `json:"min,omitzero"`
 	// Value to filter on.
 	Value param.Opt[string] `json:"value,omitzero"`
-	// Field to filter on.
-	//
-	// Any of "status", "legal_form", "register_number", "register_court",
-	// "register_type", "city", "active", "incorporated_at", "zip", "address",
-	// "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate",
-	// "materials", "pension_provisions", "salaries", "taxes", "liabilities",
-	// "capital_reserves", "net_income", "industry_codes", "capital_amount",
-	// "capital_currency".
-	Field string `json:"field,omitzero"`
+	// Any of "date_of_birth", "city", "active", "status", "legal_form",
+	// "register_number", "register_court", "register_type", "incorporated_at", "zip",
+	// "address", "balance_sheet_total", "revenue", "cash", "employees", "equity",
+	// "real_estate", "materials", "pension_provisions", "salaries", "taxes",
+	// "liabilities", "capital_reserves", "net_income", "industry_codes",
+	// "capital_amount", "capital_currency".
+	Field SearchFindCompaniesV1ParamsFilterField `json:"field,omitzero"`
 	// Keywords to filter on.
 	Keywords []string `json:"keywords,omitzero"`
 	// Values to filter on.
@@ -400,11 +398,37 @@ func (r *SearchFindCompaniesV1ParamsFilter) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterFieldValidator[SearchFindCompaniesV1ParamsFilter](
-		"field", "status", "legal_form", "register_number", "register_court", "register_type", "city", "active", "incorporated_at", "zip", "address", "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate", "materials", "pension_provisions", "salaries", "taxes", "liabilities", "capital_reserves", "net_income", "industry_codes", "capital_amount", "capital_currency",
-	)
-}
+type SearchFindCompaniesV1ParamsFilterField string
+
+const (
+	SearchFindCompaniesV1ParamsFilterFieldDateOfBirth       SearchFindCompaniesV1ParamsFilterField = "date_of_birth"
+	SearchFindCompaniesV1ParamsFilterFieldCity              SearchFindCompaniesV1ParamsFilterField = "city"
+	SearchFindCompaniesV1ParamsFilterFieldActive            SearchFindCompaniesV1ParamsFilterField = "active"
+	SearchFindCompaniesV1ParamsFilterFieldStatus            SearchFindCompaniesV1ParamsFilterField = "status"
+	SearchFindCompaniesV1ParamsFilterFieldLegalForm         SearchFindCompaniesV1ParamsFilterField = "legal_form"
+	SearchFindCompaniesV1ParamsFilterFieldRegisterNumber    SearchFindCompaniesV1ParamsFilterField = "register_number"
+	SearchFindCompaniesV1ParamsFilterFieldRegisterCourt     SearchFindCompaniesV1ParamsFilterField = "register_court"
+	SearchFindCompaniesV1ParamsFilterFieldRegisterType      SearchFindCompaniesV1ParamsFilterField = "register_type"
+	SearchFindCompaniesV1ParamsFilterFieldIncorporatedAt    SearchFindCompaniesV1ParamsFilterField = "incorporated_at"
+	SearchFindCompaniesV1ParamsFilterFieldZip               SearchFindCompaniesV1ParamsFilterField = "zip"
+	SearchFindCompaniesV1ParamsFilterFieldAddress           SearchFindCompaniesV1ParamsFilterField = "address"
+	SearchFindCompaniesV1ParamsFilterFieldBalanceSheetTotal SearchFindCompaniesV1ParamsFilterField = "balance_sheet_total"
+	SearchFindCompaniesV1ParamsFilterFieldRevenue           SearchFindCompaniesV1ParamsFilterField = "revenue"
+	SearchFindCompaniesV1ParamsFilterFieldCash              SearchFindCompaniesV1ParamsFilterField = "cash"
+	SearchFindCompaniesV1ParamsFilterFieldEmployees         SearchFindCompaniesV1ParamsFilterField = "employees"
+	SearchFindCompaniesV1ParamsFilterFieldEquity            SearchFindCompaniesV1ParamsFilterField = "equity"
+	SearchFindCompaniesV1ParamsFilterFieldRealEstate        SearchFindCompaniesV1ParamsFilterField = "real_estate"
+	SearchFindCompaniesV1ParamsFilterFieldMaterials         SearchFindCompaniesV1ParamsFilterField = "materials"
+	SearchFindCompaniesV1ParamsFilterFieldPensionProvisions SearchFindCompaniesV1ParamsFilterField = "pension_provisions"
+	SearchFindCompaniesV1ParamsFilterFieldSalaries          SearchFindCompaniesV1ParamsFilterField = "salaries"
+	SearchFindCompaniesV1ParamsFilterFieldTaxes             SearchFindCompaniesV1ParamsFilterField = "taxes"
+	SearchFindCompaniesV1ParamsFilterFieldLiabilities       SearchFindCompaniesV1ParamsFilterField = "liabilities"
+	SearchFindCompaniesV1ParamsFilterFieldCapitalReserves   SearchFindCompaniesV1ParamsFilterField = "capital_reserves"
+	SearchFindCompaniesV1ParamsFilterFieldNetIncome         SearchFindCompaniesV1ParamsFilterField = "net_income"
+	SearchFindCompaniesV1ParamsFilterFieldIndustryCodes     SearchFindCompaniesV1ParamsFilterField = "industry_codes"
+	SearchFindCompaniesV1ParamsFilterFieldCapitalAmount     SearchFindCompaniesV1ParamsFilterField = "capital_amount"
+	SearchFindCompaniesV1ParamsFilterFieldCapitalCurrency   SearchFindCompaniesV1ParamsFilterField = "capital_currency"
+)
 
 // Location to filter companies.
 //
