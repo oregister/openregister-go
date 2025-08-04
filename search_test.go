@@ -86,7 +86,7 @@ func TestSearchFindCompaniesV1WithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Search.FindCompaniesV1(context.TODO(), openregister.SearchFindCompaniesV1Params{
 		Filters: []openregister.SearchFindCompaniesV1ParamsFilter{{
-			Field:    openregister.SearchFindCompaniesV1ParamsFilterFieldDateOfBirth,
+			Field:    "status",
 			Keywords: []string{"string"},
 			Max:      openregister.String("max"),
 			Min:      openregister.String("min"),
@@ -130,7 +130,7 @@ func TestSearchFindPersonWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Search.FindPerson(context.TODO(), openregister.SearchFindPersonParams{
 		Filters: []openregister.SearchFindPersonParamsFilter{{
-			Field:    openregister.SearchFindPersonParamsFilterFieldDateOfBirth,
+			Field:    "date_of_birth",
 			Keywords: []string{"string"},
 			Max:      openregister.String("max"),
 			Min:      openregister.String("min"),
