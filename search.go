@@ -58,6 +58,14 @@ func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindComp
 	return
 }
 
+// Search for people
+func (r *SearchService) FindPerson(ctx context.Context, body SearchFindPersonParams, opts ...option.RequestOption) (res *SearchFindPersonResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v1/search/person"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
 // Find company by website URL
 func (r *SearchService) LookupCompanyByURL(ctx context.Context, query SearchLookupCompanyByURLParams, opts ...option.RequestOption) (res *SearchLookupCompanyByURLResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -262,6 +270,80 @@ type SearchAutocompleteCompaniesV1ResponseResult struct {
 // Returns the unmodified JSON received from the API
 func (r SearchAutocompleteCompaniesV1ResponseResult) RawJSON() string { return r.JSON.raw }
 func (r *SearchAutocompleteCompaniesV1ResponseResult) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindPersonResponse struct {
+	Pagination SearchFindPersonResponsePagination `json:"pagination,required"`
+	// List of people matching the search criteria.
+	Results []SearchFindPersonResponseResult `json:"results,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Pagination  respjson.Field
+		Results     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindPersonResponse) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindPersonResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindPersonResponsePagination struct {
+	// Current page number.
+	Page int64 `json:"page,required"`
+	// Number of results per page.
+	PerPage int64 `json:"per_page,required"`
+	// Total number of pages.
+	TotalPages int64 `json:"total_pages,required"`
+	// Total number of results.
+	TotalResults int64 `json:"total_results,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Page         respjson.Field
+		PerPage      respjson.Field
+		TotalPages   respjson.Field
+		TotalResults respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindPersonResponsePagination) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindPersonResponsePagination) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindPersonResponseResult struct {
+	// Unique person identifier. Example: 1234-5678-9012-345678901234
+	ID string `json:"id,required"`
+	// Person status - true if active, false if inactive.
+	Active bool `json:"active,required"`
+	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
+	DateOfBirth string `json:"date_of_birth,required"`
+	// Name of the person. Example: "Max Mustermann"
+	Name string `json:"name,required"`
+	// City of the person. Example: "Berlin"
+	City string `json:"city"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID          respjson.Field
+		Active      respjson.Field
+		DateOfBirth respjson.Field
+		Name        respjson.Field
+		City        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindPersonResponseResult) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindPersonResponseResult) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -482,6 +564,121 @@ func (r SearchFindCompaniesV1ParamsQuery) MarshalJSON() (data []byte, err error)
 	return param.MarshalObject(r, (*shadow)(&r))
 }
 func (r *SearchFindCompaniesV1ParamsQuery) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindPersonParams struct {
+	// Filters to filter people.
+	Filters []SearchFindPersonParamsFilter `json:"filters,omitzero"`
+	// Pagination parameters.
+	Pagination SearchFindPersonParamsPagination `json:"pagination,omitzero"`
+	// Search query to filter people.
+	Query SearchFindPersonParamsQuery `json:"query,omitzero"`
+	paramObj
+}
+
+func (r SearchFindPersonParams) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindPersonParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindPersonParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Filter by field. The properties values, value, keywords and min/max are mutually
+// exclusive. Dates must be in the format YYYY-MM-DD.
+type SearchFindPersonParamsFilter struct {
+	// Maximum value to filter on.
+	Max param.Opt[string] `json:"max,omitzero"`
+	// Minimum value to filter on.
+	Min param.Opt[string] `json:"min,omitzero"`
+	// Value to filter on.
+	Value param.Opt[string] `json:"value,omitzero"`
+	// Any of "date_of_birth", "city", "active", "status", "legal_form",
+	// "register_number", "register_court", "register_type", "incorporated_at", "zip",
+	// "address", "balance_sheet_total", "revenue", "cash", "employees", "equity",
+	// "real_estate", "materials", "pension_provisions", "salaries", "taxes",
+	// "liabilities", "capital_reserves", "net_income", "industry_codes",
+	// "capital_amount", "capital_currency".
+	Field SearchFindPersonParamsFilterField `json:"field,omitzero"`
+	// Keywords to filter on.
+	Keywords []string `json:"keywords,omitzero"`
+	// Values to filter on.
+	Values []string `json:"values,omitzero"`
+	paramObj
+}
+
+func (r SearchFindPersonParamsFilter) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindPersonParamsFilter
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindPersonParamsFilter) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindPersonParamsFilterField string
+
+const (
+	SearchFindPersonParamsFilterFieldDateOfBirth       SearchFindPersonParamsFilterField = "date_of_birth"
+	SearchFindPersonParamsFilterFieldCity              SearchFindPersonParamsFilterField = "city"
+	SearchFindPersonParamsFilterFieldActive            SearchFindPersonParamsFilterField = "active"
+	SearchFindPersonParamsFilterFieldStatus            SearchFindPersonParamsFilterField = "status"
+	SearchFindPersonParamsFilterFieldLegalForm         SearchFindPersonParamsFilterField = "legal_form"
+	SearchFindPersonParamsFilterFieldRegisterNumber    SearchFindPersonParamsFilterField = "register_number"
+	SearchFindPersonParamsFilterFieldRegisterCourt     SearchFindPersonParamsFilterField = "register_court"
+	SearchFindPersonParamsFilterFieldRegisterType      SearchFindPersonParamsFilterField = "register_type"
+	SearchFindPersonParamsFilterFieldIncorporatedAt    SearchFindPersonParamsFilterField = "incorporated_at"
+	SearchFindPersonParamsFilterFieldZip               SearchFindPersonParamsFilterField = "zip"
+	SearchFindPersonParamsFilterFieldAddress           SearchFindPersonParamsFilterField = "address"
+	SearchFindPersonParamsFilterFieldBalanceSheetTotal SearchFindPersonParamsFilterField = "balance_sheet_total"
+	SearchFindPersonParamsFilterFieldRevenue           SearchFindPersonParamsFilterField = "revenue"
+	SearchFindPersonParamsFilterFieldCash              SearchFindPersonParamsFilterField = "cash"
+	SearchFindPersonParamsFilterFieldEmployees         SearchFindPersonParamsFilterField = "employees"
+	SearchFindPersonParamsFilterFieldEquity            SearchFindPersonParamsFilterField = "equity"
+	SearchFindPersonParamsFilterFieldRealEstate        SearchFindPersonParamsFilterField = "real_estate"
+	SearchFindPersonParamsFilterFieldMaterials         SearchFindPersonParamsFilterField = "materials"
+	SearchFindPersonParamsFilterFieldPensionProvisions SearchFindPersonParamsFilterField = "pension_provisions"
+	SearchFindPersonParamsFilterFieldSalaries          SearchFindPersonParamsFilterField = "salaries"
+	SearchFindPersonParamsFilterFieldTaxes             SearchFindPersonParamsFilterField = "taxes"
+	SearchFindPersonParamsFilterFieldLiabilities       SearchFindPersonParamsFilterField = "liabilities"
+	SearchFindPersonParamsFilterFieldCapitalReserves   SearchFindPersonParamsFilterField = "capital_reserves"
+	SearchFindPersonParamsFilterFieldNetIncome         SearchFindPersonParamsFilterField = "net_income"
+	SearchFindPersonParamsFilterFieldIndustryCodes     SearchFindPersonParamsFilterField = "industry_codes"
+	SearchFindPersonParamsFilterFieldCapitalAmount     SearchFindPersonParamsFilterField = "capital_amount"
+	SearchFindPersonParamsFilterFieldCapitalCurrency   SearchFindPersonParamsFilterField = "capital_currency"
+)
+
+// Pagination parameters.
+type SearchFindPersonParamsPagination struct {
+	// Page number to return.
+	Page param.Opt[int64] `json:"page,omitzero"`
+	// Number of results per page.
+	PerPage param.Opt[int64] `json:"per_page,omitzero"`
+	paramObj
+}
+
+func (r SearchFindPersonParamsPagination) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindPersonParamsPagination
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindPersonParamsPagination) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Search query to filter people.
+//
+// The property Value is required.
+type SearchFindPersonParamsQuery struct {
+	// Search query to filter people.
+	Value string `json:"value,required"`
+	paramObj
+}
+
+func (r SearchFindPersonParamsQuery) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindPersonParamsQuery
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindPersonParamsQuery) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
