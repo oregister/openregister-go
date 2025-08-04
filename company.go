@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/oregister/openregister-go/internal/apijson"
 	"github.com/oregister/openregister-go/internal/apiquery"
@@ -92,6 +93,18 @@ func (r *CompanyService) GetContact(ctx context.Context, companyID string, opts 
 		return
 	}
 	path := fmt.Sprintf("v0/company/%s/contact", companyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+// Get financial reports
+func (r *CompanyService) GetFinancials(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetFinancialsResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if companyID == "" {
+		err = errors.New("missing required company_id parameter")
+		return
+	}
+	path := fmt.Sprintf("v1/company/%s/financials", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -808,6 +821,170 @@ type CompanyGetContactResponse struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetContactResponse) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetContactResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsResponse struct {
+	Reports []CompanyGetFinancialsResponseReport `json:"reports,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Reports     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsResponse) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsResponseReport struct {
+	Aktiva          CompanyGetFinancialsResponseReportAktiva  `json:"aktiva,required"`
+	Consolidated    bool                                      `json:"consolidated,required"`
+	Passiva         CompanyGetFinancialsResponseReportPassiva `json:"passiva,required"`
+	ReportEndDate   time.Time                                 `json:"report_end_date,required" format:"date-time"`
+	ReportID        string                                    `json:"report_id,required"`
+	Guv             CompanyGetFinancialsResponseReportGuv     `json:"guv"`
+	ReportStartDate time.Time                                 `json:"report_start_date" format:"date-time"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Aktiva          respjson.Field
+		Consolidated    respjson.Field
+		Passiva         respjson.Field
+		ReportEndDate   respjson.Field
+		ReportID        respjson.Field
+		Guv             respjson.Field
+		ReportStartDate respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsResponseReport) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsResponseReport) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsResponseReportAktiva struct {
+	Rows []CompanyGetFinancialsResponseReportAktivaRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsResponseReportAktiva) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsResponseReportAktiva) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsResponseReportAktivaRow struct {
+	Children      []any  `json:"children,required"`
+	FormattedName string `json:"formatted_name,required"`
+	Name          string `json:"name,required"`
+	CurrentValue  int64  `json:"current_value"`
+	PreviousValue int64  `json:"previous_value"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		CurrentValue  respjson.Field
+		PreviousValue respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsResponseReportAktivaRow) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsResponseReportAktivaRow) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsResponseReportPassiva struct {
+	Rows []CompanyGetFinancialsResponseReportPassivaRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsResponseReportPassiva) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsResponseReportPassiva) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsResponseReportPassivaRow struct {
+	Children      []any  `json:"children,required"`
+	FormattedName string `json:"formatted_name,required"`
+	Name          string `json:"name,required"`
+	CurrentValue  int64  `json:"current_value"`
+	PreviousValue int64  `json:"previous_value"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		CurrentValue  respjson.Field
+		PreviousValue respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsResponseReportPassivaRow) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsResponseReportPassivaRow) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsResponseReportGuv struct {
+	Rows []CompanyGetFinancialsResponseReportGuvRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsResponseReportGuv) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsResponseReportGuv) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsResponseReportGuvRow struct {
+	Children      []any  `json:"children,required"`
+	FormattedName string `json:"formatted_name,required"`
+	Name          string `json:"name,required"`
+	CurrentValue  int64  `json:"current_value"`
+	PreviousValue int64  `json:"previous_value"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		CurrentValue  respjson.Field
+		PreviousValue respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsResponseReportGuvRow) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsResponseReportGuvRow) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

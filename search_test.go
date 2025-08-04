@@ -115,6 +115,45 @@ func TestSearchFindCompaniesV1WithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestSearchFindPersonWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := openregister.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	_, err := client.Search.FindPerson(context.TODO(), openregister.SearchFindPersonParams{
+		Filters: []openregister.SearchFindPersonParamsFilter{{
+			Field:    openregister.SearchFindPersonParamsFilterFieldDateOfBirth,
+			Keywords: []string{"string"},
+			Max:      openregister.String("max"),
+			Min:      openregister.String("min"),
+			Value:    openregister.String("value"),
+			Values:   []string{"string"},
+		}},
+		Pagination: openregister.SearchFindPersonParamsPagination{
+			Page:    openregister.Int(0),
+			PerPage: openregister.Int(0),
+		},
+		Query: openregister.SearchFindPersonParamsQuery{
+			Value: "value",
+		},
+	})
+	if err != nil {
+		var apierr *openregister.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestSearchLookupCompanyByURL(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
