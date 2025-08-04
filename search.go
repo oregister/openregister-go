@@ -449,26 +449,20 @@ func (r *SearchFindCompaniesV1Params) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Filter by field. The properties values, value, keywords and min/max are mutually
-// exclusive. Dates must be in the format YYYY-MM-DD.
+// The property Field is required.
 type SearchFindCompaniesV1ParamsFilter struct {
-	// Maximum value to filter on.
-	Max param.Opt[string] `json:"max,omitzero"`
-	// Minimum value to filter on.
-	Min param.Opt[string] `json:"min,omitzero"`
-	// Value to filter on.
-	Value param.Opt[string] `json:"value,omitzero"`
-	// Any of "date_of_birth", "city", "active", "status", "legal_form",
-	// "register_number", "register_court", "register_type", "incorporated_at", "zip",
-	// "address", "balance_sheet_total", "revenue", "cash", "employees", "equity",
-	// "real_estate", "materials", "pension_provisions", "salaries", "taxes",
-	// "liabilities", "capital_reserves", "net_income", "industry_codes",
-	// "capital_amount", "capital_currency".
-	Field SearchFindCompaniesV1ParamsFilterField `json:"field,omitzero"`
-	// Keywords to filter on.
-	Keywords []string `json:"keywords,omitzero"`
-	// Values to filter on.
-	Values []string `json:"values,omitzero"`
+	// Any of "status", "legal_form", "register_number", "register_court",
+	// "register_type", "city", "active", "incorporated_at", "zip", "address",
+	// "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate",
+	// "materials", "pension_provisions", "salaries", "taxes", "liabilities",
+	// "capital_reserves", "net_income", "industry_codes", "capital_amount",
+	// "capital_currency".
+	Field    string            `json:"field,omitzero,required"`
+	Max      param.Opt[string] `json:"max,omitzero"`
+	Min      param.Opt[string] `json:"min,omitzero"`
+	Value    param.Opt[string] `json:"value,omitzero"`
+	Keywords []string          `json:"keywords,omitzero"`
+	Values   []string          `json:"values,omitzero"`
 	paramObj
 }
 
@@ -480,37 +474,11 @@ func (r *SearchFindCompaniesV1ParamsFilter) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindCompaniesV1ParamsFilterField string
-
-const (
-	SearchFindCompaniesV1ParamsFilterFieldDateOfBirth       SearchFindCompaniesV1ParamsFilterField = "date_of_birth"
-	SearchFindCompaniesV1ParamsFilterFieldCity              SearchFindCompaniesV1ParamsFilterField = "city"
-	SearchFindCompaniesV1ParamsFilterFieldActive            SearchFindCompaniesV1ParamsFilterField = "active"
-	SearchFindCompaniesV1ParamsFilterFieldStatus            SearchFindCompaniesV1ParamsFilterField = "status"
-	SearchFindCompaniesV1ParamsFilterFieldLegalForm         SearchFindCompaniesV1ParamsFilterField = "legal_form"
-	SearchFindCompaniesV1ParamsFilterFieldRegisterNumber    SearchFindCompaniesV1ParamsFilterField = "register_number"
-	SearchFindCompaniesV1ParamsFilterFieldRegisterCourt     SearchFindCompaniesV1ParamsFilterField = "register_court"
-	SearchFindCompaniesV1ParamsFilterFieldRegisterType      SearchFindCompaniesV1ParamsFilterField = "register_type"
-	SearchFindCompaniesV1ParamsFilterFieldIncorporatedAt    SearchFindCompaniesV1ParamsFilterField = "incorporated_at"
-	SearchFindCompaniesV1ParamsFilterFieldZip               SearchFindCompaniesV1ParamsFilterField = "zip"
-	SearchFindCompaniesV1ParamsFilterFieldAddress           SearchFindCompaniesV1ParamsFilterField = "address"
-	SearchFindCompaniesV1ParamsFilterFieldBalanceSheetTotal SearchFindCompaniesV1ParamsFilterField = "balance_sheet_total"
-	SearchFindCompaniesV1ParamsFilterFieldRevenue           SearchFindCompaniesV1ParamsFilterField = "revenue"
-	SearchFindCompaniesV1ParamsFilterFieldCash              SearchFindCompaniesV1ParamsFilterField = "cash"
-	SearchFindCompaniesV1ParamsFilterFieldEmployees         SearchFindCompaniesV1ParamsFilterField = "employees"
-	SearchFindCompaniesV1ParamsFilterFieldEquity            SearchFindCompaniesV1ParamsFilterField = "equity"
-	SearchFindCompaniesV1ParamsFilterFieldRealEstate        SearchFindCompaniesV1ParamsFilterField = "real_estate"
-	SearchFindCompaniesV1ParamsFilterFieldMaterials         SearchFindCompaniesV1ParamsFilterField = "materials"
-	SearchFindCompaniesV1ParamsFilterFieldPensionProvisions SearchFindCompaniesV1ParamsFilterField = "pension_provisions"
-	SearchFindCompaniesV1ParamsFilterFieldSalaries          SearchFindCompaniesV1ParamsFilterField = "salaries"
-	SearchFindCompaniesV1ParamsFilterFieldTaxes             SearchFindCompaniesV1ParamsFilterField = "taxes"
-	SearchFindCompaniesV1ParamsFilterFieldLiabilities       SearchFindCompaniesV1ParamsFilterField = "liabilities"
-	SearchFindCompaniesV1ParamsFilterFieldCapitalReserves   SearchFindCompaniesV1ParamsFilterField = "capital_reserves"
-	SearchFindCompaniesV1ParamsFilterFieldNetIncome         SearchFindCompaniesV1ParamsFilterField = "net_income"
-	SearchFindCompaniesV1ParamsFilterFieldIndustryCodes     SearchFindCompaniesV1ParamsFilterField = "industry_codes"
-	SearchFindCompaniesV1ParamsFilterFieldCapitalAmount     SearchFindCompaniesV1ParamsFilterField = "capital_amount"
-	SearchFindCompaniesV1ParamsFilterFieldCapitalCurrency   SearchFindCompaniesV1ParamsFilterField = "capital_currency"
-)
+func init() {
+	apijson.RegisterFieldValidator[SearchFindCompaniesV1ParamsFilter](
+		"field", "status", "legal_form", "register_number", "register_court", "register_type", "city", "active", "incorporated_at", "zip", "address", "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate", "materials", "pension_provisions", "salaries", "taxes", "liabilities", "capital_reserves", "net_income", "industry_codes", "capital_amount", "capital_currency",
+	)
+}
 
 // Location to filter companies.
 //
@@ -585,26 +553,15 @@ func (r *SearchFindPersonParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Filter by field. The properties values, value, keywords and min/max are mutually
-// exclusive. Dates must be in the format YYYY-MM-DD.
+// The property Field is required.
 type SearchFindPersonParamsFilter struct {
-	// Maximum value to filter on.
-	Max param.Opt[string] `json:"max,omitzero"`
-	// Minimum value to filter on.
-	Min param.Opt[string] `json:"min,omitzero"`
-	// Value to filter on.
-	Value param.Opt[string] `json:"value,omitzero"`
-	// Any of "date_of_birth", "city", "active", "status", "legal_form",
-	// "register_number", "register_court", "register_type", "incorporated_at", "zip",
-	// "address", "balance_sheet_total", "revenue", "cash", "employees", "equity",
-	// "real_estate", "materials", "pension_provisions", "salaries", "taxes",
-	// "liabilities", "capital_reserves", "net_income", "industry_codes",
-	// "capital_amount", "capital_currency".
-	Field SearchFindPersonParamsFilterField `json:"field,omitzero"`
-	// Keywords to filter on.
-	Keywords []string `json:"keywords,omitzero"`
-	// Values to filter on.
-	Values []string `json:"values,omitzero"`
+	// Any of "date_of_birth", "city", "active".
+	Field    string            `json:"field,omitzero,required"`
+	Max      param.Opt[string] `json:"max,omitzero"`
+	Min      param.Opt[string] `json:"min,omitzero"`
+	Value    param.Opt[string] `json:"value,omitzero"`
+	Keywords []string          `json:"keywords,omitzero"`
+	Values   []string          `json:"values,omitzero"`
 	paramObj
 }
 
@@ -616,37 +573,11 @@ func (r *SearchFindPersonParamsFilter) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindPersonParamsFilterField string
-
-const (
-	SearchFindPersonParamsFilterFieldDateOfBirth       SearchFindPersonParamsFilterField = "date_of_birth"
-	SearchFindPersonParamsFilterFieldCity              SearchFindPersonParamsFilterField = "city"
-	SearchFindPersonParamsFilterFieldActive            SearchFindPersonParamsFilterField = "active"
-	SearchFindPersonParamsFilterFieldStatus            SearchFindPersonParamsFilterField = "status"
-	SearchFindPersonParamsFilterFieldLegalForm         SearchFindPersonParamsFilterField = "legal_form"
-	SearchFindPersonParamsFilterFieldRegisterNumber    SearchFindPersonParamsFilterField = "register_number"
-	SearchFindPersonParamsFilterFieldRegisterCourt     SearchFindPersonParamsFilterField = "register_court"
-	SearchFindPersonParamsFilterFieldRegisterType      SearchFindPersonParamsFilterField = "register_type"
-	SearchFindPersonParamsFilterFieldIncorporatedAt    SearchFindPersonParamsFilterField = "incorporated_at"
-	SearchFindPersonParamsFilterFieldZip               SearchFindPersonParamsFilterField = "zip"
-	SearchFindPersonParamsFilterFieldAddress           SearchFindPersonParamsFilterField = "address"
-	SearchFindPersonParamsFilterFieldBalanceSheetTotal SearchFindPersonParamsFilterField = "balance_sheet_total"
-	SearchFindPersonParamsFilterFieldRevenue           SearchFindPersonParamsFilterField = "revenue"
-	SearchFindPersonParamsFilterFieldCash              SearchFindPersonParamsFilterField = "cash"
-	SearchFindPersonParamsFilterFieldEmployees         SearchFindPersonParamsFilterField = "employees"
-	SearchFindPersonParamsFilterFieldEquity            SearchFindPersonParamsFilterField = "equity"
-	SearchFindPersonParamsFilterFieldRealEstate        SearchFindPersonParamsFilterField = "real_estate"
-	SearchFindPersonParamsFilterFieldMaterials         SearchFindPersonParamsFilterField = "materials"
-	SearchFindPersonParamsFilterFieldPensionProvisions SearchFindPersonParamsFilterField = "pension_provisions"
-	SearchFindPersonParamsFilterFieldSalaries          SearchFindPersonParamsFilterField = "salaries"
-	SearchFindPersonParamsFilterFieldTaxes             SearchFindPersonParamsFilterField = "taxes"
-	SearchFindPersonParamsFilterFieldLiabilities       SearchFindPersonParamsFilterField = "liabilities"
-	SearchFindPersonParamsFilterFieldCapitalReserves   SearchFindPersonParamsFilterField = "capital_reserves"
-	SearchFindPersonParamsFilterFieldNetIncome         SearchFindPersonParamsFilterField = "net_income"
-	SearchFindPersonParamsFilterFieldIndustryCodes     SearchFindPersonParamsFilterField = "industry_codes"
-	SearchFindPersonParamsFilterFieldCapitalAmount     SearchFindPersonParamsFilterField = "capital_amount"
-	SearchFindPersonParamsFilterFieldCapitalCurrency   SearchFindPersonParamsFilterField = "capital_currency"
-)
+func init() {
+	apijson.RegisterFieldValidator[SearchFindPersonParamsFilter](
+		"field", "date_of_birth", "city", "active",
+	)
+}
 
 // Pagination parameters.
 type SearchFindPersonParamsPagination struct {
