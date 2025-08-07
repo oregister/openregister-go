@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.1.0-alpha.10 (2025-08-07)
+
+Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
+
+### Features
+
+* **api:** update via SDK Studio ([1bf804d](https://github.com/oregister/openregister-go/commit/1bf804d81eea01ff114fc7f24ef2fdde430ad36e))
+* **api:** update via SDK Studio ([d06290a](https://github.com/oregister/openregister-go/commit/d06290a50933b266899b228c8cfb22c47bd76ae4))
+* **api:** update via SDK Studio ([919ae8f](https://github.com/oregister/openregister-go/commit/919ae8f1a17f0c096b1a9c7c6e7db534c1cabec7))
+* **api:** update via SDK Studio ([fe435c3](https://github.com/oregister/openregister-go/commit/fe435c34fc68ed302d619c20d7aa56628e5b9755))
+* **api:** update via SDK Studio ([9dd3702](https://github.com/oregister/openregister-go/commit/9dd3702dfd9e5874ed048f9c9479081261dcc6f4))
+* **api:** update via SDK Studio ([9e22185](https://github.com/oregister/openregister-go/commit/9e22185c1e6c282410c4f8e35c2843ed024fb551))
+* **api:** update via SDK Studio ([351b67d](https://github.com/oregister/openregister-go/commit/351b67d8c7c4c76e83776014173d35ec4ad725ec))
+* **api:** update via SDK Studio ([ffadfd8](https://github.com/oregister/openregister-go/commit/ffadfd882679e591a7686bcbcfafc5a4ad8dc145))
+* **api:** update via SDK Studio ([735aeca](https://github.com/oregister/openregister-go/commit/735aecaa44a33de089f4bda1bc2519943840e026))
+* **api:** update via SDK Studio ([5c81f59](https://github.com/oregister/openregister-go/commit/5c81f59cb92dc4d48a5cea142b083c6cfe3f34d0))
+* **api:** update via SDK Studio ([ea890da](https://github.com/oregister/openregister-go/commit/ea890da1160562eb24449455d153c498441f0dea))
+* **api:** update via SDK Studio ([fbfb60d](https://github.com/oregister/openregister-go/commit/fbfb60d05b7e9fddefe0a2ae6f727435d698ac78))
+* **api:** update via SDK Studio ([75c41d8](https://github.com/oregister/openregister-go/commit/75c41d8c40561a0f6b9738a27a2cbce0902e5ee2))
+* **api:** update via SDK Studio ([56d2486](https://github.com/oregister/openregister-go/commit/56d2486fda9bcbb28c30f1b42f06c5bc27aeae3c))
+* **api:** update via SDK Studio ([a679486](https://github.com/oregister/openregister-go/commit/a679486eaaf3f95c6dc55366ee16d655095e09a6))
+* **api:** update via SDK Studio ([749caa2](https://github.com/oregister/openregister-go/commit/749caa2541c5c49cb677b34a7d0de4a7ecc046c9))
+* **client:** support optional json html escaping ([2a291f8](https://github.com/oregister/openregister-go/commit/2a291f86a59191a127f3deb5c60ddb5da287825d))
+
 ## 0.1.0-alpha.9 (2025-07-28)
 
 Full Changelog: [v0.1.0-alpha.8...v0.1.0-alpha.9](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.8...v0.1.0-alpha.9)
