@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-alpha.11 (2025-08-10)
+
+Full Changelog: [v0.1.0-alpha.10...v0.1.0-alpha.11](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.10...v0.1.0-alpha.11)
+
+### Chores
+
+* **internal:** update comment in script ([e807b53](https://github.com/oregister/openregister-go/commit/e807b536a6a183af5b835394db1c0166fadd9b69))
+* update @stainless-api/prism-cli to v5.15.0 ([5133cc9](https://github.com/oregister/openregister-go/commit/5133cc9b7f27dd9dcd0c06056cc87b31058a9be8))
+
 ## 0.1.0-alpha.10 (2025-08-07)
 
 Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
