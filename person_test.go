@@ -13,7 +13,7 @@ import (
 	"github.com/oregister/openregister-go/option"
 )
 
-func TestDocumentDocumentCached(t *testing.T) {
+func TestPersonGet(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,7 +26,7 @@ func TestDocumentDocumentCached(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Document.DocumentCached(context.TODO(), "document_id")
+	_, err := client.Person.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {
@@ -36,7 +36,7 @@ func TestDocumentDocumentCached(t *testing.T) {
 	}
 }
 
-func TestDocumentFetch(t *testing.T) {
+func TestPersonListHoldingsV1(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -49,10 +49,7 @@ func TestDocumentFetch(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Document.Fetch(context.TODO(), openregister.DocumentFetchParams{
-		CompanyID:        "company_id",
-		DocumentCategory: openregister.DocumentFetchParamsDocumentCategoryCurrentPrintout,
-	})
+	_, err := client.Person.ListHoldingsV1(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {
