@@ -171,6 +171,9 @@ type CompanySearchResult struct {
 	Active bool `json:"active,required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id,required"`
+	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
+	// "DE" for Germany
+	Country string `json:"country,required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
@@ -187,19 +190,16 @@ type CompanySearchResult struct {
 	//
 	// Any of "HRB", "HRA", "PR", "GnR", "VR".
 	RegisterType CompanyRegisterType `json:"register_type,required"`
-	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
-	// "DE" for Germany
-	Country string `json:"country"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Active         respjson.Field
 		CompanyID      respjson.Field
+		Country        respjson.Field
 		LegalForm      respjson.Field
 		Name           respjson.Field
 		RegisterCourt  respjson.Field
 		RegisterNumber respjson.Field
 		RegisterType   respjson.Field
-		Country        respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
 	} `json:"-"`
@@ -213,7 +213,7 @@ func (r *CompanySearchResult) UnmarshalJSON(data []byte) error {
 
 type SearchAutocompleteCompaniesV1Response struct {
 	// List of companies matching the search criteria.
-	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results"`
+	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Results     respjson.Field
@@ -233,6 +233,9 @@ type SearchAutocompleteCompaniesV1ResponseResult struct {
 	Active bool `json:"active,required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id,required"`
+	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
+	// "DE" for Germany
+	Country string `json:"country,required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
@@ -249,19 +252,16 @@ type SearchAutocompleteCompaniesV1ResponseResult struct {
 	//
 	// Any of "HRB", "HRA", "PR", "GnR", "VR".
 	RegisterType CompanyRegisterType `json:"register_type,required"`
-	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
-	// "DE" for Germany
-	Country string `json:"country"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Active         respjson.Field
 		CompanyID      respjson.Field
+		Country        respjson.Field
 		LegalForm      respjson.Field
 		Name           respjson.Field
 		RegisterCourt  respjson.Field
 		RegisterNumber respjson.Field
 		RegisterType   respjson.Field
-		Country        respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
 	} `json:"-"`
@@ -323,19 +323,19 @@ type SearchFindPersonResponseResult struct {
 	ID string `json:"id,required"`
 	// Person status - true if active, false if inactive.
 	Active bool `json:"active,required"`
+	// City of the person. Example: "Berlin"
+	City string `json:"city,required"`
 	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
 	DateOfBirth string `json:"date_of_birth,required"`
 	// Name of the person. Example: "Max Mustermann"
 	Name string `json:"name,required"`
-	// City of the person. Example: "Berlin"
-	City string `json:"city"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID          respjson.Field
 		Active      respjson.Field
+		City        respjson.Field
 		DateOfBirth respjson.Field
 		Name        respjson.Field
-		City        respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
