@@ -24,11 +24,13 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	response, err := client.Search.AutocompleteCompaniesV1(context.TODO(), openregister.SearchAutocompleteCompaniesV1Params{
-		Query: "query",
-	})
+	response, err := client.Company.GetDetailsV1(
+		context.TODO(),
+		"company_id",
+		openregister.CompanyGetDetailsV1Params{},
+	)
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.Results)
+	t.Logf("%+v\n", response.ID)
 }
