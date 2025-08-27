@@ -13,7 +13,7 @@ import (
 	"github.com/oregister/openregister-go/option"
 )
 
-func TestCompanyGetWithOptionalParams(t *testing.T) {
+func TestCompanyGetContactV0(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,13 +26,59 @@ func TestCompanyGetWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Company.Get(
+	_, err := client.Company.GetContactV0(context.TODO(), "company_id")
+	if err != nil {
+		var apierr *openregister.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCompanyGetDetailsV1WithOptionalParams(t *testing.T) {
+	t.Skip("Prism tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := openregister.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	_, err := client.Company.GetDetailsV1(
 		context.TODO(),
 		"company_id",
-		openregister.CompanyGetParams{
+		openregister.CompanyGetDetailsV1Params{
 			Realtime: openregister.Bool(true),
 		},
 	)
+	if err != nil {
+		var apierr *openregister.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCompanyGetFinancialsV1(t *testing.T) {
+	t.Skip("Prism tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := openregister.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	_, err := client.Company.GetFinancialsV1(context.TODO(), "company_id")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {
@@ -85,52 +131,6 @@ func TestCompanyGetOwnersV1WithOptionalParams(t *testing.T) {
 			Realtime: openregister.Bool(true),
 		},
 	)
-	if err != nil {
-		var apierr *openregister.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestCompanyGetContact(t *testing.T) {
-	t.Skip("Prism tests are disabled")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := openregister.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-	)
-	_, err := client.Company.GetContact(context.TODO(), "company_id")
-	if err != nil {
-		var apierr *openregister.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestCompanyGetFinancials(t *testing.T) {
-	t.Skip("Prism tests are disabled")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := openregister.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-	)
-	_, err := client.Company.GetFinancials(context.TODO(), "company_id")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {

@@ -37,8 +37,20 @@ func NewCompanyService(opts ...option.RequestOption) (r CompanyService) {
 	return
 }
 
+// Get company contact information
+func (r *CompanyService) GetContactV0(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetContactV0Response, err error) {
+	opts = append(r.Options[:], opts...)
+	if companyID == "" {
+		err = errors.New("missing required company_id parameter")
+		return
+	}
+	path := fmt.Sprintf("v0/company/%s/contact", companyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 // Get detailed company information
-func (r *CompanyService) Get(ctx context.Context, companyID string, query CompanyGetParams, opts ...option.RequestOption) (res *CompanyGetResponse, err error) {
+func (r *CompanyService) GetDetailsV1(ctx context.Context, companyID string, query CompanyGetDetailsV1Params, opts ...option.RequestOption) (res *CompanyGetDetailsV1Response, err error) {
 	opts = append(r.Options[:], opts...)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
@@ -46,6 +58,18 @@ func (r *CompanyService) Get(ctx context.Context, companyID string, query Compan
 	}
 	path := fmt.Sprintf("v1/company/%s", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
+}
+
+// Get financial reports
+func (r *CompanyService) GetFinancialsV1(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetFinancialsV1Response, err error) {
+	opts = append(r.Options[:], opts...)
+	if companyID == "" {
+		err = errors.New("missing required company_id parameter")
+		return
+	}
+	path := fmt.Sprintf("v1/company/%s/financials", companyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -70,30 +94,6 @@ func (r *CompanyService) GetOwnersV1(ctx context.Context, companyID string, quer
 	}
 	path := fmt.Sprintf("v1/company/%s/owners", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
-}
-
-// Get company contact information
-func (r *CompanyService) GetContact(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetContactResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	if companyID == "" {
-		err = errors.New("missing required company_id parameter")
-		return
-	}
-	path := fmt.Sprintf("v0/company/%s/contact", companyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-// Get financial reports
-func (r *CompanyService) GetFinancials(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetFinancialsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	if companyID == "" {
-		err = errors.New("missing required company_id parameter")
-		return
-	}
-	path := fmt.Sprintf("v1/company/%s/financials", companyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -295,7 +295,34 @@ func (r *ReportRow) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetResponse struct {
+type CompanyGetContactV0Response struct {
+	// Where the contact information was found. Example: "https://openregister.de"
+	SourceURL string `json:"source_url,required" format:"uri"`
+	// Company contact email address. Example: "founders@openregister.de"
+	Email string `json:"email"`
+	// Company phone number. Example: "+49 030 12345678"
+	Phone string `json:"phone"`
+	// Value Added Tax identification number. (Umsatzsteuer-Identifikationsnummer)
+	// Example: "DE370146530"
+	VatID string `json:"vat_id"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		SourceURL   respjson.Field
+		Email       respjson.Field
+		Phone       respjson.Field
+		VatID       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetContactV0Response) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetContactV0Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetDetailsV1Response struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	ID string `json:"id,required"`
 	// Current registered address of the company.
@@ -307,14 +334,14 @@ type CompanyGetResponse struct {
 	// Historical capital changes. Shows how the company capital changed over time.
 	Capitals []CompanyCapital `json:"capitals,required"`
 	// Available official documents related to the company.
-	Documents []CompanyGetResponseDocument `json:"documents,required"`
+	Documents []CompanyGetDetailsV1ResponseDocument `json:"documents,required"`
 	// Date when the company was officially registered. Format: ISO 8601 (YYYY-MM-DD)
 	// Example: "2022-01-01"
 	IncorporatedAt string `json:"incorporated_at,required"`
 	// Key company indicators like net income, employee count, revenue, etc..
-	Indicators []CompanyGetResponseIndicator `json:"indicators,required"`
+	Indicators []CompanyGetDetailsV1ResponseIndicator `json:"indicators,required"`
 	// Industry codes of the company.
-	IndustryCodes []CompanyGetResponseIndustryCode `json:"industry_codes,required"`
+	IndustryCodes []CompanyGetDetailsV1ResponseIndustryCode `json:"industry_codes,required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
@@ -336,7 +363,7 @@ type CompanyGetResponse struct {
 	Registers []CompanyRegister `json:"registers,required"`
 	// List of individuals or entities authorized to represent the company. Includes
 	// directors, officers, and authorized signatories.
-	Representation []CompanyGetResponseRepresentation `json:"representation,required"`
+	Representation []CompanyGetDetailsV1ResponseRepresentation `json:"representation,required"`
 	// Current status of the company:
 	//
 	// - active: Operating normally
@@ -344,7 +371,7 @@ type CompanyGetResponse struct {
 	// - liquidation: In the process of being dissolved
 	//
 	// Any of "active", "inactive", "liquidation".
-	Status CompanyGetResponseStatus `json:"status,required"`
+	Status CompanyGetDetailsV1ResponseStatus `json:"status,required"`
 	// Date when the company was officially terminated (if applicable). Format: ISO
 	// 8601 (YYYY-MM-DD) Example: "2022-01-01"
 	TerminatedAt string `json:"terminated_at,required"`
@@ -375,12 +402,12 @@ type CompanyGetResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetResponse) UnmarshalJSON(data []byte) error {
+func (r CompanyGetDetailsV1Response) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetResponseDocument struct {
+type CompanyGetDetailsV1ResponseDocument struct {
 	// Unique identifier for the document. Example:
 	// "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 	ID string `json:"id,required"`
@@ -409,15 +436,15 @@ type CompanyGetResponseDocument struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetResponseDocument) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetResponseDocument) UnmarshalJSON(data []byte) error {
+func (r CompanyGetDetailsV1ResponseDocument) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseDocument) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The indicators of the company for a given year. Values of the indicator are
 // given in the smallest currency unit (cents). Example: 2099 represents €20.99 for
 // monetary values For non-monetary values (e.g., employees), the actual number.
-type CompanyGetResponseIndicator struct {
+type CompanyGetDetailsV1ResponseIndicator struct {
 	// The balance sheet total of that year (in cents).
 	BalanceSheetTotal int64 `json:"balance_sheet_total,required"`
 	// The capital reserves of that year (in cents).
@@ -472,13 +499,13 @@ type CompanyGetResponseIndicator struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetResponseIndicator) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetResponseIndicator) UnmarshalJSON(data []byte) error {
+func (r CompanyGetDetailsV1ResponseIndicator) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseIndicator) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Industry codes from WZ 2025.
-type CompanyGetResponseIndustryCode struct {
+type CompanyGetDetailsV1ResponseIndustryCode struct {
 	Code string `json:"code,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -489,12 +516,12 @@ type CompanyGetResponseIndustryCode struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetResponseIndustryCode) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetResponseIndustryCode) UnmarshalJSON(data []byte) error {
+func (r CompanyGetDetailsV1ResponseIndustryCode) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseIndustryCode) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetResponseRepresentation struct {
+type CompanyGetDetailsV1ResponseRepresentation struct {
 	// Unique identifier for the representative. For companies: Format matches
 	// company_id pattern For individuals: UUID Example: "DE-HRB-F1103-267645" or UUID
 	// May be null for certain representatives.
@@ -515,9 +542,9 @@ type CompanyGetResponseRepresentation struct {
 	// Whether the representation is a natural person or a legal entity.
 	//
 	// Any of "natural_person", "legal_person".
-	Type          EntityType                                    `json:"type,required"`
-	LegalPerson   CompanyGetResponseRepresentationLegalPerson   `json:"legal_person,nullable"`
-	NaturalPerson CompanyGetResponseRepresentationNaturalPerson `json:"natural_person,nullable"`
+	Type          EntityType                                             `json:"type,required"`
+	LegalPerson   CompanyGetDetailsV1ResponseRepresentationLegalPerson   `json:"legal_person,nullable"`
+	NaturalPerson CompanyGetDetailsV1ResponseRepresentationNaturalPerson `json:"natural_person,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID            respjson.Field
@@ -534,12 +561,12 @@ type CompanyGetResponseRepresentation struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetResponseRepresentation) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetResponseRepresentation) UnmarshalJSON(data []byte) error {
+func (r CompanyGetDetailsV1ResponseRepresentation) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseRepresentation) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetResponseRepresentationLegalPerson struct {
+type CompanyGetDetailsV1ResponseRepresentationLegalPerson struct {
 	City string `json:"city,required"`
 	// Country where the representative is located, in ISO 3166-1 alpha-2 format.
 	// Example: "DE" for Germany
@@ -556,12 +583,12 @@ type CompanyGetResponseRepresentationLegalPerson struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetResponseRepresentationLegalPerson) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetResponseRepresentationLegalPerson) UnmarshalJSON(data []byte) error {
+func (r CompanyGetDetailsV1ResponseRepresentationLegalPerson) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseRepresentationLegalPerson) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetResponseRepresentationNaturalPerson struct {
+type CompanyGetDetailsV1ResponseRepresentationNaturalPerson struct {
 	// City where the representative is located. Example: "Berlin"
 	City string `json:"city,required"`
 	// Date of birth of the representative. May still be null for natural persons if it
@@ -583,8 +610,8 @@ type CompanyGetResponseRepresentationNaturalPerson struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetResponseRepresentationNaturalPerson) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetResponseRepresentationNaturalPerson) UnmarshalJSON(data []byte) error {
+func (r CompanyGetDetailsV1ResponseRepresentationNaturalPerson) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseRepresentationNaturalPerson) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -593,13 +620,108 @@ func (r *CompanyGetResponseRepresentationNaturalPerson) UnmarshalJSON(data []byt
 // - active: Operating normally
 // - inactive: No longer operating
 // - liquidation: In the process of being dissolved
-type CompanyGetResponseStatus string
+type CompanyGetDetailsV1ResponseStatus string
 
 const (
-	CompanyGetResponseStatusActive      CompanyGetResponseStatus = "active"
-	CompanyGetResponseStatusInactive    CompanyGetResponseStatus = "inactive"
-	CompanyGetResponseStatusLiquidation CompanyGetResponseStatus = "liquidation"
+	CompanyGetDetailsV1ResponseStatusActive      CompanyGetDetailsV1ResponseStatus = "active"
+	CompanyGetDetailsV1ResponseStatusInactive    CompanyGetDetailsV1ResponseStatus = "inactive"
+	CompanyGetDetailsV1ResponseStatusLiquidation CompanyGetDetailsV1ResponseStatus = "liquidation"
 )
+
+type CompanyGetFinancialsV1Response struct {
+	Reports []CompanyGetFinancialsV1ResponseReport `json:"reports,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Reports     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1Response) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsV1ResponseReport struct {
+	Aktiva CompanyGetFinancialsV1ResponseReportAktiva `json:"aktiva,required"`
+	// Whether the report is a consolidated report or not.
+	Consolidated  bool                                        `json:"consolidated,required"`
+	Passiva       CompanyGetFinancialsV1ResponseReportPassiva `json:"passiva,required"`
+	ReportEndDate time.Time                                   `json:"report_end_date,required" format:"date-time"`
+	// Unique identifier for the financial report. Example:
+	// f47ac10b-58cc-4372-a567-0e02b2c3d479
+	ReportID        string                                  `json:"report_id,required"`
+	ReportStartDate time.Time                               `json:"report_start_date,required" format:"date-time"`
+	Guv             CompanyGetFinancialsV1ResponseReportGuv `json:"guv,nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Aktiva          respjson.Field
+		Consolidated    respjson.Field
+		Passiva         respjson.Field
+		ReportEndDate   respjson.Field
+		ReportID        respjson.Field
+		ReportStartDate respjson.Field
+		Guv             respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseReport) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseReport) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsV1ResponseReportAktiva struct {
+	Rows []ReportRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseReportAktiva) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseReportAktiva) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsV1ResponseReportPassiva struct {
+	Rows []ReportRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseReportPassiva) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseReportPassiva) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsV1ResponseReportGuv struct {
+	Rows []ReportRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseReportGuv) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseReportGuv) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 // Companies this entity owns or has invested in.
 type CompanyGetHoldingsV1Response struct {
@@ -777,129 +899,7 @@ func (r *CompanyGetOwnersV1ResponseOwnerNaturalPerson) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetContactResponse struct {
-	// Where the contact information was found. Example: "https://openregister.de"
-	SourceURL string `json:"source_url,required" format:"uri"`
-	// Company contact email address. Example: "founders@openregister.de"
-	Email string `json:"email"`
-	// Company phone number. Example: "+49 030 12345678"
-	Phone string `json:"phone"`
-	// Value Added Tax identification number. (Umsatzsteuer-Identifikationsnummer)
-	// Example: "DE370146530"
-	VatID string `json:"vat_id"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		SourceURL   respjson.Field
-		Email       respjson.Field
-		Phone       respjson.Field
-		VatID       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetContactResponse) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetContactResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetFinancialsResponse struct {
-	Reports []CompanyGetFinancialsResponseReport `json:"reports,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Reports     respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsResponse) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetFinancialsResponseReport struct {
-	Aktiva CompanyGetFinancialsResponseReportAktiva `json:"aktiva,required"`
-	// Whether the report is a consolidated report or not.
-	Consolidated  bool                                      `json:"consolidated,required"`
-	Passiva       CompanyGetFinancialsResponseReportPassiva `json:"passiva,required"`
-	ReportEndDate time.Time                                 `json:"report_end_date,required" format:"date-time"`
-	// Unique identifier for the financial report. Example:
-	// f47ac10b-58cc-4372-a567-0e02b2c3d479
-	ReportID        string                                `json:"report_id,required"`
-	ReportStartDate time.Time                             `json:"report_start_date,required" format:"date-time"`
-	Guv             CompanyGetFinancialsResponseReportGuv `json:"guv,nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Aktiva          respjson.Field
-		Consolidated    respjson.Field
-		Passiva         respjson.Field
-		ReportEndDate   respjson.Field
-		ReportID        respjson.Field
-		ReportStartDate respjson.Field
-		Guv             respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsResponseReport) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsResponseReport) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetFinancialsResponseReportAktiva struct {
-	Rows []ReportRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsResponseReportAktiva) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsResponseReportAktiva) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetFinancialsResponseReportPassiva struct {
-	Rows []ReportRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsResponseReportPassiva) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsResponseReportPassiva) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetFinancialsResponseReportGuv struct {
-	Rows []ReportRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsResponseReportGuv) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsResponseReportGuv) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetParams struct {
+type CompanyGetDetailsV1Params struct {
 	// Get the most up-to-date company information directly from the Handelsregister.
 	// When set to true, we fetch the latest data in real-time from the official German
 	// commercial register, ensuring you receive the most current company details.
@@ -908,8 +908,9 @@ type CompanyGetParams struct {
 	paramObj
 }
 
-// URLQuery serializes [CompanyGetParams]'s query parameters as `url.Values`.
-func (r CompanyGetParams) URLQuery() (v url.Values, err error) {
+// URLQuery serializes [CompanyGetDetailsV1Params]'s query parameters as
+// `url.Values`.
+func (r CompanyGetDetailsV1Params) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
