@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.0.0 (2025-08-27)
+
+Full Changelog: [v0.1.0-alpha.10...v1.0.0](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.10...v1.0.0)
+
+### Features
+
+* **api:** update via SDK Studio ([7531dd2](https://github.com/oregister/openregister-go/commit/7531dd294c273898eb3c2e4293fc4a94fb4b4d0d))
+* **api:** update via SDK Studio ([169a80a](https://github.com/oregister/openregister-go/commit/169a80a5e438929327757400d0eadd7ccc4d919e))
+* **api:** update via SDK Studio ([d0fdaee](https://github.com/oregister/openregister-go/commit/d0fdaeefa386f940890e2f15630cafb1244c9ff5))
+* **api:** update via SDK Studio ([0c21d9c](https://github.com/oregister/openregister-go/commit/0c21d9c0f20cee64172d6c55e42d09b300d3fb89))
+* **api:** update via SDK Studio ([4f77ac5](https://github.com/oregister/openregister-go/commit/4f77ac56686e9b1532f5a21b6f51bf37f29c7f7c))
+* **api:** update via SDK Studio ([d4bbd79](https://github.com/oregister/openregister-go/commit/d4bbd79f81ef58b37b75388b70178168ef3fce4d))
+* **api:** update via SDK Studio ([cd6d020](https://github.com/oregister/openregister-go/commit/cd6d0207564d039b1a995a757fc07cdb0f19d039))
+
+
+### Chores
+
+* **internal:** codegen related update ([b7d09b8](https://github.com/oregister/openregister-go/commit/b7d09b8e8401d6d118e5f7ad0d620d209ab4ab39))
+* **internal:** update comment in script ([e807b53](https://github.com/oregister/openregister-go/commit/e807b536a6a183af5b835394db1c0166fadd9b69))
+* update @stainless-api/prism-cli to v5.15.0 ([5133cc9](https://github.com/oregister/openregister-go/commit/5133cc9b7f27dd9dcd0c06056cc87b31058a9be8))
+
 ## 0.1.0-alpha.10 (2025-08-07)
 
 Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/oregister/openregister-go/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
