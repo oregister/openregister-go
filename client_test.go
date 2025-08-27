@@ -40,7 +40,7 @@ func TestUserAgentHeader(t *testing.T) {
 	)
 	client.Company.GetDetailsV1(
 		context.Background(),
-		"DE-HRB",
+		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
 	)
 	if userAgent != fmt.Sprintf("Openregister/Go %s", internal.PackageVersion) {
@@ -68,7 +68,7 @@ func TestRetryAfter(t *testing.T) {
 	)
 	_, err := client.Company.GetDetailsV1(
 		context.Background(),
-		"DE-HRB",
+		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
 	)
 	if err == nil {
@@ -107,7 +107,7 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 	)
 	_, err := client.Company.GetDetailsV1(
 		context.Background(),
-		"DE-HRB",
+		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
 	)
 	if err == nil {
@@ -141,7 +141,7 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 	)
 	_, err := client.Company.GetDetailsV1(
 		context.Background(),
-		"DE-HRB",
+		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
 	)
 	if err == nil {
@@ -174,7 +174,7 @@ func TestRetryAfterMs(t *testing.T) {
 	)
 	_, err := client.Company.GetDetailsV1(
 		context.Background(),
-		"DE-HRB",
+		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
 	)
 	if err == nil {
@@ -201,7 +201,7 @@ func TestContextCancel(t *testing.T) {
 	cancel()
 	_, err := client.Company.GetDetailsV1(
 		cancelCtx,
-		"DE-HRB",
+		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
 	)
 	if err == nil {
@@ -225,7 +225,7 @@ func TestContextCancelDelay(t *testing.T) {
 	defer cancel()
 	_, err := client.Company.GetDetailsV1(
 		cancelCtx,
-		"DE-HRB",
+		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
 	)
 	if err == nil {
@@ -255,7 +255,7 @@ func TestContextDeadline(t *testing.T) {
 		)
 		_, err := client.Company.GetDetailsV1(
 			deadlineCtx,
-			"DE-HRB",
+			"DE-HRB-F1103-267645",
 			openregister.CompanyGetDetailsV1Params{},
 		)
 		if err == nil {

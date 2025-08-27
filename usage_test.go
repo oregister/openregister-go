@@ -26,7 +26,7 @@ func TestUsage(t *testing.T) {
 	)
 	response, err := client.Company.GetDetailsV1(
 		context.TODO(),
-		"company_id",
+		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
 	)
 	if err != nil {
