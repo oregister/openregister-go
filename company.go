@@ -341,7 +341,7 @@ type CompanyGetDetailsV1Response struct {
 	// Key company indicators like net income, employee count, revenue, etc..
 	Indicators []CompanyGetDetailsV1ResponseIndicator `json:"indicators,required"`
 	// Industry codes of the company.
-	IndustryCodes []CompanyGetDetailsV1ResponseIndustryCode `json:"industry_codes,required"`
+	IndustryCodes CompanyGetDetailsV1ResponseIndustryCodes `json:"industry_codes,required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
@@ -504,8 +504,25 @@ func (r *CompanyGetDetailsV1ResponseIndicator) UnmarshalJSON(data []byte) error 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Industry codes of the company.
+type CompanyGetDetailsV1ResponseIndustryCodes struct {
+	Wz2025 []CompanyGetDetailsV1ResponseIndustryCodesWz2025 `json:"WZ2025,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Wz2025      respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseIndustryCodes) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseIndustryCodes) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Industry codes from WZ 2025.
-type CompanyGetDetailsV1ResponseIndustryCode struct {
+type CompanyGetDetailsV1ResponseIndustryCodesWz2025 struct {
 	Code string `json:"code,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -516,8 +533,8 @@ type CompanyGetDetailsV1ResponseIndustryCode struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetDetailsV1ResponseIndustryCode) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetDetailsV1ResponseIndustryCode) UnmarshalJSON(data []byte) error {
+func (r CompanyGetDetailsV1ResponseIndustryCodesWz2025) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseIndustryCodesWz2025) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
