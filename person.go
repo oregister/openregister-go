@@ -35,7 +35,7 @@ func NewPersonService(opts ...option.RequestOption) (r PersonService) {
 }
 
 // Get detailed person information
-func (r *PersonService) Get(ctx context.Context, personID string, opts ...option.RequestOption) (res *PersonGetResponse, err error) {
+func (r *PersonService) GetDetailsV1(ctx context.Context, personID string, opts ...option.RequestOption) (res *PersonGetDetailsV1Response, err error) {
 	opts = append(r.Options[:], opts...)
 	if personID == "" {
 		err = errors.New("missing required person_id parameter")
@@ -47,7 +47,7 @@ func (r *PersonService) Get(ctx context.Context, personID string, opts ...option
 }
 
 // Get person holdings
-func (r *PersonService) ListHoldingsV1(ctx context.Context, personID string, opts ...option.RequestOption) (res *PersonListHoldingsV1Response, err error) {
+func (r *PersonService) GetHoldingsV1(ctx context.Context, personID string, opts ...option.RequestOption) (res *PersonGetHoldingsV1Response, err error) {
 	opts = append(r.Options[:], opts...)
 	if personID == "" {
 		err = errors.New("missing required person_id parameter")
@@ -58,7 +58,7 @@ func (r *PersonService) ListHoldingsV1(ctx context.Context, personID string, opt
 	return
 }
 
-type PersonGetResponse struct {
+type PersonGetDetailsV1Response struct {
 	// Unique person identifier. Example: cc78ab54-d958-49b8-bae7-2f6c0c308837
 	ID string `json:"id,required"`
 	// Age of the person.
@@ -72,7 +72,7 @@ type PersonGetResponse struct {
 	// Last name of the person.
 	LastName string `json:"last_name,required"`
 	// Management positions of the person.
-	ManagementPositions []PersonGetResponseManagementPosition `json:"management_positions,required"`
+	ManagementPositions []PersonGetDetailsV1ResponseManagementPosition `json:"management_positions,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                  respjson.Field
@@ -88,13 +88,13 @@ type PersonGetResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r PersonGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *PersonGetResponse) UnmarshalJSON(data []byte) error {
+func (r PersonGetDetailsV1Response) RawJSON() string { return r.JSON.raw }
+func (r *PersonGetDetailsV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // All current and past management positions of the person.
-type PersonGetResponseManagementPosition struct {
+type PersonGetDetailsV1ResponseManagementPosition struct {
 	// Name of the company. Example: "Descartes Technologies GmbH"
 	CompanyName string `json:"company_name,required"`
 	// Register ID of the company. Example: DE-HRB-F1103-267645
@@ -120,15 +120,15 @@ type PersonGetResponseManagementPosition struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r PersonGetResponseManagementPosition) RawJSON() string { return r.JSON.raw }
-func (r *PersonGetResponseManagementPosition) UnmarshalJSON(data []byte) error {
+func (r PersonGetDetailsV1ResponseManagementPosition) RawJSON() string { return r.JSON.raw }
+func (r *PersonGetDetailsV1ResponseManagementPosition) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Companies this entity owns or has invested in.
-type PersonListHoldingsV1Response struct {
+type PersonGetHoldingsV1Response struct {
 	// Shareholder and limited partner positions of the person.
-	Holdings []PersonListHoldingsV1ResponseHolding `json:"holdings,required"`
+	Holdings []PersonGetHoldingsV1ResponseHolding `json:"holdings,required"`
 	// Unique person identifier. Example: cc78ab54-d958-49b8-bae7-2f6c0c308837
 	PersonID string `json:"person_id,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -141,12 +141,12 @@ type PersonListHoldingsV1Response struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r PersonListHoldingsV1Response) RawJSON() string { return r.JSON.raw }
-func (r *PersonListHoldingsV1Response) UnmarshalJSON(data []byte) error {
+func (r PersonGetHoldingsV1Response) RawJSON() string { return r.JSON.raw }
+func (r *PersonGetHoldingsV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PersonListHoldingsV1ResponseHolding struct {
+type PersonGetHoldingsV1ResponseHolding struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id,required"`
 	// Date when the ownership ended. Format: ISO 8601 (YYYY-MM-DD) Example:
@@ -180,7 +180,7 @@ type PersonListHoldingsV1ResponseHolding struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r PersonListHoldingsV1ResponseHolding) RawJSON() string { return r.JSON.raw }
-func (r *PersonListHoldingsV1ResponseHolding) UnmarshalJSON(data []byte) error {
+func (r PersonGetHoldingsV1ResponseHolding) RawJSON() string { return r.JSON.raw }
+func (r *PersonGetHoldingsV1ResponseHolding) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
