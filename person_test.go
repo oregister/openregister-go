@@ -13,8 +13,8 @@ import (
 	"github.com/oregister/openregister-go/option"
 )
 
-func TestJobDocumentNew(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+func TestPersonGetDetailsV1(t *testing.T) {
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,10 +26,7 @@ func TestJobDocumentNew(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Jobs.Document.New(context.TODO(), openregister.JobDocumentNewParams{
-		CompanyID:        "company_id",
-		DocumentCategory: openregister.JobDocumentNewParamsDocumentCategoryCurrentPrintout,
-	})
+	_, err := client.Person.GetDetailsV1(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {
@@ -39,8 +36,8 @@ func TestJobDocumentNew(t *testing.T) {
 	}
 }
 
-func TestJobDocumentGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+func TestPersonGetHoldingsV1(t *testing.T) {
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -52,7 +49,7 @@ func TestJobDocumentGet(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Jobs.Document.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+	_, err := client.Person.GetHoldingsV1(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {

@@ -14,7 +14,7 @@ import (
 )
 
 func TestSearchAutocompleteCompaniesV1(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -39,7 +39,7 @@ func TestSearchAutocompleteCompaniesV1(t *testing.T) {
 }
 
 func TestSearchFindCompaniesV0WithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -72,7 +72,7 @@ func TestSearchFindCompaniesV0WithOptionalParams(t *testing.T) {
 }
 
 func TestSearchFindCompaniesV1WithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -115,8 +115,8 @@ func TestSearchFindCompaniesV1WithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSearchFindPersonWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+func TestSearchFindPersonV1WithOptionalParams(t *testing.T) {
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -128,8 +128,8 @@ func TestSearchFindPersonWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Search.FindPerson(context.TODO(), openregister.SearchFindPersonParams{
-		Filters: []openregister.SearchFindPersonParamsFilter{{
+	_, err := client.Search.FindPersonV1(context.TODO(), openregister.SearchFindPersonV1Params{
+		Filters: []openregister.SearchFindPersonV1ParamsFilter{{
 			Field:    "date_of_birth",
 			Keywords: []string{"string"},
 			Max:      openregister.String("max"),
@@ -137,11 +137,11 @@ func TestSearchFindPersonWithOptionalParams(t *testing.T) {
 			Value:    openregister.String("value"),
 			Values:   []string{"string"},
 		}},
-		Pagination: openregister.SearchFindPersonParamsPagination{
+		Pagination: openregister.SearchFindPersonV1ParamsPagination{
 			Page:    openregister.Int(0),
 			PerPage: openregister.Int(0),
 		},
-		Query: openregister.SearchFindPersonParamsQuery{
+		Query: openregister.SearchFindPersonV1ParamsQuery{
 			Value: "value",
 		},
 	})
@@ -155,7 +155,7 @@ func TestSearchFindPersonWithOptionalParams(t *testing.T) {
 }
 
 func TestSearchLookupCompanyByURL(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

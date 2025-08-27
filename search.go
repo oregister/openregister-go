@@ -59,7 +59,7 @@ func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindComp
 }
 
 // Search for people
-func (r *SearchService) FindPerson(ctx context.Context, body SearchFindPersonParams, opts ...option.RequestOption) (res *SearchFindPersonResponse, err error) {
+func (r *SearchService) FindPersonV1(ctx context.Context, body SearchFindPersonV1Params, opts ...option.RequestOption) (res *SearchFindPersonV1Response, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v1/search/person"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -171,6 +171,9 @@ type CompanySearchResult struct {
 	Active bool `json:"active,required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id,required"`
+	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
+	// "DE" for Germany
+	Country string `json:"country,required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
@@ -187,19 +190,16 @@ type CompanySearchResult struct {
 	//
 	// Any of "HRB", "HRA", "PR", "GnR", "VR".
 	RegisterType CompanyRegisterType `json:"register_type,required"`
-	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
-	// "DE" for Germany
-	Country string `json:"country"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Active         respjson.Field
 		CompanyID      respjson.Field
+		Country        respjson.Field
 		LegalForm      respjson.Field
 		Name           respjson.Field
 		RegisterCourt  respjson.Field
 		RegisterNumber respjson.Field
 		RegisterType   respjson.Field
-		Country        respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
 	} `json:"-"`
@@ -213,7 +213,7 @@ func (r *CompanySearchResult) UnmarshalJSON(data []byte) error {
 
 type SearchAutocompleteCompaniesV1Response struct {
 	// List of companies matching the search criteria.
-	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results"`
+	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Results     respjson.Field
@@ -233,6 +233,9 @@ type SearchAutocompleteCompaniesV1ResponseResult struct {
 	Active bool `json:"active,required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id,required"`
+	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
+	// "DE" for Germany
+	Country string `json:"country,required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
@@ -249,19 +252,16 @@ type SearchAutocompleteCompaniesV1ResponseResult struct {
 	//
 	// Any of "HRB", "HRA", "PR", "GnR", "VR".
 	RegisterType CompanyRegisterType `json:"register_type,required"`
-	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
-	// "DE" for Germany
-	Country string `json:"country"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Active         respjson.Field
 		CompanyID      respjson.Field
+		Country        respjson.Field
 		LegalForm      respjson.Field
 		Name           respjson.Field
 		RegisterCourt  respjson.Field
 		RegisterNumber respjson.Field
 		RegisterType   respjson.Field
-		Country        respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
 	} `json:"-"`
@@ -273,10 +273,10 @@ func (r *SearchAutocompleteCompaniesV1ResponseResult) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindPersonResponse struct {
-	Pagination SearchFindPersonResponsePagination `json:"pagination,required"`
+type SearchFindPersonV1Response struct {
+	Pagination SearchFindPersonV1ResponsePagination `json:"pagination,required"`
 	// List of people matching the search criteria.
-	Results []SearchFindPersonResponseResult `json:"results,required"`
+	Results []SearchFindPersonV1ResponseResult `json:"results,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Pagination  respjson.Field
@@ -287,12 +287,12 @@ type SearchFindPersonResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindPersonResponse) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindPersonResponse) UnmarshalJSON(data []byte) error {
+func (r SearchFindPersonV1Response) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindPersonV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindPersonResponsePagination struct {
+type SearchFindPersonV1ResponsePagination struct {
 	// Current page number.
 	Page int64 `json:"page,required"`
 	// Number of results per page.
@@ -313,37 +313,37 @@ type SearchFindPersonResponsePagination struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindPersonResponsePagination) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindPersonResponsePagination) UnmarshalJSON(data []byte) error {
+func (r SearchFindPersonV1ResponsePagination) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindPersonV1ResponsePagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindPersonResponseResult struct {
+type SearchFindPersonV1ResponseResult struct {
 	// Unique person identifier. Example: 1234-5678-9012-345678901234
 	ID string `json:"id,required"`
 	// Person status - true if active, false if inactive.
 	Active bool `json:"active,required"`
+	// City of the person. Example: "Berlin"
+	City string `json:"city,required"`
 	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
 	DateOfBirth string `json:"date_of_birth,required"`
 	// Name of the person. Example: "Max Mustermann"
 	Name string `json:"name,required"`
-	// City of the person. Example: "Berlin"
-	City string `json:"city"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID          respjson.Field
 		Active      respjson.Field
+		City        respjson.Field
 		DateOfBirth respjson.Field
 		Name        respjson.Field
-		City        respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
-func (r SearchFindPersonResponseResult) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindPersonResponseResult) UnmarshalJSON(data []byte) error {
+func (r SearchFindPersonV1ResponseResult) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindPersonV1ResponseResult) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -535,26 +535,26 @@ func (r *SearchFindCompaniesV1ParamsQuery) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchFindPersonParams struct {
+type SearchFindPersonV1Params struct {
 	// Filters to filter people.
-	Filters []SearchFindPersonParamsFilter `json:"filters,omitzero"`
+	Filters []SearchFindPersonV1ParamsFilter `json:"filters,omitzero"`
 	// Pagination parameters.
-	Pagination SearchFindPersonParamsPagination `json:"pagination,omitzero"`
+	Pagination SearchFindPersonV1ParamsPagination `json:"pagination,omitzero"`
 	// Search query to filter people.
-	Query SearchFindPersonParamsQuery `json:"query,omitzero"`
+	Query SearchFindPersonV1ParamsQuery `json:"query,omitzero"`
 	paramObj
 }
 
-func (r SearchFindPersonParams) MarshalJSON() (data []byte, err error) {
-	type shadow SearchFindPersonParams
+func (r SearchFindPersonV1Params) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindPersonV1Params
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *SearchFindPersonParams) UnmarshalJSON(data []byte) error {
+func (r *SearchFindPersonV1Params) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The property Field is required.
-type SearchFindPersonParamsFilter struct {
+type SearchFindPersonV1ParamsFilter struct {
 	// Any of "date_of_birth", "city", "active".
 	Field    string            `json:"field,omitzero,required"`
 	Max      param.Opt[string] `json:"max,omitzero"`
@@ -565,22 +565,22 @@ type SearchFindPersonParamsFilter struct {
 	paramObj
 }
 
-func (r SearchFindPersonParamsFilter) MarshalJSON() (data []byte, err error) {
-	type shadow SearchFindPersonParamsFilter
+func (r SearchFindPersonV1ParamsFilter) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindPersonV1ParamsFilter
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *SearchFindPersonParamsFilter) UnmarshalJSON(data []byte) error {
+func (r *SearchFindPersonV1ParamsFilter) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 func init() {
-	apijson.RegisterFieldValidator[SearchFindPersonParamsFilter](
+	apijson.RegisterFieldValidator[SearchFindPersonV1ParamsFilter](
 		"field", "date_of_birth", "city", "active",
 	)
 }
 
 // Pagination parameters.
-type SearchFindPersonParamsPagination struct {
+type SearchFindPersonV1ParamsPagination struct {
 	// Page number to return.
 	Page param.Opt[int64] `json:"page,omitzero"`
 	// Number of results per page.
@@ -588,28 +588,28 @@ type SearchFindPersonParamsPagination struct {
 	paramObj
 }
 
-func (r SearchFindPersonParamsPagination) MarshalJSON() (data []byte, err error) {
-	type shadow SearchFindPersonParamsPagination
+func (r SearchFindPersonV1ParamsPagination) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindPersonV1ParamsPagination
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *SearchFindPersonParamsPagination) UnmarshalJSON(data []byte) error {
+func (r *SearchFindPersonV1ParamsPagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Search query to filter people.
 //
 // The property Value is required.
-type SearchFindPersonParamsQuery struct {
+type SearchFindPersonV1ParamsQuery struct {
 	// Search query to filter people.
 	Value string `json:"value,required"`
 	paramObj
 }
 
-func (r SearchFindPersonParamsQuery) MarshalJSON() (data []byte, err error) {
-	type shadow SearchFindPersonParamsQuery
+func (r SearchFindPersonV1ParamsQuery) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindPersonV1ParamsQuery
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *SearchFindPersonParamsQuery) UnmarshalJSON(data []byte) error {
+func (r *SearchFindPersonV1ParamsQuery) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

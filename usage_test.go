@@ -24,13 +24,13 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	company, err := client.Company.Get(
+	response, err := client.Company.GetDetailsV1(
 		context.TODO(),
-		"company_id",
-		openregister.CompanyGetParams{},
+		"DE-HRB-F1103-267645",
+		openregister.CompanyGetDetailsV1Params{},
 	)
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", company.ID)
+	t.Logf("%+v\n", response.ID)
 }
