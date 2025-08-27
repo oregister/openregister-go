@@ -13,7 +13,7 @@ import (
 	"github.com/oregister/openregister-go/option"
 )
 
-func TestDocumentDocumentCached(t *testing.T) {
+func TestDocumentGetCachedV1(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,7 +26,7 @@ func TestDocumentDocumentCached(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Document.DocumentCached(context.TODO(), "document_id")
+	_, err := client.Document.GetCachedV1(context.TODO(), "document_id")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {
@@ -36,7 +36,7 @@ func TestDocumentDocumentCached(t *testing.T) {
 	}
 }
 
-func TestDocumentFetch(t *testing.T) {
+func TestDocumentGetRealtimeV1(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -49,9 +49,9 @@ func TestDocumentFetch(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Document.Fetch(context.TODO(), openregister.DocumentFetchParams{
+	_, err := client.Document.GetRealtimeV1(context.TODO(), openregister.DocumentGetRealtimeV1Params{
 		CompanyID:        "company_id",
-		DocumentCategory: openregister.DocumentFetchParamsDocumentCategoryCurrentPrintout,
+		DocumentCategory: openregister.DocumentGetRealtimeV1ParamsDocumentCategoryCurrentPrintout,
 	})
 	if err != nil {
 		var apierr *openregister.Error
