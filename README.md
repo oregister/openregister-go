@@ -299,7 +299,7 @@ To handle errors, we recommend that you use the `errors.As` pattern:
 ```go
 _, err := client.Company.GetDetailsV1(
 	context.TODO(),
-	"company_id",
+	"DE-HRB",
 	openregister.CompanyGetDetailsV1Params{},
 )
 if err != nil {
@@ -328,7 +328,7 @@ ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
 client.Company.GetDetailsV1(
 	ctx,
-	"company_id",
+	"DE-HRB",
 	openregister.CompanyGetDetailsV1Params{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
@@ -365,7 +365,7 @@ client := openregister.NewClient(
 // Override per-request:
 client.Company.GetDetailsV1(
 	context.TODO(),
-	"company_id",
+	"DE-HRB",
 	openregister.CompanyGetDetailsV1Params{},
 	option.WithMaxRetries(5),
 )
@@ -381,7 +381,7 @@ you need to examine response headers, status codes, or other details.
 var response *http.Response
 response, err := client.Company.GetDetailsV1(
 	context.TODO(),
-	"company_id",
+	"DE-HRB",
 	openregister.CompanyGetDetailsV1Params{},
 	option.WithResponseInto(&response),
 )
