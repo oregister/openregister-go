@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.2 (2025-08-29)
+
+Full Changelog: [v1.0.1...v1.0.2](https://github.com/oregister/openregister-go/compare/v1.0.1...v1.0.2)
+
+### Features
+
+* **api:** update via SDK Studio ([da2fa61](https://github.com/oregister/openregister-go/commit/da2fa618392b02b18152295c3bb964ec9163fec8))
+
+
+### Bug Fixes
+
+* close body before retrying ([042445b](https://github.com/oregister/openregister-go/commit/042445b9d2e1a1ee8492302c17bfa78fc46a0de3))
+
 ## 1.0.1 (2025-08-27)
 
 Full Changelog: [v1.0.0...v1.0.1](https://github.com/oregister/openregister-go/compare/v1.0.0...v1.0.1)
