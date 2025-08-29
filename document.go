@@ -101,7 +101,7 @@ type DocumentGetRealtimeV1Response struct {
 	// Any of "current_printout", "chronological_printout", "historical_printout",
 	// "structured_information", "shareholder_list", "articles_of_association".
 	Category DocumentGetRealtimeV1ResponseCategory `json:"category,required"`
-	FileDate string                                `json:"file_date,required" format:"date-only"`
+	FileDate string                                `json:"file_date,required"`
 	FileName string                                `json:"file_name,required"`
 	URL      string                                `json:"url,required" format:"uri"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
