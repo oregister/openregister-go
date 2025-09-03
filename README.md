@@ -1,6 +1,10 @@
 # Openregister Go API Library
 
+<!-- x-release-please-start-version -->
+
 <a href="https://pkg.go.dev/github.com/oregister/openregister-go"><img src="https://pkg.go.dev/badge/github.com/oregister/openregister-go.svg" alt="Go Reference"></a>
+
+<!-- x-release-please-end -->
 
 The Openregister Go library provides convenient access to the [Openregister REST API](docs.openregister.de)
 from applications written in Go.
