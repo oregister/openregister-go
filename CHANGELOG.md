@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.3 (2025-09-09)
+
+Full Changelog: [v1.0.2...v1.0.3](https://github.com/oregister/openregister-go/compare/v1.0.2...v1.0.3)
+
+### Bug Fixes
+
+* **internal:** unmarshal correctly when there are multiple discriminators ([632477b](https://github.com/oregister/openregister-go/commit/632477b57a2b946f7f719f60d54893eac65c0df9))
+
+
+### Chores
+
+* **internal:** codegen related update ([07ec8a3](https://github.com/oregister/openregister-go/commit/07ec8a3dac284babafaf1e5405f53bf72c88bead))
+
 ## 1.0.2 (2025-08-29)
 
 Full Changelog: [v1.0.1...v1.0.2](https://github.com/oregister/openregister-go/compare/v1.0.1...v1.0.2)
