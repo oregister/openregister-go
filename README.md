@@ -1,6 +1,10 @@
 # Openregister Go API Library
 
+<!-- x-release-please-start-version -->
+
 <a href="https://pkg.go.dev/github.com/oregister/openregister-go"><img src="https://pkg.go.dev/badge/github.com/oregister/openregister-go.svg" alt="Go Reference"></a>
+
+<!-- x-release-please-end -->
 
 The Openregister Go library provides convenient access to the [Openregister REST API](docs.openregister.de)
 from applications written in Go.
@@ -24,7 +28,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/oregister/openregister-go@v1.0.2'
+go get -u 'github.com/oregister/openregister-go@v1.0.3'
 ```
 
 <!-- x-release-please-end -->
