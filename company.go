@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/oregister/openregister-go/internal/apijson"
 	"github.com/oregister/openregister-go/internal/apiquery"
@@ -38,7 +39,7 @@ func NewCompanyService(opts ...option.RequestOption) (r CompanyService) {
 
 // Get company contact information
 func (r *CompanyService) GetContactV0(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetContactV0Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
 		return
@@ -50,7 +51,7 @@ func (r *CompanyService) GetContactV0(ctx context.Context, companyID string, opt
 
 // Get detailed company information
 func (r *CompanyService) GetDetailsV1(ctx context.Context, companyID string, query CompanyGetDetailsV1Params, opts ...option.RequestOption) (res *CompanyGetDetailsV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
 		return
@@ -62,7 +63,7 @@ func (r *CompanyService) GetDetailsV1(ctx context.Context, companyID string, que
 
 // Get financial reports
 func (r *CompanyService) GetFinancialsV1(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetFinancialsV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
 		return
@@ -74,7 +75,7 @@ func (r *CompanyService) GetFinancialsV1(ctx context.Context, companyID string, 
 
 // Get company holdings
 func (r *CompanyService) GetHoldingsV1(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetHoldingsV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
 		return
@@ -86,7 +87,7 @@ func (r *CompanyService) GetHoldingsV1(ctx context.Context, companyID string, op
 
 // Get company owners
 func (r *CompanyService) GetOwnersV1(ctx context.Context, companyID string, query CompanyGetOwnersV1Params, opts ...option.RequestOption) (res *CompanyGetOwnersV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
 		return
