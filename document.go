@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/oregister/openregister-go/internal/apijson"
 	"github.com/oregister/openregister-go/internal/apiquery"
@@ -37,7 +38,7 @@ func NewDocumentService(opts ...option.RequestOption) (r DocumentService) {
 
 // Get document information
 func (r *DocumentService) GetCachedV1(ctx context.Context, documentID string, opts ...option.RequestOption) (res *DocumentGetCachedV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if documentID == "" {
 		err = errors.New("missing required document_id parameter")
 		return
@@ -49,7 +50,7 @@ func (r *DocumentService) GetCachedV1(ctx context.Context, documentID string, op
 
 // Fetch a document in realtime.
 func (r *DocumentService) GetRealtimeV1(ctx context.Context, query DocumentGetRealtimeV1Params, opts ...option.RequestOption) (res *DocumentGetRealtimeV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v1/document"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
