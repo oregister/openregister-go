@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/oregister/openregister-go/internal/apijson"
 	"github.com/oregister/openregister-go/internal/apiquery"
@@ -36,7 +37,7 @@ func NewSearchService(opts ...option.RequestOption) (r SearchService) {
 
 // Autocomplete company search
 func (r *SearchService) AutocompleteCompaniesV1(ctx context.Context, query SearchAutocompleteCompaniesV1Params, opts ...option.RequestOption) (res *SearchAutocompleteCompaniesV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v1/autocomplete/company"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
@@ -44,7 +45,7 @@ func (r *SearchService) AutocompleteCompaniesV1(ctx context.Context, query Searc
 
 // Search for companies
 func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCompaniesV0Params, opts ...option.RequestOption) (res *CompanySearch, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v0/search/company"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
@@ -52,7 +53,7 @@ func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCom
 
 // Search for companies
 func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindCompaniesV1Params, opts ...option.RequestOption) (res *CompanySearch, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v1/search/company"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
@@ -60,7 +61,7 @@ func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindComp
 
 // Search for people
 func (r *SearchService) FindPersonV1(ctx context.Context, body SearchFindPersonV1Params, opts ...option.RequestOption) (res *SearchFindPersonV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v1/search/person"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
@@ -68,7 +69,7 @@ func (r *SearchService) FindPersonV1(ctx context.Context, body SearchFindPersonV
 
 // Find company by website URL
 func (r *SearchService) LookupCompanyByURL(ctx context.Context, query SearchLookupCompanyByURLParams, opts ...option.RequestOption) (res *SearchLookupCompanyByURLResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v0/search/lookup"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
