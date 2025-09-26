@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.4 (2025-09-26)
+
+Full Changelog: [v1.0.3...v1.0.4](https://github.com/oregister/openregister-go/compare/v1.0.3...v1.0.4)
+
+### Bug Fixes
+
+* bugfix for setting JSON keys with special characters ([1f9ab17](https://github.com/oregister/openregister-go/commit/1f9ab17fa9f03ae14716caf93274d469075f3daa))
+* use slices.Concat instead of sometimes modifying r.Options ([f9ea371](https://github.com/oregister/openregister-go/commit/f9ea37121a637cdedb47fe31f2a1e48f1d527a8b))
+
+
+### Chores
+
+* bump minimum go version to 1.22 ([0f82abd](https://github.com/oregister/openregister-go/commit/0f82abd64a984572148bcf137d39d706fbc1bf10))
+* do not install brew dependencies in ./scripts/bootstrap by default ([92dfa5f](https://github.com/oregister/openregister-go/commit/92dfa5f47c457731a5e106b8fd61a92f3bfb87e7))
+* update more docs for 1.22 ([a6dd530](https://github.com/oregister/openregister-go/commit/a6dd5304ccdede380458d61ecf9ea29ac7631994))
+
 ## 1.0.3 (2025-09-09)
 
 Full Changelog: [v1.0.2...v1.0.3](https://github.com/oregister/openregister-go/compare/v1.0.2...v1.0.3)
