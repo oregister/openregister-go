@@ -271,6 +271,47 @@ const (
 	EntityTypeLegalPerson   EntityType = "legal_person"
 )
 
+// Report row with values from multiple report periods
+type MergedReportRow struct {
+	Children      []MergedReportRow `json:"children,required"`
+	FormattedName string            `json:"formatted_name,required"`
+	Name          string            `json:"name,required"`
+	// Report end date to value mapping (ISO date string as key)
+	Values map[string]int64 `json:"values,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		Values        respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r MergedReportRow) RawJSON() string { return r.JSON.raw }
+func (r *MergedReportRow) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Report table with data merged across multiple report periods
+type MergedReportTable struct {
+	Rows []MergedReportRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r MergedReportTable) RawJSON() string { return r.JSON.raw }
+func (r *MergedReportTable) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type ReportRow struct {
 	Children      []ReportRow `json:"children,required"`
 	CurrentValue  int64       `json:"current_value,required"`
@@ -292,6 +333,22 @@ type ReportRow struct {
 // Returns the unmodified JSON received from the API
 func (r ReportRow) RawJSON() string { return r.JSON.raw }
 func (r *ReportRow) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ReportTable struct {
+	Rows []ReportRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ReportTable) RawJSON() string { return r.JSON.raw }
+func (r *ReportTable) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -746,11 +803,11 @@ func (r *CompanyGetFinancialsV1Response) UnmarshalJSON(data []byte) error {
 // All report periods merged into a single view
 type CompanyGetFinancialsV1ResponseMerged struct {
 	// Report table with data merged across multiple report periods
-	Aktiva CompanyGetFinancialsV1ResponseMergedAktiva `json:"aktiva,required"`
+	Aktiva MergedReportTable `json:"aktiva,required"`
 	// Report table with data merged across multiple report periods
-	Passiva CompanyGetFinancialsV1ResponseMergedPassiva `json:"passiva,required"`
+	Passiva MergedReportTable `json:"passiva,required"`
 	// Report table with data merged across multiple report periods
-	Guv CompanyGetFinancialsV1ResponseMergedGuv `json:"guv"`
+	Guv MergedReportTable `json:"guv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Aktiva      respjson.Field
@@ -767,140 +824,17 @@ func (r *CompanyGetFinancialsV1ResponseMerged) UnmarshalJSON(data []byte) error 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Report table with data merged across multiple report periods
-type CompanyGetFinancialsV1ResponseMergedAktiva struct {
-	Rows []CompanyGetFinancialsV1ResponseMergedAktivaRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseMergedAktiva) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseMergedAktiva) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Report row with values from multiple report periods
-type CompanyGetFinancialsV1ResponseMergedAktivaRow struct {
-	Children      []any  `json:"children,required"`
-	FormattedName string `json:"formatted_name,required"`
-	Name          string `json:"name,required"`
-	// Report end date to value mapping (ISO date string as key)
-	Values map[string]int64 `json:"values,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Children      respjson.Field
-		FormattedName respjson.Field
-		Name          respjson.Field
-		Values        respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseMergedAktivaRow) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseMergedAktivaRow) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Report table with data merged across multiple report periods
-type CompanyGetFinancialsV1ResponseMergedPassiva struct {
-	Rows []CompanyGetFinancialsV1ResponseMergedPassivaRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseMergedPassiva) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseMergedPassiva) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Report row with values from multiple report periods
-type CompanyGetFinancialsV1ResponseMergedPassivaRow struct {
-	Children      []any  `json:"children,required"`
-	FormattedName string `json:"formatted_name,required"`
-	Name          string `json:"name,required"`
-	// Report end date to value mapping (ISO date string as key)
-	Values map[string]int64 `json:"values,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Children      respjson.Field
-		FormattedName respjson.Field
-		Name          respjson.Field
-		Values        respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseMergedPassivaRow) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseMergedPassivaRow) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Report table with data merged across multiple report periods
-type CompanyGetFinancialsV1ResponseMergedGuv struct {
-	Rows []CompanyGetFinancialsV1ResponseMergedGuvRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseMergedGuv) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseMergedGuv) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Report row with values from multiple report periods
-type CompanyGetFinancialsV1ResponseMergedGuvRow struct {
-	Children      []any  `json:"children,required"`
-	FormattedName string `json:"formatted_name,required"`
-	Name          string `json:"name,required"`
-	// Report end date to value mapping (ISO date string as key)
-	Values map[string]int64 `json:"values,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Children      respjson.Field
-		FormattedName respjson.Field
-		Name          respjson.Field
-		Values        respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseMergedGuvRow) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseMergedGuvRow) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type CompanyGetFinancialsV1ResponseReport struct {
-	Aktiva CompanyGetFinancialsV1ResponseReportAktiva `json:"aktiva,required"`
+	Aktiva ReportTable `json:"aktiva,required"`
 	// Whether the report is a consolidated report or not.
-	Consolidated  bool                                        `json:"consolidated,required"`
-	Passiva       CompanyGetFinancialsV1ResponseReportPassiva `json:"passiva,required"`
-	ReportEndDate string                                      `json:"report_end_date,required"`
+	Consolidated  bool        `json:"consolidated,required"`
+	Passiva       ReportTable `json:"passiva,required"`
+	ReportEndDate string      `json:"report_end_date,required"`
 	// Unique identifier for the financial report. Example:
 	// f47ac10b-58cc-4372-a567-0e02b2c3d479
-	ReportID        string                                  `json:"report_id,required"`
-	ReportStartDate string                                  `json:"report_start_date,required"`
-	Guv             CompanyGetFinancialsV1ResponseReportGuv `json:"guv,nullable"`
+	ReportID        string      `json:"report_id,required"`
+	ReportStartDate string      `json:"report_start_date,required"`
+	Guv             ReportTable `json:"guv,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Aktiva          respjson.Field
@@ -918,54 +852,6 @@ type CompanyGetFinancialsV1ResponseReport struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetFinancialsV1ResponseReport) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetFinancialsV1ResponseReport) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetFinancialsV1ResponseReportAktiva struct {
-	Rows []ReportRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseReportAktiva) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseReportAktiva) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetFinancialsV1ResponseReportPassiva struct {
-	Rows []ReportRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseReportPassiva) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseReportPassiva) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetFinancialsV1ResponseReportGuv struct {
-	Rows []ReportRow `json:"rows,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetFinancialsV1ResponseReportGuv) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetFinancialsV1ResponseReportGuv) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
