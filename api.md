@@ -33,7 +33,10 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyRegister">CompanyRegister</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyRelationType">CompanyRelationType</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#EntityType">EntityType</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#MergedReportRow">MergedReportRow</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#MergedReportTable">MergedReportTable</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#ReportRow">ReportRow</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#ReportTable">ReportTable</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetContactV0Response">CompanyGetContactV0Response</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetDetailsV1Response">CompanyGetDetailsV1Response</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetFinancialsV1Response">CompanyGetFinancialsV1Response</a>

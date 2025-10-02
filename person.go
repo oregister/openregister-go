@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/oregister/openregister-go/internal/apijson"
 	"github.com/oregister/openregister-go/internal/requestconfig"
@@ -35,7 +36,7 @@ func NewPersonService(opts ...option.RequestOption) (r PersonService) {
 
 // Get detailed person information
 func (r *PersonService) GetDetailsV1(ctx context.Context, personID string, opts ...option.RequestOption) (res *PersonGetDetailsV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if personID == "" {
 		err = errors.New("missing required person_id parameter")
 		return
@@ -47,7 +48,7 @@ func (r *PersonService) GetDetailsV1(ctx context.Context, personID string, opts 
 
 // Get person holdings
 func (r *PersonService) GetHoldingsV1(ctx context.Context, personID string, opts ...option.RequestOption) (res *PersonGetHoldingsV1Response, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if personID == "" {
 		err = errors.New("missing required person_id parameter")
 		return

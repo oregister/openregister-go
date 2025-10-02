@@ -53,6 +53,7 @@ func TestCompanyGetDetailsV1WithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"company_id",
 		openregister.CompanyGetDetailsV1Params{
+			Export:   openregister.Bool(true),
 			Realtime: openregister.Bool(true),
 		},
 	)
@@ -128,6 +129,7 @@ func TestCompanyGetOwnersV1WithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"company_id",
 		openregister.CompanyGetOwnersV1Params{
+			Export:   openregister.Bool(true),
 			Realtime: openregister.Bool(true),
 		},
 	)
