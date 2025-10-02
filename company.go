@@ -333,6 +333,8 @@ type CompanyGetDetailsV1Response struct {
 	Capital CompanyCapital `json:"capital,required"`
 	// Historical capital changes. Shows how the company capital changed over time.
 	Capitals []CompanyCapital `json:"capitals,required"`
+	// Contact information of the company.
+	Contact CompanyGetDetailsV1ResponseContact `json:"contact,required"`
 	// Available official documents related to the company.
 	Documents []CompanyGetDetailsV1ResponseDocument `json:"documents,required"`
 	// Date when the company was officially registered. Format: ISO 8601 (YYYY-MM-DD)
@@ -384,6 +386,7 @@ type CompanyGetDetailsV1Response struct {
 		Addresses      respjson.Field
 		Capital        respjson.Field
 		Capitals       respjson.Field
+		Contact        respjson.Field
 		Documents      respjson.Field
 		IncorporatedAt respjson.Field
 		Indicators     respjson.Field
@@ -407,6 +410,61 @@ type CompanyGetDetailsV1Response struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetDetailsV1Response) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetDetailsV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Contact information of the company.
+type CompanyGetDetailsV1ResponseContact struct {
+	SocialMedia CompanyGetDetailsV1ResponseContactSocialMedia `json:"social_media,required"`
+	WebsiteURL  string                                        `json:"website_url,required"`
+	Email       string                                        `json:"email"`
+	Phone       string                                        `json:"phone"`
+	VatID       string                                        `json:"vat_id"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		SocialMedia respjson.Field
+		WebsiteURL  respjson.Field
+		Email       respjson.Field
+		Phone       respjson.Field
+		VatID       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseContact) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseContact) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetDetailsV1ResponseContactSocialMedia struct {
+	Facebook  string `json:"facebook"`
+	GitHub    string `json:"github"`
+	Instagram string `json:"instagram"`
+	Linkedin  string `json:"linkedin"`
+	Tiktok    string `json:"tiktok"`
+	Twitter   string `json:"twitter"`
+	Xing      string `json:"xing"`
+	Youtube   string `json:"youtube"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Facebook    respjson.Field
+		GitHub      respjson.Field
+		Instagram   respjson.Field
+		Linkedin    respjson.Field
+		Tiktok      respjson.Field
+		Twitter     respjson.Field
+		Xing        respjson.Field
+		Youtube     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseContactSocialMedia) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseContactSocialMedia) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -667,9 +725,12 @@ const (
 )
 
 type CompanyGetFinancialsV1Response struct {
+	// All report periods merged into a single view
+	Merged  CompanyGetFinancialsV1ResponseMerged   `json:"merged,required"`
 	Reports []CompanyGetFinancialsV1ResponseReport `json:"reports,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
+		Merged      respjson.Field
 		Reports     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -679,6 +740,153 @@ type CompanyGetFinancialsV1Response struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetFinancialsV1Response) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetFinancialsV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// All report periods merged into a single view
+type CompanyGetFinancialsV1ResponseMerged struct {
+	// Report table with data merged across multiple report periods
+	Aktiva CompanyGetFinancialsV1ResponseMergedAktiva `json:"aktiva,required"`
+	// Report table with data merged across multiple report periods
+	Passiva CompanyGetFinancialsV1ResponseMergedPassiva `json:"passiva,required"`
+	// Report table with data merged across multiple report periods
+	Guv CompanyGetFinancialsV1ResponseMergedGuv `json:"guv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Aktiva      respjson.Field
+		Passiva     respjson.Field
+		Guv         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseMerged) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseMerged) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Report table with data merged across multiple report periods
+type CompanyGetFinancialsV1ResponseMergedAktiva struct {
+	Rows []CompanyGetFinancialsV1ResponseMergedAktivaRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseMergedAktiva) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseMergedAktiva) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Report row with values from multiple report periods
+type CompanyGetFinancialsV1ResponseMergedAktivaRow struct {
+	Children      []any  `json:"children,required"`
+	FormattedName string `json:"formatted_name,required"`
+	Name          string `json:"name,required"`
+	// Report end date to value mapping (ISO date string as key)
+	Values map[string]int64 `json:"values,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		Values        respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseMergedAktivaRow) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseMergedAktivaRow) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Report table with data merged across multiple report periods
+type CompanyGetFinancialsV1ResponseMergedPassiva struct {
+	Rows []CompanyGetFinancialsV1ResponseMergedPassivaRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseMergedPassiva) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseMergedPassiva) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Report row with values from multiple report periods
+type CompanyGetFinancialsV1ResponseMergedPassivaRow struct {
+	Children      []any  `json:"children,required"`
+	FormattedName string `json:"formatted_name,required"`
+	Name          string `json:"name,required"`
+	// Report end date to value mapping (ISO date string as key)
+	Values map[string]int64 `json:"values,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		Values        respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseMergedPassivaRow) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseMergedPassivaRow) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Report table with data merged across multiple report periods
+type CompanyGetFinancialsV1ResponseMergedGuv struct {
+	Rows []CompanyGetFinancialsV1ResponseMergedGuvRow `json:"rows,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseMergedGuv) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseMergedGuv) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Report row with values from multiple report periods
+type CompanyGetFinancialsV1ResponseMergedGuvRow struct {
+	Children      []any  `json:"children,required"`
+	FormattedName string `json:"formatted_name,required"`
+	Name          string `json:"name,required"`
+	// Report end date to value mapping (ISO date string as key)
+	Values map[string]int64 `json:"values,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		Values        respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseMergedGuvRow) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseMergedGuvRow) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -959,6 +1167,8 @@ func (r *CompanyGetOwnersV1ResponseSource) UnmarshalJSON(data []byte) error {
 }
 
 type CompanyGetDetailsV1Params struct {
+	// Setting this to true will return the company without sources.
+	Export param.Opt[bool] `query:"export,omitzero" json:"-"`
 	// Get the most up-to-date company information directly from the Handelsregister.
 	// When set to true, we fetch the latest data in real-time from the official German
 	// commercial register, ensuring you receive the most current company details.
@@ -977,6 +1187,9 @@ func (r CompanyGetDetailsV1Params) URLQuery() (v url.Values, err error) {
 }
 
 type CompanyGetOwnersV1Params struct {
+	// Setting this to true will return the owners of the company if they exist but
+	// will skip processing the documents in case they weren't processed yet.
+	Export param.Opt[bool] `query:"export,omitzero" json:"-"`
 	// Get the most up-to-date company information directly from the Handelsregister.
 	// When set to true, we fetch the latest data in real-time from the official German
 	// commercial register, ensuring you receive the most current company details.
