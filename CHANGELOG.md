@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 (2025-10-16)
+
+Full Changelog: [v1.1.0...v1.2.0](https://github.com/oregister/openregister-go/compare/v1.1.0...v1.2.0)
+
+### Features
+
+* **api:** manual updates ([2faaa13](https://github.com/oregister/openregister-go/commit/2faaa1312f854af5e415e81b604c2e63cf199366))
+* **api:** manual updates ([1785d56](https://github.com/oregister/openregister-go/commit/1785d5679e3d076050ba5664991344ad560450e2))
+
 ## 1.1.0 (2025-10-02)
 
 Full Changelog: [v1.0.3...v1.1.0](https://github.com/oregister/openregister-go/compare/v1.0.3...v1.1.0)

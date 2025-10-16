@@ -66,7 +66,7 @@ type PersonGetDetailsV1Response struct {
 	// City of the person.
 	City string `json:"city,required"`
 	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
-	DateOfBirth string `json:"date_of_birth,required"`
+	DateOfBirth string `json:"date_of_birth,required" format:"date-only"`
 	// First name of the person.
 	FirstName string `json:"first_name,required"`
 	// Last name of the person.
@@ -101,19 +101,19 @@ type PersonGetDetailsV1ResponseManagementPosition struct {
 	RegisterID string `json:"register_id,required"`
 	// Role of the person in the company. Example: "DIRECTOR"
 	Role string `json:"role,required"`
-	// Date when the person ended the management position. Format: ISO 8601
-	// (YYYY-MM-DD) Example: "2023-01-01"
-	EndDate string `json:"end_date"`
 	// Date when the person started the management position. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
-	StartDate string `json:"start_date"`
+	StartDate string `json:"start_date,required" format:"date-only"`
+	// Date when the person ended the management position. Format: ISO 8601
+	// (YYYY-MM-DD) Example: "2023-01-01"
+	EndDate string `json:"end_date" format:"date-only"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CompanyName respjson.Field
 		RegisterID  respjson.Field
 		Role        respjson.Field
-		EndDate     respjson.Field
 		StartDate   respjson.Field
+		EndDate     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
