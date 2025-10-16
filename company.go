@@ -829,11 +829,11 @@ type CompanyGetFinancialsV1ResponseReport struct {
 	// Whether the report is a consolidated report or not.
 	Consolidated  bool        `json:"consolidated,required"`
 	Passiva       ReportTable `json:"passiva,required"`
-	ReportEndDate string      `json:"report_end_date,required"`
+	ReportEndDate string      `json:"report_end_date,required" format:"date-only"`
 	// Unique identifier for the financial report. Example:
 	// f47ac10b-58cc-4372-a567-0e02b2c3d479
 	ReportID        string      `json:"report_id,required"`
-	ReportStartDate string      `json:"report_start_date,required"`
+	ReportStartDate string      `json:"report_start_date,required" format:"date-only"`
 	Guv             ReportTable `json:"guv,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {

@@ -44,14 +44,6 @@ func (r *SearchService) AutocompleteCompaniesV1(ctx context.Context, query Searc
 }
 
 // Search for companies
-func (r *SearchService) FindCompaniesV0(ctx context.Context, query SearchFindCompaniesV0Params, opts ...option.RequestOption) (res *CompanySearch, err error) {
-	opts = slices.Concat(r.Options, opts)
-	path := "v0/search/company"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
-}
-
-// Search for companies
 func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindCompaniesV1Params, opts ...option.RequestOption) (res *CompanySearch, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/search/company"
@@ -384,46 +376,6 @@ type SearchAutocompleteCompaniesV1Params struct {
 // URLQuery serializes [SearchAutocompleteCompaniesV1Params]'s query parameters as
 // `url.Values`.
 func (r SearchAutocompleteCompaniesV1Params) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type SearchFindCompaniesV0Params struct {
-	// Filter for active or inactive companies. Set to true for active companies only,
-	// false for inactive only.
-	Active param.Opt[bool] `query:"active,omitzero" json:"-"`
-	// Date of incorporation of the company. Format: ISO 8601 (YYYY-MM-DD) Example:
-	// "2022-01-01"
-	IncorporationDate param.Opt[string] `query:"incorporation_date,omitzero" json:"-"`
-	// Page number for pagination.
-	Page param.Opt[int64] `query:"page,omitzero" json:"-"`
-	// Number of results per page (max 50).
-	PerPage param.Opt[int64] `query:"per_page,omitzero" json:"-"`
-	// Text search query to find companies by name. Example: "Descartes Technologies
-	// UG"
-	Query param.Opt[string] `query:"query,omitzero" json:"-"`
-	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
-	RegisterCourt param.Opt[string] `query:"register_court,omitzero" json:"-"`
-	// Company register number for exact matching. Example: "230633"
-	RegisterNumber param.Opt[string] `query:"register_number,omitzero" json:"-"`
-	// Legal form of the company. Example: "gmbh" for "Gesellschaft mit beschränkter
-	// Haftung"
-	//
-	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
-	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
-	LegalForm CompanyLegalForm `query:"legal_form,omitzero" json:"-"`
-	// Type of register to filter results. Example: "HRB" (Commercial Register B)
-	//
-	// Any of "HRB", "HRA", "PR", "GnR", "VR".
-	RegisterType CompanyRegisterType `query:"register_type,omitzero" json:"-"`
-	paramObj
-}
-
-// URLQuery serializes [SearchFindCompaniesV0Params]'s query parameters as
-// `url.Values`.
-func (r SearchFindCompaniesV0Params) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
