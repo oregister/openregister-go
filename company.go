@@ -97,6 +97,18 @@ func (r *CompanyService) GetOwnersV1(ctx context.Context, companyID string, quer
 	return
 }
 
+// Get company end owners
+func (r *CompanyService) GetUbosV1(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetUbosV1Response, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if companyID == "" {
+		err = errors.New("missing required company_id parameter")
+		return
+	}
+	path := fmt.Sprintf("v1/company/%s/ubo", companyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 type CompanyAddress struct {
 	// City or locality name. Example: "Berlin"
 	City string `json:"city,required"`
@@ -1049,6 +1061,112 @@ type CompanyGetOwnersV1ResponseSource struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetOwnersV1ResponseSource) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetOwnersV1ResponseSource) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetUbosV1Response struct {
+	// Unique company identifier. Example: DE-HRB-F1103-267645
+	CompanyID string                        `json:"company_id,required"`
+	Ubos      []CompanyGetUbosV1ResponseUbo `json:"ubos,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CompanyID   respjson.Field
+		Ubos        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetUbosV1Response) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetUbosV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetUbosV1ResponseUbo struct {
+	// Unique identifier for the shareholder. For individuals: UUID For companies:
+	// Format matches company_id pattern Example: "DE-HRB-F1103-267645" or UUID May be
+	// null for certain shareholders.
+	ID          string                                 `json:"id,required"`
+	LegalPerson CompanyGetUbosV1ResponseUboLegalPerson `json:"legal_person,required"`
+	// Maximum percentage of company ownership. Example: 5.36 represents maximum of
+	// 5.36% ownership There is no exact percentage share for owners that hold a stake
+	// as or through a limited partner. For these owners, we can only show the maximum
+	// percentage share they could have based on their deposit as a limited partner. Is
+	// null for all owners that have an exact percentage share or owners that hold a
+	// stake as or through a personal liable director.
+	MaxPercentageShare float64 `json:"max_percentage_share,required"`
+	// The name of the shareholder. E.g. "Max Mustermann"
+	Name          string                                   `json:"name,required"`
+	NaturalPerson CompanyGetUbosV1ResponseUboNaturalPerson `json:"natural_person,required"`
+	// Percentage of company ownership. Example: 5.36 represents 5.36% ownership Is
+	// null for all owners that hold a stake as or through a personal liable directors
+	// or limited partner.
+	PercentageShare float64 `json:"percentage_share,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID                 respjson.Field
+		LegalPerson        respjson.Field
+		MaxPercentageShare respjson.Field
+		Name               respjson.Field
+		NaturalPerson      respjson.Field
+		PercentageShare    respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetUbosV1ResponseUbo) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetUbosV1ResponseUbo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetUbosV1ResponseUboLegalPerson struct {
+	City string `json:"city,required"`
+	// Country where the owner is located, in ISO 3166-1 alpha-2 format. Example: "DE"
+	// for Germany
+	Country string `json:"country,required"`
+	Name    string `json:"name,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		City        respjson.Field
+		Country     respjson.Field
+		Name        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetUbosV1ResponseUboLegalPerson) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetUbosV1ResponseUboLegalPerson) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetUbosV1ResponseUboNaturalPerson struct {
+	City        string `json:"city,required"`
+	Country     string `json:"country,required"`
+	DateOfBirth string `json:"date_of_birth,required"`
+	FirstName   string `json:"first_name,required"`
+	FullName    string `json:"full_name,required"`
+	LastName    string `json:"last_name,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		City        respjson.Field
+		Country     respjson.Field
+		DateOfBirth respjson.Field
+		FirstName   respjson.Field
+		FullName    respjson.Field
+		LastName    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetUbosV1ResponseUboNaturalPerson) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetUbosV1ResponseUboNaturalPerson) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
