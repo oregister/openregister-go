@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.1 (2025-11-12)
+
+Full Changelog: [v1.2.0...v1.2.1](https://github.com/oregister/openregister-go/compare/v1.2.0...v1.2.1)
+
+### Chores
+
+* bump gjson version ([4491e3d](https://github.com/oregister/openregister-go/commit/4491e3d35bd622ac030cfd2c4faae308438867e0))
+* **internal:** grammar fix (it's -&gt; its) ([9aaf9e4](https://github.com/oregister/openregister-go/commit/9aaf9e4ee87ff56bc825e7797155a8f5888e61c6))
+
 ## 1.2.0 (2025-10-16)
 
 Full Changelog: [v1.1.0...v1.2.0](https://github.com/oregister/openregister-go/compare/v1.1.0...v1.2.0)
