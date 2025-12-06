@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.2.2 (2025-12-06)
+
+Full Changelog: [v1.2.1...v1.2.2](https://github.com/oregister/openregister-go/compare/v1.2.1...v1.2.2)
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([834ffb2](https://github.com/oregister/openregister-go/commit/834ffb2cbcd4da0df4c10a3fe7d0906847d6ebef))
+* rename param to avoid collision ([5312e75](https://github.com/oregister/openregister-go/commit/5312e754fa883dec88b2806bac2c88556beecdfc))
+
+
+### Chores
+
+* elide duplicate aliases ([7d46ca9](https://github.com/oregister/openregister-go/commit/7d46ca99c2088db7bfa94c2afb9414819b5ea013))
+* **internal:** codegen related update ([2ec520c](https://github.com/oregister/openregister-go/commit/2ec520c64827dbf077154853546b9a9cae554aca))
+
 ## 1.2.1 (2025-11-12)
 
 Full Changelog: [v1.2.0...v1.2.1](https://github.com/oregister/openregister-go/compare/v1.2.0...v1.2.1)
