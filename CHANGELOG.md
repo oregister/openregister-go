@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.3.0 (2026-01-24)
+
+Full Changelog: [v1.2.1...v1.3.0](https://github.com/oregister/openregister-go/compare/v1.2.1...v1.3.0)
+
+### Features
+
+* **client:** add a convenient param.SetJSON helper ([7b3cf6e](https://github.com/oregister/openregister-go/commit/7b3cf6e1bf5988631f4c5606738ee32078c90b35))
+* **encoder:** support bracket encoding form-data object members ([2827f3d](https://github.com/oregister/openregister-go/commit/2827f3dd75e2d90aae53bbfdf47fca36378fd13c))
+
+
+### Bug Fixes
+
+* **docs:** add missing pointer prefix to api.md return types ([e2f9878](https://github.com/oregister/openregister-go/commit/e2f98786d4a20416b0a8b9399aa143af6bedfb94))
+* **mcp:** correct code tool API endpoint ([834ffb2](https://github.com/oregister/openregister-go/commit/834ffb2cbcd4da0df4c10a3fe7d0906847d6ebef))
+* rename param to avoid collision ([5312e75](https://github.com/oregister/openregister-go/commit/5312e754fa883dec88b2806bac2c88556beecdfc))
+* skip usage tests that don't work with Prism ([4506e4d](https://github.com/oregister/openregister-go/commit/4506e4d84145e6174cad8d13afb54368e3c4e94a))
+
+
+### Chores
+
+* add float64 to valid types for RegisterFieldValidator ([d425d64](https://github.com/oregister/openregister-go/commit/d425d64972a7e0e48e9089badc9cee2d53f0b05d))
+* elide duplicate aliases ([7d46ca9](https://github.com/oregister/openregister-go/commit/7d46ca99c2088db7bfa94c2afb9414819b5ea013))
+* **internal:** codegen related update ([6a7b041](https://github.com/oregister/openregister-go/commit/6a7b041e5a4509efaa6eaca52a675a0801e70716))
+* **internal:** codegen related update ([2ec520c](https://github.com/oregister/openregister-go/commit/2ec520c64827dbf077154853546b9a9cae554aca))
+* **internal:** update `actions/checkout` version ([31b43a4](https://github.com/oregister/openregister-go/commit/31b43a484fcddbab1d59613a7e9ffbcd1160173e))
+
+
+### Documentation
+
+* prominently feature MCP server setup in root SDK readmes ([4967a3c](https://github.com/oregister/openregister-go/commit/4967a3ce3d618a31656191ac6e3c56b7b228c5d2))
+
 ## 1.2.1 (2025-11-12)
 
 Full Changelog: [v1.2.0...v1.2.1](https://github.com/oregister/openregister-go/compare/v1.2.0...v1.2.1)
