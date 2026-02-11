@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.1 (2026-02-11)
+
+Full Changelog: [v1.3.0...v1.3.1](https://github.com/oregister/openregister-go/compare/v1.3.0...v1.3.1)
+
+### Bug Fixes
+
+* **encoder:** correctly serialize NullStruct ([c422983](https://github.com/oregister/openregister-go/commit/c42298381a09a9e261d35af5eaa02a2e80ac2d42))
+
+
+### Chores
+
+* **internal:** codegen related update ([39c2d79](https://github.com/oregister/openregister-go/commit/39c2d7968a4dad44ec6ca498af5ab78a547733bc))
+
 ## 1.3.0 (2026-01-24)
 
 Full Changelog: [v1.2.1...v1.3.0](https://github.com/oregister/openregister-go/compare/v1.2.1...v1.3.0)
