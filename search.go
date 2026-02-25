@@ -115,9 +115,9 @@ const (
 )
 
 type CompanySearch struct {
-	Pagination CompanySearchPagination `json:"pagination,required"`
+	Pagination CompanySearchPagination `json:"pagination" api:"required"`
 	// List of companies matching the search criteria.
-	Results []CompanySearchResult `json:"results,required"`
+	Results []CompanySearchResult `json:"results" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Pagination  respjson.Field
@@ -135,13 +135,13 @@ func (r *CompanySearch) UnmarshalJSON(data []byte) error {
 
 type CompanySearchPagination struct {
 	// Current page number.
-	Page int64 `json:"page,required"`
+	Page int64 `json:"page" api:"required"`
 	// Number of results per page.
-	PerPage int64 `json:"per_page,required"`
+	PerPage int64 `json:"per_page" api:"required"`
 	// Total number of pages.
-	TotalPages int64 `json:"total_pages,required"`
+	TotalPages int64 `json:"total_pages" api:"required"`
 	// Total number of results.
-	TotalResults int64 `json:"total_results,required"`
+	TotalResults int64 `json:"total_results" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Page         respjson.Field
@@ -161,28 +161,28 @@ func (r *CompanySearchPagination) UnmarshalJSON(data []byte) error {
 
 type CompanySearchResult struct {
 	// Company status - true if active, false if inactive.
-	Active bool `json:"active,required"`
+	Active bool `json:"active" api:"required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
-	CompanyID string `json:"company_id,required"`
+	CompanyID string `json:"company_id" api:"required"`
 	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
 	// "DE" for Germany
-	Country string `json:"country,required"`
+	Country string `json:"country" api:"required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
 	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
 	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
-	LegalForm CompanyLegalForm `json:"legal_form,required"`
+	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
 	// Official registered company name. Example: "Max Mustermann GmbH"
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
-	RegisterCourt string `json:"register_court,required"`
+	RegisterCourt string `json:"register_court" api:"required"`
 	// Registration number in the company register. Example: "230633"
-	RegisterNumber string `json:"register_number,required"`
+	RegisterNumber string `json:"register_number" api:"required"`
 	// Type of company register. Example: "HRB" for Commercial Register B
 	//
 	// Any of "HRB", "HRA", "PR", "GnR", "VR".
-	RegisterType CompanyRegisterType `json:"register_type,required"`
+	RegisterType CompanyRegisterType `json:"register_type" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Active         respjson.Field
@@ -206,7 +206,7 @@ func (r *CompanySearchResult) UnmarshalJSON(data []byte) error {
 
 type SearchAutocompleteCompaniesV1Response struct {
 	// List of companies matching the search criteria.
-	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results,required"`
+	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Results     respjson.Field
@@ -223,28 +223,28 @@ func (r *SearchAutocompleteCompaniesV1Response) UnmarshalJSON(data []byte) error
 
 type SearchAutocompleteCompaniesV1ResponseResult struct {
 	// Company status - true if active, false if inactive.
-	Active bool `json:"active,required"`
+	Active bool `json:"active" api:"required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
-	CompanyID string `json:"company_id,required"`
+	CompanyID string `json:"company_id" api:"required"`
 	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
 	// "DE" for Germany
-	Country string `json:"country,required"`
+	Country string `json:"country" api:"required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
 	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
 	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
-	LegalForm CompanyLegalForm `json:"legal_form,required"`
+	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
 	// Official registered company name. Example: "Max Mustermann GmbH"
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
-	RegisterCourt string `json:"register_court,required"`
+	RegisterCourt string `json:"register_court" api:"required"`
 	// Registration number in the company register. Example: "230633"
-	RegisterNumber string `json:"register_number,required"`
+	RegisterNumber string `json:"register_number" api:"required"`
 	// Type of company register. Example: "HRB" for Commercial Register B
 	//
 	// Any of "HRB", "HRA", "PR", "GnR", "VR".
-	RegisterType CompanyRegisterType `json:"register_type,required"`
+	RegisterType CompanyRegisterType `json:"register_type" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Active         respjson.Field
@@ -267,9 +267,9 @@ func (r *SearchAutocompleteCompaniesV1ResponseResult) UnmarshalJSON(data []byte)
 }
 
 type SearchFindPersonV1Response struct {
-	Pagination SearchFindPersonV1ResponsePagination `json:"pagination,required"`
+	Pagination SearchFindPersonV1ResponsePagination `json:"pagination" api:"required"`
 	// List of people matching the search criteria.
-	Results []SearchFindPersonV1ResponseResult `json:"results,required"`
+	Results []SearchFindPersonV1ResponseResult `json:"results" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Pagination  respjson.Field
@@ -287,13 +287,13 @@ func (r *SearchFindPersonV1Response) UnmarshalJSON(data []byte) error {
 
 type SearchFindPersonV1ResponsePagination struct {
 	// Current page number.
-	Page int64 `json:"page,required"`
+	Page int64 `json:"page" api:"required"`
 	// Number of results per page.
-	PerPage int64 `json:"per_page,required"`
+	PerPage int64 `json:"per_page" api:"required"`
 	// Total number of pages.
-	TotalPages int64 `json:"total_pages,required"`
+	TotalPages int64 `json:"total_pages" api:"required"`
 	// Total number of results.
-	TotalResults int64 `json:"total_results,required"`
+	TotalResults int64 `json:"total_results" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Page         respjson.Field
@@ -313,15 +313,15 @@ func (r *SearchFindPersonV1ResponsePagination) UnmarshalJSON(data []byte) error 
 
 type SearchFindPersonV1ResponseResult struct {
 	// Unique person identifier. Example: 1234-5678-9012-345678901234
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Person status - true if active, false if inactive.
-	Active bool `json:"active,required"`
+	Active bool `json:"active" api:"required"`
 	// City of the person. Example: "Berlin"
-	City string `json:"city,required"`
+	City string `json:"city" api:"required"`
 	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
-	DateOfBirth string `json:"date_of_birth,required"`
+	DateOfBirth string `json:"date_of_birth" api:"required"`
 	// Name of the person. Example: "Max Mustermann"
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID          respjson.Field
@@ -342,7 +342,7 @@ func (r *SearchFindPersonV1ResponseResult) UnmarshalJSON(data []byte) error {
 
 type SearchLookupCompanyByURLResponse struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
-	CompanyID string `json:"company_id,required"`
+	CompanyID string `json:"company_id" api:"required"`
 	// Email address of the company. Example: "info@maxmustermann.de"
 	Email string `json:"email"`
 	// Phone number of the company. Example: "+49 123 456 789"
@@ -369,7 +369,7 @@ func (r *SearchLookupCompanyByURLResponse) UnmarshalJSON(data []byte) error {
 type SearchAutocompleteCompaniesV1Params struct {
 	// Text search query to find companies by name. Example: "Descartes Technologies
 	// UG"
-	Query string `query:"query,required" json:"-"`
+	Query string `query:"query" api:"required" json:"-"`
 	paramObj
 }
 
@@ -410,7 +410,7 @@ type SearchFindCompaniesV1ParamsFilter struct {
 	// "materials", "pension_provisions", "salaries", "taxes", "liabilities",
 	// "capital_reserves", "net_income", "industry_codes", "capital_amount",
 	// "capital_currency".
-	Field    string            `json:"field,omitzero,required"`
+	Field    string            `json:"field,omitzero" api:"required"`
 	Max      param.Opt[string] `json:"max,omitzero"`
 	Min      param.Opt[string] `json:"min,omitzero"`
 	Value    param.Opt[string] `json:"value,omitzero"`
@@ -438,9 +438,9 @@ func init() {
 // The properties Latitude, Longitude are required.
 type SearchFindCompaniesV1ParamsLocation struct {
 	// Latitude to filter on.
-	Latitude float64 `json:"latitude,required"`
+	Latitude float64 `json:"latitude" api:"required"`
 	// Longitude to filter on.
-	Longitude float64 `json:"longitude,required"`
+	Longitude float64 `json:"longitude" api:"required"`
 	// Radius in kilometers to filter on. Example: 10
 	Radius param.Opt[float64] `json:"radius,omitzero"`
 	paramObj
@@ -476,7 +476,7 @@ func (r *SearchFindCompaniesV1ParamsPagination) UnmarshalJSON(data []byte) error
 // The property Value is required.
 type SearchFindCompaniesV1ParamsQuery struct {
 	// Search query to filter companies.
-	Value string `json:"value,required"`
+	Value string `json:"value" api:"required"`
 	paramObj
 }
 
@@ -509,7 +509,7 @@ func (r *SearchFindPersonV1Params) UnmarshalJSON(data []byte) error {
 // The property Field is required.
 type SearchFindPersonV1ParamsFilter struct {
 	// Any of "date_of_birth", "city", "active".
-	Field    string            `json:"field,omitzero,required"`
+	Field    string            `json:"field,omitzero" api:"required"`
 	Max      param.Opt[string] `json:"max,omitzero"`
 	Min      param.Opt[string] `json:"min,omitzero"`
 	Value    param.Opt[string] `json:"value,omitzero"`
@@ -554,7 +554,7 @@ func (r *SearchFindPersonV1ParamsPagination) UnmarshalJSON(data []byte) error {
 // The property Value is required.
 type SearchFindPersonV1ParamsQuery struct {
 	// Search query to filter people.
-	Value string `json:"value,required"`
+	Value string `json:"value" api:"required"`
 	paramObj
 }
 
@@ -568,7 +568,7 @@ func (r *SearchFindPersonV1ParamsQuery) UnmarshalJSON(data []byte) error {
 
 type SearchLookupCompanyByURLParams struct {
 	// Website URL to search for. Example: "https://openregister.de"
-	URL string `query:"url,required" format:"uri" json:"-"`
+	URL string `query:"url" api:"required" format:"uri" json:"-"`
 	paramObj
 }
 
