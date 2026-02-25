@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.2 (2026-02-25)
+
+Full Changelog: [v1.3.1...v1.3.2](https://github.com/oregister/openregister-go/compare/v1.3.1...v1.3.2)
+
+### Bug Fixes
+
+* allow canceling a request while it is waiting to retry ([6d10a38](https://github.com/oregister/openregister-go/commit/6d10a38e76bc69d73f3c6272d9e53370f6f7596a))
+
+
+### Chores
+
+* **internal:** move custom custom `json` tags to `api` ([cb1f3d6](https://github.com/oregister/openregister-go/commit/cb1f3d6bab23c933cc2b923a5a87df386c93163a))
+* **internal:** remove mock server code ([0b2de1b](https://github.com/oregister/openregister-go/commit/0b2de1ba67282af282a2f859ffdc6d7c1ed05c7f))
+* update mock server docs ([2301fe5](https://github.com/oregister/openregister-go/commit/2301fe59553331d0b5fd698674077098b2ffa726))
+
 ## 1.3.1 (2026-02-11)
 
 Full Changelog: [v1.3.0...v1.3.1](https://github.com/oregister/openregister-go/compare/v1.3.0...v1.3.1)
