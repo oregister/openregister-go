@@ -60,19 +60,19 @@ func (r *PersonService) GetHoldingsV1(ctx context.Context, personID string, opts
 
 type PersonGetDetailsV1Response struct {
 	// Unique person identifier. Example: cc78ab54-d958-49b8-bae7-2f6c0c308837
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Age of the person.
-	Age int64 `json:"age,required"`
+	Age int64 `json:"age" api:"required"`
 	// City of the person.
-	City string `json:"city,required"`
+	City string `json:"city" api:"required"`
 	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
-	DateOfBirth string `json:"date_of_birth,required" format:"date-only"`
+	DateOfBirth string `json:"date_of_birth" api:"required" format:"date-only"`
 	// First name of the person.
-	FirstName string `json:"first_name,required"`
+	FirstName string `json:"first_name" api:"required"`
 	// Last name of the person.
-	LastName string `json:"last_name,required"`
+	LastName string `json:"last_name" api:"required"`
 	// Management positions of the person.
-	ManagementPositions []PersonGetDetailsV1ResponseManagementPosition `json:"management_positions,required"`
+	ManagementPositions []PersonGetDetailsV1ResponseManagementPosition `json:"management_positions" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                  respjson.Field
@@ -96,14 +96,14 @@ func (r *PersonGetDetailsV1Response) UnmarshalJSON(data []byte) error {
 // All current and past management positions of the person.
 type PersonGetDetailsV1ResponseManagementPosition struct {
 	// Name of the company. Example: "Descartes Technologies GmbH"
-	CompanyName string `json:"company_name,required"`
+	CompanyName string `json:"company_name" api:"required"`
 	// Register ID of the company. Example: DE-HRB-F1103-267645
-	RegisterID string `json:"register_id,required"`
+	RegisterID string `json:"register_id" api:"required"`
 	// Role of the person in the company. Example: "DIRECTOR"
-	Role string `json:"role,required"`
+	Role string `json:"role" api:"required"`
 	// Date when the person started the management position. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
-	StartDate string `json:"start_date,required" format:"date-only"`
+	StartDate string `json:"start_date" api:"required" format:"date-only"`
 	// Date when the person ended the management position. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2023-01-01"
 	EndDate string `json:"end_date" format:"date-only"`
@@ -128,9 +128,9 @@ func (r *PersonGetDetailsV1ResponseManagementPosition) UnmarshalJSON(data []byte
 // Companies this entity owns or has invested in.
 type PersonGetHoldingsV1Response struct {
 	// Shareholder and limited partner positions of the person.
-	Holdings []PersonGetHoldingsV1ResponseHolding `json:"holdings,required"`
+	Holdings []PersonGetHoldingsV1ResponseHolding `json:"holdings" api:"required"`
 	// Unique person identifier. Example: cc78ab54-d958-49b8-bae7-2f6c0c308837
-	PersonID string `json:"person_id,required"`
+	PersonID string `json:"person_id" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Holdings    respjson.Field
@@ -148,23 +148,23 @@ func (r *PersonGetHoldingsV1Response) UnmarshalJSON(data []byte) error {
 
 type PersonGetHoldingsV1ResponseHolding struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
-	CompanyID string `json:"company_id,required"`
+	CompanyID string `json:"company_id" api:"required"`
 	// Date when the ownership ended. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	End string `json:"end,required"`
+	End string `json:"end" api:"required"`
 	// Name of the company.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Amount of shares or capital in the company. Example: 100
-	NominalShare float64 `json:"nominal_share,required"`
+	NominalShare float64 `json:"nominal_share" api:"required"`
 	// Share of the company. Example: 0.5 represents 50% ownership
-	PercentageShare float64 `json:"percentage_share,required"`
+	PercentageShare float64 `json:"percentage_share" api:"required"`
 	// Type of relationship between the entity and the company.
 	//
 	// Any of "shareholder", "stockholder", "limited_partner", "general_partner".
-	RelationType CompanyRelationType `json:"relation_type,required"`
+	RelationType CompanyRelationType `json:"relation_type" api:"required"`
 	// Date when the ownership started. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	Start string `json:"start,required"`
+	Start string `json:"start" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CompanyID       respjson.Field

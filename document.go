@@ -59,18 +59,18 @@ func (r *DocumentService) GetRealtimeV1(ctx context.Context, query DocumentGetRe
 type DocumentGetCachedV1Response struct {
 	// The unique identifier for the document. E.g.
 	// "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The date of the document. E.g. "2022-01-01"
-	Date string `json:"date,required"`
+	Date string `json:"date" api:"required"`
 	// The name of the document. E.g. "Musterprotokoll vom 01.01.2022"
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The type of document.
 	//
 	// Any of "articles_of_association", "sample_protocol", "shareholder_list".
-	Type DocumentGetCachedV1ResponseType `json:"type,required"`
+	Type DocumentGetCachedV1ResponseType `json:"type" api:"required"`
 	// The URL of the document. It can be downloaded from there. Only valid for 15
 	// minutes after the request.
-	URL string `json:"url,required" format:"uri"`
+	URL string `json:"url" api:"required" format:"uri"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID          respjson.Field
@@ -101,10 +101,10 @@ const (
 type DocumentGetRealtimeV1Response struct {
 	// Any of "current_printout", "chronological_printout", "historical_printout",
 	// "structured_information", "shareholder_list", "articles_of_association".
-	Category DocumentGetRealtimeV1ResponseCategory `json:"category,required"`
-	FileDate string                                `json:"file_date,required"`
-	FileName string                                `json:"file_name,required"`
-	URL      string                                `json:"url,required" format:"uri"`
+	Category DocumentGetRealtimeV1ResponseCategory `json:"category" api:"required"`
+	FileDate string                                `json:"file_date" api:"required"`
+	FileName string                                `json:"file_name" api:"required"`
+	URL      string                                `json:"url" api:"required" format:"uri"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Category    respjson.Field
@@ -134,10 +134,10 @@ const (
 )
 
 type DocumentGetRealtimeV1Params struct {
-	CompanyID string `query:"company_id,required" json:"-"`
+	CompanyID string `query:"company_id" api:"required" json:"-"`
 	// Any of "current_printout", "chronological_printout", "historical_printout",
 	// "structured_information", "shareholder_list", "articles_of_association".
-	DocumentCategory DocumentGetRealtimeV1ParamsDocumentCategory `query:"document_category,omitzero,required" json:"-"`
+	DocumentCategory DocumentGetRealtimeV1ParamsDocumentCategory `query:"document_category,omitzero" api:"required" json:"-"`
 	paramObj
 }
 
