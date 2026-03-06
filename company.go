@@ -109,6 +109,18 @@ func (r *CompanyService) GetUbosV1(ctx context.Context, companyID string, opts .
 	return
 }
 
+// Get company shareholders
+func (r *CompanyService) GetShareholders(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetShareholdersResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if companyID == "" {
+		err = errors.New("missing required company_id parameter")
+		return
+	}
+	path := fmt.Sprintf("v0/company/%s/shareholders", companyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 type CompanyAddress struct {
 	// City or locality name. Example: "Berlin"
 	City string `json:"city" api:"required"`
@@ -1167,6 +1179,67 @@ type CompanyGetUbosV1ResponseUboNaturalPerson struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetUbosV1ResponseUboNaturalPerson) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetUbosV1ResponseUboNaturalPerson) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetShareholdersResponse struct {
+	// Date when this shareholder information became effective. Format: ISO 8601
+	// (YYYY-MM-DD) Example: "2022-01-01"
+	Date string `json:"date" api:"required"`
+	// Unique identifier for the document this was taken from. Example:
+	// "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+	DocumentID   string                                      `json:"document_id" api:"required"`
+	Shareholders []CompanyGetShareholdersResponseShareholder `json:"shareholders" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Date         respjson.Field
+		DocumentID   respjson.Field
+		Shareholders respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetShareholdersResponse) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetShareholdersResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetShareholdersResponseShareholder struct {
+	// Country where the shareholder is located, in ISO 3166-1 alpha-2 format. Example:
+	// "DE" for Germany
+	Country string `json:"country" api:"required"`
+	// The name of the shareholder. E.g. "Max Mustermann" or "Max Mustermann GmbH"
+	Name string `json:"name" api:"required"`
+	// Nominal value of shares in Euro. Example: 100
+	NominalShare int64 `json:"nominal_share" api:"required"`
+	// Percentage of company ownership. Example: 5.36 represents 5.36% ownership
+	PercentageShare float64 `json:"percentage_share" api:"required"`
+	// The type of shareholder.
+	//
+	// Any of "natural_person", "legal_person".
+	Type EntityType `json:"type" api:"required"`
+	// Unique identifier for the shareholder. For companies: Format matches company_id
+	// pattern For individuals: UUID Example: "DE-HRB-F1103-267645" or UUID May be null
+	// for certain shareholders.
+	ID string `json:"id"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Country         respjson.Field
+		Name            respjson.Field
+		NominalShare    respjson.Field
+		PercentageShare respjson.Field
+		Type            respjson.Field
+		ID              respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetShareholdersResponseShareholder) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetShareholdersResponseShareholder) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

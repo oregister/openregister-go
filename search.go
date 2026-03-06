@@ -409,7 +409,8 @@ type SearchFindCompaniesV1ParamsFilter struct {
 	// "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate",
 	// "materials", "pension_provisions", "salaries", "taxes", "liabilities",
 	// "capital_reserves", "net_income", "industry_codes", "capital_amount",
-	// "capital_currency".
+	// "capital_currency", "number_of_owners", "has_sole_owner",
+	// "has_representative_owner", "is_family_owned", "youngest_owner_age", "purpose".
 	Field    string            `json:"field,omitzero" api:"required"`
 	Max      param.Opt[string] `json:"max,omitzero"`
 	Min      param.Opt[string] `json:"min,omitzero"`
@@ -429,7 +430,7 @@ func (r *SearchFindCompaniesV1ParamsFilter) UnmarshalJSON(data []byte) error {
 
 func init() {
 	apijson.RegisterFieldValidator[SearchFindCompaniesV1ParamsFilter](
-		"field", "status", "legal_form", "register_number", "register_court", "register_type", "city", "active", "incorporated_at", "zip", "address", "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate", "materials", "pension_provisions", "salaries", "taxes", "liabilities", "capital_reserves", "net_income", "industry_codes", "capital_amount", "capital_currency",
+		"field", "status", "legal_form", "register_number", "register_court", "register_type", "city", "active", "incorporated_at", "zip", "address", "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate", "materials", "pension_provisions", "salaries", "taxes", "liabilities", "capital_reserves", "net_income", "industry_codes", "capital_amount", "capital_currency", "number_of_owners", "has_sole_owner", "has_representative_owner", "is_family_owned", "youngest_owner_age", "purpose",
 	)
 }
 
