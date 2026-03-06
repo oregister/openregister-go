@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.3 (2026-03-06)
+
+Full Changelog: [v1.3.2...v1.3.3](https://github.com/oregister/openregister-go/compare/v1.3.2...v1.3.3)
+
+### Chores
+
+* **internal:** codegen related update ([19d9cef](https://github.com/oregister/openregister-go/commit/19d9cef2bdb08bf6b06271ca066afb3a3ea077e8))
+* **internal:** codegen related update ([f0824bb](https://github.com/oregister/openregister-go/commit/f0824bbe855532232f15573b9ce732fc1431b49e))
+
 ## 1.3.2 (2026-02-25)
 
 Full Changelog: [v1.3.1...v1.3.2](https://github.com/oregister/openregister-go/compare/v1.3.1...v1.3.2)
