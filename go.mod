@@ -1,4 +1,4 @@
-module github.com/oregister/openregister-go
+module github.com/oregister/openregister-go/v2
 
 go 1.22
 

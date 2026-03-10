@@ -2,7 +2,7 @@ package apijson
 
 import (
 	"errors"
-	"github.com/oregister/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/v2/packages/param"
 	"reflect"
 
 	"github.com/tidwall/gjson"

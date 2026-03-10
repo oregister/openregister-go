@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/oregister/openregister-go"
-	"github.com/oregister/openregister-go/internal/testutil"
-	"github.com/oregister/openregister-go/option"
+	"github.com/oregister/openregister-go/v2"
+	"github.com/oregister/openregister-go/v2/internal/testutil"
+	"github.com/oregister/openregister-go/v2/option"
 )
 
 func TestSearchAutocompleteCompaniesV1(t *testing.T) {
@@ -53,19 +53,21 @@ func TestSearchFindCompaniesV1WithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Search.FindCompaniesV1(context.TODO(), openregister.SearchFindCompaniesV1Params{
 		Filters: []openregister.SearchFindCompaniesV1ParamsFilter{{
-			Field:    "status",
-			Keywords: []string{"string"},
-			Max:      openregister.String("max"),
-			Min:      openregister.String("min"),
-			Value:    openregister.String("value"),
-			Values:   []string{"string"},
+			SearchFilterBaseParam: openregister.SearchFilterBaseParam{
+				Keywords: []string{"string"},
+				Max:      openregister.String("max"),
+				Min:      openregister.String("min"),
+				Value:    openregister.String("value"),
+				Values:   []string{"string"},
+			},
+			Field: "status",
 		}},
 		Location: openregister.SearchFindCompaniesV1ParamsLocation{
 			Latitude:  0,
 			Longitude: 0,
 			Radius:    openregister.Float(0),
 		},
-		Pagination: openregister.SearchFindCompaniesV1ParamsPagination{
+		Pagination: openregister.SearchRequestPaginationParam{
 			Page:    openregister.Int(0),
 			PerPage: openregister.Int(0),
 		},
@@ -97,14 +99,16 @@ func TestSearchFindPersonV1WithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Search.FindPersonV1(context.TODO(), openregister.SearchFindPersonV1Params{
 		Filters: []openregister.SearchFindPersonV1ParamsFilter{{
-			Field:    "date_of_birth",
-			Keywords: []string{"string"},
-			Max:      openregister.String("max"),
-			Min:      openregister.String("min"),
-			Value:    openregister.String("value"),
-			Values:   []string{"string"},
+			SearchFilterBaseParam: openregister.SearchFilterBaseParam{
+				Keywords: []string{"string"},
+				Max:      openregister.String("max"),
+				Min:      openregister.String("min"),
+				Value:    openregister.String("value"),
+				Values:   []string{"string"},
+			},
+			Field: "date_of_birth",
 		}},
-		Pagination: openregister.SearchFindPersonV1ParamsPagination{
+		Pagination: openregister.SearchRequestPaginationParam{
 			Page:    openregister.Int(0),
 			PerPage: openregister.Int(0),
 		},

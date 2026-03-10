@@ -3,8 +3,8 @@ package apijson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/oregister/openregister-go/internal/apijson"
-	"github.com/oregister/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/v2/internal/apijson"
+	"github.com/oregister/openregister-go/v2/packages/param"
 	"reflect"
 	"testing"
 )

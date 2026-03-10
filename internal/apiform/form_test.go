@@ -2,7 +2,7 @@ package apiform
 
 import (
 	"bytes"
-	"github.com/oregister/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/v2/packages/param"
 	"io"
 	"mime/multipart"
 	"strings"

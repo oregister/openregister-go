@@ -1,8 +1,8 @@
 package sentinel_test
 
 import (
-	"github.com/oregister/openregister-go/internal/encoding/json/sentinel"
-	"github.com/oregister/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/v2/internal/encoding/json/sentinel"
+	"github.com/oregister/openregister-go/v2/packages/param"
 	"reflect"
 	"slices"
 	"testing"

@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/oregister/openregister-go"
-	"github.com/oregister/openregister-go/internal/testutil"
-	"github.com/oregister/openregister-go/option"
+	"github.com/oregister/openregister-go/v2"
+	"github.com/oregister/openregister-go/v2/internal/testutil"
+	"github.com/oregister/openregister-go/v2/option"
 )
 
 func TestUsage(t *testing.T) {
@@ -25,7 +25,7 @@ func TestUsage(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	t.Skip("Mock server tests are disabled")
-	response, err := client.Company.GetDetailsV1(
+	companyV1, err := client.Company.GetDetailsV1(
 		context.TODO(),
 		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
@@ -33,5 +33,5 @@ func TestUsage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.ID)
+	t.Logf("%+v\n", companyV1.ID)
 }

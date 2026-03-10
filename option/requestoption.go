@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/oregister/openregister-go/internal/requestconfig"
+	"github.com/oregister/openregister-go/v2/internal/requestconfig"
 	"github.com/tidwall/sjson"
 )
 
