@@ -3,8 +3,8 @@ package respjson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/oregister/openregister-go/internal/apijson"
-	rj "github.com/oregister/openregister-go/packages/respjson"
+	"github.com/oregister/openregister-go/v2/internal/apijson"
+	rj "github.com/oregister/openregister-go/v2/packages/respjson"
 	"reflect"
 	"testing"
 )

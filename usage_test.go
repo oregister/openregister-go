@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/oregister/openregister-go"
-	"github.com/oregister/openregister-go/internal/testutil"
-	"github.com/oregister/openregister-go/option"
+	"github.com/oregister/openregister-go/v2"
+	"github.com/oregister/openregister-go/v2/internal/testutil"
+	"github.com/oregister/openregister-go/v2/option"
 )
 
 func TestUsage(t *testing.T) {

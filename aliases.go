@@ -3,8 +3,8 @@
 package openregister
 
 import (
-	"github.com/oregister/openregister-go/internal/apierror"
-	"github.com/oregister/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/v2/internal/apierror"
+	"github.com/oregister/openregister-go/v2/packages/param"
 )
 
 // aliased to make [param.APIUnion] private when embedding

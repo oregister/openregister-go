@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.0.0 (2026-03-10)
+
+Full Changelog: [v1.3.2...v2.0.0](https://github.com/oregister/openregister-go/compare/v1.3.2...v2.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* deprecate v0 document & shareholder endpoint
+
+### Features
+
+* **api:** additional static models ([1ed3b30](https://github.com/oregister/openregister-go/commit/1ed3b30e3859ca07f10dba1fe0b9bebdd5af55e8))
+* **company:** enable filtering by business purpose ([29648e5](https://github.com/oregister/openregister-go/commit/29648e5955ccf0ded36663404f33e49d9050075a))
+* deprecate v0 document & shareholder endpoint ([4caf7f2](https://github.com/oregister/openregister-go/commit/4caf7f2971b4283ad74d88eb406cd687b235b002))
+* **v0:** add historical owners endpoint ([6274eae](https://github.com/oregister/openregister-go/commit/6274eae1f2c4fc4a2415fd49810f6a155bcd5097))
+* **v0:** remove cached document endpoints ([04efd77](https://github.com/oregister/openregister-go/commit/04efd7791d6eec58bd92da622aaf4d5b4da228fb))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([8925816](https://github.com/oregister/openregister-go/commit/8925816454194cd32a7631a7ed08b7c637d45bfa))
+* **internal:** codegen related update ([19d9cef](https://github.com/oregister/openregister-go/commit/19d9cef2bdb08bf6b06271ca066afb3a3ea077e8))
+* **internal:** codegen related update ([f0824bb](https://github.com/oregister/openregister-go/commit/f0824bbe855532232f15573b9ce732fc1431b49e))
+* **python:** shadowing pydantic property ([e1f8021](https://github.com/oregister/openregister-go/commit/e1f80214ee0f591655a2f8adc49a0e39d49ad1c8))
+
 ## 1.3.2 (2026-02-25)
 
 Full Changelog: [v1.3.1...v1.3.2](https://github.com/oregister/openregister-go/compare/v1.3.1...v1.3.2)

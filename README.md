@@ -2,7 +2,7 @@
 
 <!-- x-release-please-start-version -->
 
-<a href="https://pkg.go.dev/github.com/oregister/openregister-go"><img src="https://pkg.go.dev/badge/github.com/oregister/openregister-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2"><img src="https://pkg.go.dev/badge/github.com/oregister/openregister-go.svg" alt="Go Reference"></a>
 
 <!-- x-release-please-end -->
 
@@ -26,7 +26,7 @@ Use the Openregister MCP Server to enable AI assistants to interact with this AP
 
 ```go
 import (
-	"github.com/oregister/openregister-go" // imported as openregister
+	"github.com/oregister/openregister-go/v2" // imported as openregister
 )
 ```
 
@@ -37,7 +37,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/oregister/openregister-go@v1.3.2'
+go get -u 'github.com/oregister/openregister-go@v2.0.0'
 ```
 
 <!-- x-release-please-end -->
@@ -57,8 +57,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/oregister/openregister-go"
-	"github.com/oregister/openregister-go/option"
+	"github.com/oregister/openregister-go/v2"
+	"github.com/oregister/openregister-go/v2/option"
 )
 
 func main() {

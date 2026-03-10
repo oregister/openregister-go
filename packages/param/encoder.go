@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	shimjson "github.com/oregister/openregister-go/internal/encoding/json"
+	shimjson "github.com/oregister/openregister-go/v2/internal/encoding/json"
 
 	"github.com/tidwall/sjson"
 )

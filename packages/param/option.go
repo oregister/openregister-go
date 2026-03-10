@@ -3,7 +3,7 @@ package param
 import (
 	"encoding/json"
 	"fmt"
-	shimjson "github.com/oregister/openregister-go/internal/encoding/json"
+	shimjson "github.com/oregister/openregister-go/v2/internal/encoding/json"
 	"time"
 )
 

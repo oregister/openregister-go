@@ -2,7 +2,7 @@ package param_test
 
 import (
 	"encoding/json"
-	"github.com/oregister/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/v2/packages/param"
 	"testing"
 )
 
