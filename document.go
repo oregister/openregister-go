@@ -37,7 +37,7 @@ func NewDocumentService(opts ...option.RequestOption) (r DocumentService) {
 }
 
 // Get document information
-func (r *DocumentService) GetCachedV1(ctx context.Context, documentID string, opts ...option.RequestOption) (res *DocumentGetCachedV1Response, err error) {
+func (r *DocumentService) GetCachedV1(ctx context.Context, documentID string, opts ...option.RequestOption) (res *Document, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if documentID == "" {
 		err = errors.New("missing required document_id parameter")
@@ -56,7 +56,7 @@ func (r *DocumentService) GetRealtimeV1(ctx context.Context, query DocumentGetRe
 	return
 }
 
-type DocumentGetCachedV1Response struct {
+type Document struct {
 	// The unique identifier for the document. E.g.
 	// "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 	ID string `json:"id" api:"required"`
@@ -67,7 +67,7 @@ type DocumentGetCachedV1Response struct {
 	// The type of document.
 	//
 	// Any of "articles_of_association", "sample_protocol", "shareholder_list".
-	Type DocumentGetCachedV1ResponseType `json:"type" api:"required"`
+	Type DocumentType `json:"type" api:"required"`
 	// The URL of the document. It can be downloaded from there. Only valid for 15
 	// minutes after the request.
 	URL string `json:"url" api:"required" format:"uri"`
@@ -84,18 +84,18 @@ type DocumentGetCachedV1Response struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r DocumentGetCachedV1Response) RawJSON() string { return r.JSON.raw }
-func (r *DocumentGetCachedV1Response) UnmarshalJSON(data []byte) error {
+func (r Document) RawJSON() string { return r.JSON.raw }
+func (r *Document) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of document.
-type DocumentGetCachedV1ResponseType string
+type DocumentType string
 
 const (
-	DocumentGetCachedV1ResponseTypeArticlesOfAssociation DocumentGetCachedV1ResponseType = "articles_of_association"
-	DocumentGetCachedV1ResponseTypeSampleProtocol        DocumentGetCachedV1ResponseType = "sample_protocol"
-	DocumentGetCachedV1ResponseTypeShareholderList       DocumentGetCachedV1ResponseType = "shareholder_list"
+	DocumentTypeArticlesOfAssociation DocumentType = "articles_of_association"
+	DocumentTypeSampleProtocol        DocumentType = "sample_protocol"
+	DocumentTypeShareholderList       DocumentType = "shareholder_list"
 )
 
 type DocumentGetRealtimeV1Response struct {
