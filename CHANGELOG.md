@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.1 (2026-03-10)
+
+Full Changelog: [v2.0.0...v2.0.1](https://github.com/oregister/openregister-go/compare/v2.0.0...v2.0.1)
+
+### Chores
+
+* remove breaking company model ([b3c8159](https://github.com/oregister/openregister-go/commit/b3c8159592ef662ade6962ef239d6165fadf50e0))
+
 ## 2.0.0 (2026-03-10)
 
 Full Changelog: [v1.3.2...v2.0.0](https://github.com/oregister/openregister-go/compare/v1.3.2...v2.0.0)
