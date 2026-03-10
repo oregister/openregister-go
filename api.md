@@ -37,7 +37,6 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetHoldingsV1Response">CompanyGetHoldingsV1Response</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetOwnersV1Response">CompanyGetOwnersV1Response</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetUbosV1Response">CompanyGetUbosV1Response</a>
-- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetShareholdersResponse">CompanyGetShareholdersResponse</a>
 
 Methods:
 
@@ -47,7 +46,6 @@ Methods:
 - <code title="get /v1/company/{company_id}/holdings">client.Company.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyService.GetHoldingsV1">GetHoldingsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, companyID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetHoldingsV1Response">CompanyGetHoldingsV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v1/company/{company_id}/owners">client.Company.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyService.GetOwnersV1">GetOwnersV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, companyID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetOwnersV1Params">CompanyGetOwnersV1Params</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetOwnersV1Response">CompanyGetOwnersV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v1/company/{company_id}/ubo">client.Company.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyService.GetUbosV1">GetUbosV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, companyID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetUbosV1Response">CompanyGetUbosV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /v0/company/{company_id}/shareholders">client.Company.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyService.GetShareholders">GetShareholders</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, companyID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetShareholdersResponse">CompanyGetShareholdersResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Document
 
@@ -75,17 +73,3 @@ Methods:
 
 - <code title="get /v1/person/{person_id}">client.Person.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#PersonService.GetDetailsV1">GetDetailsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, personID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#PersonGetDetailsV1Response">PersonGetDetailsV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v1/person/{person_id}/holdings">client.Person.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#PersonService.GetHoldingsV1">GetHoldingsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, personID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#PersonGetHoldingsV1Response">PersonGetHoldingsV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-# Jobs
-
-## Document
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentNewResponse">JobDocumentNewResponse</a>
-- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentGetResponse">JobDocumentGetResponse</a>
-
-Methods:
-
-- <code title="post /v0/jobs/document">client.Jobs.Document.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentNewParams">JobDocumentNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentNewResponse">JobDocumentNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /v0/jobs/document/{id}">client.Jobs.Document.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#JobDocumentGetResponse">JobDocumentGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
