@@ -204,6 +204,41 @@ func (r *Pagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Filter by field. The property sets `value`, `values`, `keywords` and `min`/`max`
+// are mutually exclusive. Dates must be YYYY-MM-DD.
+type SearchFilterBaseParam struct {
+	Max      param.Opt[string] `json:"max,omitzero"`
+	Min      param.Opt[string] `json:"min,omitzero"`
+	Value    param.Opt[string] `json:"value,omitzero"`
+	Keywords []string          `json:"keywords,omitzero"`
+	Values   []string          `json:"values,omitzero"`
+	paramObj
+}
+
+func (r SearchFilterBaseParam) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFilterBaseParam
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFilterBaseParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchRequestPaginationParam struct {
+	// Page number to return.
+	Page param.Opt[int64] `json:"page,omitzero"`
+	// Number of results per page.
+	PerPage param.Opt[int64] `json:"per_page,omitzero"`
+	paramObj
+}
+
+func (r SearchRequestPaginationParam) MarshalJSON() (data []byte, err error) {
+	type shadow SearchRequestPaginationParam
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchRequestPaginationParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type SearchAutocompleteCompaniesV1Response struct {
 	// List of companies matching the search criteria.
 	Results []CompanySearchResponseItem `json:"results" api:"required"`
@@ -317,7 +352,7 @@ type SearchFindCompaniesV1Params struct {
 	// Location to filter companies.
 	Location SearchFindCompaniesV1ParamsLocation `json:"location,omitzero"`
 	// Pagination parameters.
-	Pagination SearchFindCompaniesV1ParamsPagination `json:"pagination,omitzero"`
+	Pagination SearchRequestPaginationParam `json:"pagination,omitzero"`
 	// Search query to filter companies.
 	Query SearchFindCompaniesV1ParamsQuery `json:"query,omitzero"`
 	paramObj
@@ -331,36 +366,19 @@ func (r *SearchFindCompaniesV1Params) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The property Field is required.
+// Filter by field. The property sets `value`, `values`, `keywords` and `min`/`max`
+// are mutually exclusive. Dates must be YYYY-MM-DD.
 type SearchFindCompaniesV1ParamsFilter struct {
-	// Any of "status", "legal_form", "register_number", "register_court",
-	// "register_type", "city", "active", "incorporated_at", "zip", "address",
-	// "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate",
-	// "materials", "pension_provisions", "salaries", "taxes", "liabilities",
-	// "capital_reserves", "net_income", "industry_codes", "capital_amount",
-	// "capital_currency", "number_of_owners", "has_sole_owner",
-	// "has_representative_owner", "is_family_owned", "youngest_owner_age", "purpose".
-	Field    string            `json:"field,omitzero" api:"required"`
-	Max      param.Opt[string] `json:"max,omitzero"`
-	Min      param.Opt[string] `json:"min,omitzero"`
-	Value    param.Opt[string] `json:"value,omitzero"`
-	Keywords []string          `json:"keywords,omitzero"`
-	Values   []string          `json:"values,omitzero"`
-	paramObj
+	Field string `json:"field,omitzero" api:"required"`
+	SearchFilterBaseParam
 }
 
 func (r SearchFindCompaniesV1ParamsFilter) MarshalJSON() (data []byte, err error) {
-	type shadow SearchFindCompaniesV1ParamsFilter
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *SearchFindCompaniesV1ParamsFilter) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func init() {
-	apijson.RegisterFieldValidator[SearchFindCompaniesV1ParamsFilter](
-		"field", "status", "legal_form", "register_number", "register_court", "register_type", "city", "active", "incorporated_at", "zip", "address", "balance_sheet_total", "revenue", "cash", "employees", "equity", "real_estate", "materials", "pension_provisions", "salaries", "taxes", "liabilities", "capital_reserves", "net_income", "industry_codes", "capital_amount", "capital_currency", "number_of_owners", "has_sole_owner", "has_representative_owner", "is_family_owned", "youngest_owner_age", "purpose",
-	)
+	type shadow struct {
+		*SearchFindCompaniesV1ParamsFilter
+		MarshalJSON bool `json:"-"` // Prevent inheriting [json.Marshaler] from the embedded field
+	}
+	return param.MarshalObject(r, shadow{&r, false})
 }
 
 // Location to filter companies.
@@ -381,23 +399,6 @@ func (r SearchFindCompaniesV1ParamsLocation) MarshalJSON() (data []byte, err err
 	return param.MarshalObject(r, (*shadow)(&r))
 }
 func (r *SearchFindCompaniesV1ParamsLocation) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination parameters.
-type SearchFindCompaniesV1ParamsPagination struct {
-	// Page number to return.
-	Page param.Opt[int64] `json:"page,omitzero"`
-	// Number of results per page.
-	PerPage param.Opt[int64] `json:"per_page,omitzero"`
-	paramObj
-}
-
-func (r SearchFindCompaniesV1ParamsPagination) MarshalJSON() (data []byte, err error) {
-	type shadow SearchFindCompaniesV1ParamsPagination
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *SearchFindCompaniesV1ParamsPagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -422,7 +423,7 @@ type SearchFindPersonV1Params struct {
 	// Filters to filter people.
 	Filters []SearchFindPersonV1ParamsFilter `json:"filters,omitzero"`
 	// Pagination parameters.
-	Pagination SearchFindPersonV1ParamsPagination `json:"pagination,omitzero"`
+	Pagination SearchRequestPaginationParam `json:"pagination,omitzero"`
 	// Search query to filter people.
 	Query SearchFindPersonV1ParamsQuery `json:"query,omitzero"`
 	paramObj
@@ -436,47 +437,19 @@ func (r *SearchFindPersonV1Params) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The property Field is required.
+// Filter by field. The property sets `value`, `values`, `keywords` and `min`/`max`
+// are mutually exclusive. Dates must be YYYY-MM-DD.
 type SearchFindPersonV1ParamsFilter struct {
-	// Any of "date_of_birth", "city", "active".
-	Field    string            `json:"field,omitzero" api:"required"`
-	Max      param.Opt[string] `json:"max,omitzero"`
-	Min      param.Opt[string] `json:"min,omitzero"`
-	Value    param.Opt[string] `json:"value,omitzero"`
-	Keywords []string          `json:"keywords,omitzero"`
-	Values   []string          `json:"values,omitzero"`
-	paramObj
+	Field string `json:"field,omitzero" api:"required"`
+	SearchFilterBaseParam
 }
 
 func (r SearchFindPersonV1ParamsFilter) MarshalJSON() (data []byte, err error) {
-	type shadow SearchFindPersonV1ParamsFilter
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *SearchFindPersonV1ParamsFilter) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func init() {
-	apijson.RegisterFieldValidator[SearchFindPersonV1ParamsFilter](
-		"field", "date_of_birth", "city", "active",
-	)
-}
-
-// Pagination parameters.
-type SearchFindPersonV1ParamsPagination struct {
-	// Page number to return.
-	Page param.Opt[int64] `json:"page,omitzero"`
-	// Number of results per page.
-	PerPage param.Opt[int64] `json:"per_page,omitzero"`
-	paramObj
-}
-
-func (r SearchFindPersonV1ParamsPagination) MarshalJSON() (data []byte, err error) {
-	type shadow SearchFindPersonV1ParamsPagination
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *SearchFindPersonV1ParamsPagination) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
+	type shadow struct {
+		*SearchFindPersonV1ParamsFilter
+		MarshalJSON bool `json:"-"` // Prevent inheriting [json.Marshaler] from the embedded field
+	}
+	return param.MarshalObject(r, shadow{&r, false})
 }
 
 // Search query to filter people.
