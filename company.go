@@ -225,6 +225,54 @@ func (r *CompanyName) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type CompanyOwnerLegalPerson struct {
+	City string `json:"city" api:"required"`
+	// Country where the owner is located, in ISO 3166-1 alpha-2 format. Example: "DE"
+	// for Germany
+	Country string `json:"country" api:"required"`
+	Name    string `json:"name" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		City        respjson.Field
+		Country     respjson.Field
+		Name        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyOwnerLegalPerson) RawJSON() string { return r.JSON.raw }
+func (r *CompanyOwnerLegalPerson) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyOwnerNaturalPerson struct {
+	City        string `json:"city" api:"required"`
+	Country     string `json:"country" api:"required"`
+	DateOfBirth string `json:"date_of_birth" api:"required"`
+	FirstName   string `json:"first_name" api:"required"`
+	FullName    string `json:"full_name" api:"required"`
+	LastName    string `json:"last_name" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		City        respjson.Field
+		Country     respjson.Field
+		DateOfBirth respjson.Field
+		FirstName   respjson.Field
+		FullName    respjson.Field
+		LastName    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyOwnerNaturalPerson) RawJSON() string { return r.JSON.raw }
+func (r *CompanyOwnerNaturalPerson) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type CompanyPurpose struct {
 	// Official description of the company's business activities and objectives. This
 	// is the registered purpose as stated in official documents.
@@ -377,6 +425,24 @@ func (r *ReportTable) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type Source struct {
+	// Url of the source document. In the form of a presigned url accessible for 30
+	// minutes.
+	DocumentURL string `json:"document_url" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		DocumentURL respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r Source) RawJSON() string { return r.JSON.raw }
+func (r *Source) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type CompanyGetContactV0Response struct {
 	// Where the contact information was found. Example: "https://openregister.de"
 	SourceURL string `json:"source_url" api:"required" format:"uri"`
@@ -449,7 +515,7 @@ type CompanyGetDetailsV1Response struct {
 	// directors, officers, and authorized signatories.
 	Representation []CompanyGetDetailsV1ResponseRepresentation `json:"representation" api:"required"`
 	// Sources of the company data.
-	Sources []CompanyGetDetailsV1ResponseSource `json:"sources" api:"required"`
+	Sources []Source `json:"sources" api:"required"`
 	// Current status of the company:
 	//
 	// - active: Operating normally
@@ -775,24 +841,6 @@ func (r *CompanyGetDetailsV1ResponseRepresentationNaturalPerson) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetDetailsV1ResponseSource struct {
-	// Url of the source document. In the form of a presigned url accessible for 30
-	// minutes.
-	DocumentURL string `json:"document_url" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		DocumentURL respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetDetailsV1ResponseSource) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetDetailsV1ResponseSource) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Current status of the company:
 //
 // - active: Operating normally
@@ -1034,7 +1082,7 @@ type CompanyGetOwnersV1Response struct {
 	CompanyID string                            `json:"company_id" api:"required"`
 	Owners    []CompanyGetOwnersV1ResponseOwner `json:"owners" api:"required"`
 	// Sources of the company owners data.
-	Sources []CompanyGetOwnersV1ResponseSource `json:"sources" api:"required"`
+	Sources []Source `json:"sources" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CompanyID   respjson.Field
@@ -1057,11 +1105,11 @@ type CompanyGetOwnersV1ResponseOwner struct {
 	// for certain shareholders.
 	ID string `json:"id" api:"required"`
 	// Details about the legal person.
-	LegalPerson CompanyGetOwnersV1ResponseOwnerLegalPerson `json:"legal_person" api:"required"`
+	LegalPerson CompanyOwnerLegalPerson `json:"legal_person" api:"required"`
 	// The name of the shareholder. E.g. "Max Mustermann" or "Max Mustermann GmbH"
 	Name string `json:"name" api:"required"`
 	// Details about the natural person.
-	NaturalPerson CompanyGetOwnersV1ResponseOwnerNaturalPerson `json:"natural_person" api:"required"`
+	NaturalPerson CompanyOwnerNaturalPerson `json:"natural_person" api:"required"`
 	// Nominal value of shares in Euro. Example: 100
 	NominalShare float64 `json:"nominal_share" api:"required"`
 	// Percentage of company ownership. Example: 5.36 represents 5.36% ownership
@@ -1099,74 +1147,6 @@ func (r *CompanyGetOwnersV1ResponseOwner) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Details about the legal person.
-type CompanyGetOwnersV1ResponseOwnerLegalPerson struct {
-	City string `json:"city" api:"required"`
-	// Country where the owner is located, in ISO 3166-1 alpha-2 format. Example: "DE"
-	// for Germany
-	Country string `json:"country" api:"required"`
-	Name    string `json:"name" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		City        respjson.Field
-		Country     respjson.Field
-		Name        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetOwnersV1ResponseOwnerLegalPerson) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetOwnersV1ResponseOwnerLegalPerson) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Details about the natural person.
-type CompanyGetOwnersV1ResponseOwnerNaturalPerson struct {
-	City        string `json:"city" api:"required"`
-	Country     string `json:"country" api:"required"`
-	DateOfBirth string `json:"date_of_birth" api:"required"`
-	FirstName   string `json:"first_name" api:"required"`
-	FullName    string `json:"full_name" api:"required"`
-	LastName    string `json:"last_name" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		City        respjson.Field
-		Country     respjson.Field
-		DateOfBirth respjson.Field
-		FirstName   respjson.Field
-		FullName    respjson.Field
-		LastName    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetOwnersV1ResponseOwnerNaturalPerson) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetOwnersV1ResponseOwnerNaturalPerson) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetOwnersV1ResponseSource struct {
-	// Url of the source document. In the form of a presigned url accessible for 30
-	// minutes.
-	DocumentURL string `json:"document_url" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		DocumentURL respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetOwnersV1ResponseSource) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetOwnersV1ResponseSource) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type CompanyGetUbosV1Response struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string                        `json:"company_id" api:"required"`
@@ -1190,8 +1170,8 @@ type CompanyGetUbosV1ResponseUbo struct {
 	// Unique identifier for the shareholder. For individuals: UUID For companies:
 	// Format matches company_id pattern Example: "DE-HRB-F1103-267645" or UUID May be
 	// null for certain shareholders.
-	ID          string                                 `json:"id" api:"required"`
-	LegalPerson CompanyGetUbosV1ResponseUboLegalPerson `json:"legal_person" api:"required"`
+	ID          string                  `json:"id" api:"required"`
+	LegalPerson CompanyOwnerLegalPerson `json:"legal_person" api:"required"`
 	// Maximum percentage of company ownership. Example: 5.36 represents maximum of
 	// 5.36% ownership There is no exact percentage share for owners that hold a stake
 	// as or through a limited partner. For these owners, we can only show the maximum
@@ -1200,8 +1180,8 @@ type CompanyGetUbosV1ResponseUbo struct {
 	// stake as or through a personal liable director.
 	MaxPercentageShare float64 `json:"max_percentage_share" api:"required"`
 	// The name of the shareholder. E.g. "Max Mustermann"
-	Name          string                                   `json:"name" api:"required"`
-	NaturalPerson CompanyGetUbosV1ResponseUboNaturalPerson `json:"natural_person" api:"required"`
+	Name          string                    `json:"name" api:"required"`
+	NaturalPerson CompanyOwnerNaturalPerson `json:"natural_person" api:"required"`
 	// Percentage of company ownership. Example: 5.36 represents 5.36% ownership Is
 	// null for all owners that hold a stake as or through a personal liable directors
 	// or limited partner.
@@ -1222,54 +1202,6 @@ type CompanyGetUbosV1ResponseUbo struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetUbosV1ResponseUbo) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetUbosV1ResponseUbo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetUbosV1ResponseUboLegalPerson struct {
-	City string `json:"city" api:"required"`
-	// Country where the owner is located, in ISO 3166-1 alpha-2 format. Example: "DE"
-	// for Germany
-	Country string `json:"country" api:"required"`
-	Name    string `json:"name" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		City        respjson.Field
-		Country     respjson.Field
-		Name        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetUbosV1ResponseUboLegalPerson) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetUbosV1ResponseUboLegalPerson) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetUbosV1ResponseUboNaturalPerson struct {
-	City        string `json:"city" api:"required"`
-	Country     string `json:"country" api:"required"`
-	DateOfBirth string `json:"date_of_birth" api:"required"`
-	FirstName   string `json:"first_name" api:"required"`
-	FullName    string `json:"full_name" api:"required"`
-	LastName    string `json:"last_name" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		City        respjson.Field
-		Country     respjson.Field
-		DateOfBirth respjson.Field
-		FirstName   respjson.Field
-		FullName    respjson.Field
-		LastName    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetUbosV1ResponseUboNaturalPerson) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetUbosV1ResponseUboNaturalPerson) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

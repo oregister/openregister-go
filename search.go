@@ -115,9 +115,9 @@ const (
 )
 
 type CompanySearch struct {
-	Pagination CompanySearchPagination `json:"pagination" api:"required"`
+	Pagination Pagination `json:"pagination" api:"required"`
 	// List of companies matching the search criteria.
-	Results []CompanySearchResult `json:"results" api:"required"`
+	Results []CompanySearchResponseItem `json:"results" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Pagination  respjson.Field
@@ -133,33 +133,7 @@ func (r *CompanySearch) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanySearchPagination struct {
-	// Current page number.
-	Page int64 `json:"page" api:"required"`
-	// Number of results per page.
-	PerPage int64 `json:"per_page" api:"required"`
-	// Total number of pages.
-	TotalPages int64 `json:"total_pages" api:"required"`
-	// Total number of results.
-	TotalResults int64 `json:"total_results" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Page         respjson.Field
-		PerPage      respjson.Field
-		TotalPages   respjson.Field
-		TotalResults respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanySearchPagination) RawJSON() string { return r.JSON.raw }
-func (r *CompanySearchPagination) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanySearchResult struct {
+type CompanySearchResponseItem struct {
 	// Company status - true if active, false if inactive.
 	Active bool `json:"active" api:"required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
@@ -199,14 +173,40 @@ type CompanySearchResult struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanySearchResult) RawJSON() string { return r.JSON.raw }
-func (r *CompanySearchResult) UnmarshalJSON(data []byte) error {
+func (r CompanySearchResponseItem) RawJSON() string { return r.JSON.raw }
+func (r *CompanySearchResponseItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type Pagination struct {
+	// Current page number.
+	Page int64 `json:"page" api:"required"`
+	// Number of results per page.
+	PerPage int64 `json:"per_page" api:"required"`
+	// Total number of pages.
+	TotalPages int64 `json:"total_pages" api:"required"`
+	// Total number of results.
+	TotalResults int64 `json:"total_results" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Page         respjson.Field
+		PerPage      respjson.Field
+		TotalPages   respjson.Field
+		TotalResults respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r Pagination) RawJSON() string { return r.JSON.raw }
+func (r *Pagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type SearchAutocompleteCompaniesV1Response struct {
 	// List of companies matching the search criteria.
-	Results []SearchAutocompleteCompaniesV1ResponseResult `json:"results" api:"required"`
+	Results []CompanySearchResponseItem `json:"results" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Results     respjson.Field
@@ -221,53 +221,8 @@ func (r *SearchAutocompleteCompaniesV1Response) UnmarshalJSON(data []byte) error
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SearchAutocompleteCompaniesV1ResponseResult struct {
-	// Company status - true if active, false if inactive.
-	Active bool `json:"active" api:"required"`
-	// Unique company identifier. Example: DE-HRB-F1103-267645
-	CompanyID string `json:"company_id" api:"required"`
-	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
-	// "DE" for Germany
-	Country string `json:"country" api:"required"`
-	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
-	// Haftung
-	//
-	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
-	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
-	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
-	// Official registered company name. Example: "Max Mustermann GmbH"
-	Name string `json:"name" api:"required"`
-	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
-	RegisterCourt string `json:"register_court" api:"required"`
-	// Registration number in the company register. Example: "230633"
-	RegisterNumber string `json:"register_number" api:"required"`
-	// Type of company register. Example: "HRB" for Commercial Register B
-	//
-	// Any of "HRB", "HRA", "PR", "GnR", "VR".
-	RegisterType CompanyRegisterType `json:"register_type" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Active         respjson.Field
-		CompanyID      respjson.Field
-		Country        respjson.Field
-		LegalForm      respjson.Field
-		Name           respjson.Field
-		RegisterCourt  respjson.Field
-		RegisterNumber respjson.Field
-		RegisterType   respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r SearchAutocompleteCompaniesV1ResponseResult) RawJSON() string { return r.JSON.raw }
-func (r *SearchAutocompleteCompaniesV1ResponseResult) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type SearchFindPersonV1Response struct {
-	Pagination SearchFindPersonV1ResponsePagination `json:"pagination" api:"required"`
+	Pagination Pagination `json:"pagination" api:"required"`
 	// List of people matching the search criteria.
 	Results []SearchFindPersonV1ResponseResult `json:"results" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -282,32 +237,6 @@ type SearchFindPersonV1Response struct {
 // Returns the unmodified JSON received from the API
 func (r SearchFindPersonV1Response) RawJSON() string { return r.JSON.raw }
 func (r *SearchFindPersonV1Response) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SearchFindPersonV1ResponsePagination struct {
-	// Current page number.
-	Page int64 `json:"page" api:"required"`
-	// Number of results per page.
-	PerPage int64 `json:"per_page" api:"required"`
-	// Total number of pages.
-	TotalPages int64 `json:"total_pages" api:"required"`
-	// Total number of results.
-	TotalResults int64 `json:"total_results" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Page         respjson.Field
-		PerPage      respjson.Field
-		TotalPages   respjson.Field
-		TotalResults respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r SearchFindPersonV1ResponsePagination) RawJSON() string { return r.JSON.raw }
-func (r *SearchFindPersonV1ResponsePagination) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
