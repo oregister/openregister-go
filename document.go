@@ -37,31 +37,6 @@ func NewDocumentService(opts ...option.RequestOption) (r DocumentService) {
 }
 
 // Get document information
-func (r *DocumentService) Get(ctx context.Context, documentID string, opts ...option.RequestOption) (res *DocumentGetResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	if documentID == "" {
-		err = errors.New("missing required document_id parameter")
-		return
-	}
-	path := fmt.Sprintf("v0/document/%s", documentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-// Download document
-func (r *DocumentService) Download(ctx context.Context, documentID string, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
-	if documentID == "" {
-		err = errors.New("missing required document_id parameter")
-		return
-	}
-	path := fmt.Sprintf("v0/document/%s/download", documentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-// Get document information
 func (r *DocumentService) GetCachedV1(ctx context.Context, documentID string, opts ...option.RequestOption) (res *DocumentGetCachedV1Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if documentID == "" {
@@ -80,48 +55,6 @@ func (r *DocumentService) GetRealtimeV1(ctx context.Context, query DocumentGetRe
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
-
-type DocumentGetResponse struct {
-	// The unique identifier for the document. E.g.
-	// "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-	ID string `json:"id" api:"required"`
-	// The date of the document. E.g. "2022-01-01"
-	Date string `json:"date" api:"required"`
-	// The name of the document. E.g. "Musterprotokoll vom 01.01.2022"
-	Name string `json:"name" api:"required"`
-	// The type of document.
-	//
-	// Any of "articles_of_association", "sample_protocol", "shareholder_list".
-	Type DocumentGetResponseType `json:"type" api:"required"`
-	// The URL of the document. It can be downloaded from there. Only valid for 15
-	// minutes after the request.
-	URL string `json:"url" api:"required" format:"uri"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID          respjson.Field
-		Date        respjson.Field
-		Name        respjson.Field
-		Type        respjson.Field
-		URL         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r DocumentGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *DocumentGetResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of document.
-type DocumentGetResponseType string
-
-const (
-	DocumentGetResponseTypeArticlesOfAssociation DocumentGetResponseType = "articles_of_association"
-	DocumentGetResponseTypeSampleProtocol        DocumentGetResponseType = "sample_protocol"
-	DocumentGetResponseTypeShareholderList       DocumentGetResponseType = "shareholder_list"
-)
 
 type DocumentGetCachedV1Response struct {
 	// The unique identifier for the document. E.g.
