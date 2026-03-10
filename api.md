@@ -5,6 +5,8 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyLegalForm">CompanyLegalForm</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyRegisterType">CompanyRegisterType</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanySearch">CompanySearch</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanySearchResponseItem">CompanySearchResponseItem</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#Pagination">Pagination</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#SearchAutocompleteCompaniesV1Response">SearchAutocompleteCompaniesV1Response</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#SearchFindPersonV1Response">SearchFindPersonV1Response</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#SearchLookupCompanyByURLResponse">SearchLookupCompanyByURLResponse</a>
@@ -23,6 +25,8 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyAddress">CompanyAddress</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyCapital">CompanyCapital</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyName">CompanyName</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyOwnerLegalPerson">CompanyOwnerLegalPerson</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyOwnerNaturalPerson">CompanyOwnerNaturalPerson</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyPurpose">CompanyPurpose</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyRegister">CompanyRegister</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyRelationType">CompanyRelationType</a>
@@ -31,6 +35,7 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#MergedReportTable">MergedReportTable</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#ReportRow">ReportRow</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#ReportTable">ReportTable</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#Source">Source</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetContactV0Response">CompanyGetContactV0Response</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetDetailsV1Response">CompanyGetDetailsV1Response</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go#CompanyGetFinancialsV1Response">CompanyGetFinancialsV1Response</a>
