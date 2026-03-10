@@ -1,7 +1,7 @@
 package apijson
 
 import (
-	"github.com/oregister/openregister-go/packages/respjson"
+	"github.com/oregister/openregister-go/v2/packages/respjson"
 	"reflect"
 )
 

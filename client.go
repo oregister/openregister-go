@@ -8,8 +8,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/oregister/openregister-go/internal/requestconfig"
-	"github.com/oregister/openregister-go/option"
+	"github.com/oregister/openregister-go/v2/internal/requestconfig"
+	"github.com/oregister/openregister-go/v2/option"
 )
 
 // Client creates a struct with services and top level methods that help with

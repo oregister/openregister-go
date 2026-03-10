@@ -11,12 +11,12 @@ import (
 	"slices"
 	"time"
 
-	"github.com/oregister/openregister-go/internal/apijson"
-	"github.com/oregister/openregister-go/internal/apiquery"
-	"github.com/oregister/openregister-go/internal/requestconfig"
-	"github.com/oregister/openregister-go/option"
-	"github.com/oregister/openregister-go/packages/param"
-	"github.com/oregister/openregister-go/packages/respjson"
+	"github.com/oregister/openregister-go/v2/internal/apijson"
+	"github.com/oregister/openregister-go/v2/internal/apiquery"
+	"github.com/oregister/openregister-go/v2/internal/requestconfig"
+	"github.com/oregister/openregister-go/v2/option"
+	"github.com/oregister/openregister-go/v2/packages/param"
+	"github.com/oregister/openregister-go/v2/packages/respjson"
 )
 
 // CompanyService contains methods and other services that help with interacting

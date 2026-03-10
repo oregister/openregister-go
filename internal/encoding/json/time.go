@@ -2,7 +2,7 @@
 package json
 
 import (
-	"github.com/oregister/openregister-go/internal/encoding/json/shims"
+	"github.com/oregister/openregister-go/v2/internal/encoding/json/shims"
 	"reflect"
 	"time"
 )

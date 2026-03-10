@@ -1,7 +1,7 @@
 package apiquery
 
 import (
-	"github.com/oregister/openregister-go/packages/param"
+	"github.com/oregister/openregister-go/v2/packages/param"
 	"net/url"
 	"testing"
 	"time"
