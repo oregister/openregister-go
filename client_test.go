@@ -38,7 +38,7 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.Company.GetDetailsV1(
+	_, _ = client.Company.GetDetailsV1(
 		context.Background(),
 		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
