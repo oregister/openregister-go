@@ -971,7 +971,10 @@ func (r *CompanyGetHistoricalOwnersV0Response) UnmarshalJSON(data []byte) error 
 }
 
 type CompanyGetHistoricalOwnersV0ResponseOwner struct {
-	// Unique identifier for the owner (generated key)
+	// Unique identifier for the owner. For companies, this is the company register ID
+	// (e.g. DE-HRB-F1103-267645) which can be used to look up the company. For natural
+	// persons, this is the entity UUID. For other entity types (foreign companies,
+	// foundations, etc.), this is empty.
 	ID string `json:"id" api:"required"`
 	// Type of the owner entity
 	//
@@ -992,8 +995,6 @@ type CompanyGetHistoricalOwnersV0ResponseOwner struct {
 	Country string `json:"country"`
 	// Date when this owner last appeared (null if still active)
 	LastAppearance time.Time `json:"last_appearance" format:"date-time"`
-	// Link to the owner
-	Link string `json:"link"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID               respjson.Field
@@ -1004,7 +1005,6 @@ type CompanyGetHistoricalOwnersV0ResponseOwner struct {
 		Status           respjson.Field
 		Country          respjson.Field
 		LastAppearance   respjson.Field
-		Link             respjson.Field
 		ExtraFields      map[string]respjson.Field
 		raw              string
 	} `json:"-"`
