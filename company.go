@@ -43,11 +43,11 @@ func (r *CompanyService) GetContactV0(ctx context.Context, companyID string, opt
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/company/%s/contact", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get detailed company information
@@ -55,11 +55,11 @@ func (r *CompanyService) GetDetailsV1(ctx context.Context, companyID string, que
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get financial reports
@@ -67,11 +67,11 @@ func (r *CompanyService) GetFinancialsV1(ctx context.Context, companyID string, 
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/financials", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get historical owner changes
@@ -79,11 +79,11 @@ func (r *CompanyService) GetHistoricalOwnersV0(ctx context.Context, companyID st
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/company/%s/owners/historical", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get company holdings
@@ -91,11 +91,11 @@ func (r *CompanyService) GetHoldingsV1(ctx context.Context, companyID string, op
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/holdings", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get company owners
@@ -103,11 +103,11 @@ func (r *CompanyService) GetOwnersV1(ctx context.Context, companyID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/owners", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get company end owners
@@ -115,11 +115,11 @@ func (r *CompanyService) GetUbosV1(ctx context.Context, companyID string, opts .
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/ubo", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type CompanyAddress struct {
