@@ -39,11 +39,11 @@ func (r *PersonService) GetDetailsV1(ctx context.Context, personID string, opts 
 	opts = slices.Concat(r.Options, opts)
 	if personID == "" {
 		err = errors.New("missing required person_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/person/%s", personID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get person holdings
@@ -51,11 +51,11 @@ func (r *PersonService) GetHoldingsV1(ctx context.Context, personID string, opts
 	opts = slices.Concat(r.Options, opts)
 	if personID == "" {
 		err = errors.New("missing required person_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/person/%s/holdings", personID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type PersonGetDetailsV1Response struct {

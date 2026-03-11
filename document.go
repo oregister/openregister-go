@@ -41,11 +41,11 @@ func (r *DocumentService) GetCachedV1(ctx context.Context, documentID string, op
 	opts = slices.Concat(r.Options, opts)
 	if documentID == "" {
 		err = errors.New("missing required document_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/document/%s", documentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Fetch a document in realtime.
@@ -53,7 +53,7 @@ func (r *DocumentService) GetRealtimeV1(ctx context.Context, query DocumentGetRe
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/document"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 type Document struct {
