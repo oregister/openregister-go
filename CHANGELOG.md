@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.2 (2026-03-11)
+
+Full Changelog: [v2.0.1...v2.0.2](https://github.com/oregister/openregister-go/compare/v2.0.1...v2.0.2)
+
+### Bug Fixes
+
+* **api:** adjust historical owner ids ([814e9fb](https://github.com/oregister/openregister-go/commit/814e9fb1cfa4c6a4ebeed0103956cbcf45e23ce4))
+
 ## 2.0.1 (2026-03-10)
 
 Full Changelog: [v2.0.0...v2.0.1](https://github.com/oregister/openregister-go/compare/v2.0.0...v2.0.1)
