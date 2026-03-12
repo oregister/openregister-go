@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/oregister/openregister-go/v2/internal/apijson"
 	"github.com/oregister/openregister-go/v2/internal/apiquery"
@@ -70,18 +69,6 @@ func (r *CompanyService) GetFinancialsV1(ctx context.Context, companyID string, 
 		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/financials", companyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// Get historical owner changes
-func (r *CompanyService) GetHistoricalOwnersV0(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetHistoricalOwnersV0Response, err error) {
-	opts = slices.Concat(r.Options, opts)
-	if companyID == "" {
-		err = errors.New("missing required company_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/company/%s/owners/historical", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
@@ -951,96 +938,6 @@ type CompanyGetFinancialsV1ResponseReport struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetFinancialsV1ResponseReport) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetFinancialsV1ResponseReport) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetHistoricalOwnersV0Response struct {
-	Owners []CompanyGetHistoricalOwnersV0ResponseOwner `json:"owners" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Owners      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetHistoricalOwnersV0Response) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetHistoricalOwnersV0Response) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetHistoricalOwnersV0ResponseOwner struct {
-	// Unique identifier for the owner. For companies, this is the company register ID
-	// (e.g. DE-HRB-F1103-267645) which can be used to look up the company. For natural
-	// persons, this is the entity UUID. For other entity types (foreign companies,
-	// foundations, etc.), this is empty.
-	ID string `json:"id" api:"required"`
-	// Type of the owner entity
-	//
-	// Any of "natural_person", "german_company", "foreign_company",
-	// "german_government_entity", "german_foundation", "german_multiple_shareholder".
-	EntityType string `json:"entity_type" api:"required"`
-	// Date when this owner first appeared
-	FirstAppearance time.Time `json:"first_appearance" api:"required" format:"date-time"`
-	// Name of the owner
-	Name string `json:"name" api:"required"`
-	// Historical ownership data across all documents
-	OwnershipHistory []CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory `json:"ownership_history" api:"required"`
-	// Current status of the owner
-	//
-	// Any of "active", "removed".
-	Status string `json:"status" api:"required"`
-	// Country of the owner
-	Country string `json:"country"`
-	// Date when this owner last appeared (null if still active)
-	LastAppearance time.Time `json:"last_appearance" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID               respjson.Field
-		EntityType       respjson.Field
-		FirstAppearance  respjson.Field
-		Name             respjson.Field
-		OwnershipHistory respjson.Field
-		Status           respjson.Field
-		Country          respjson.Field
-		LastAppearance   respjson.Field
-		ExtraFields      map[string]respjson.Field
-		raw              string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetHistoricalOwnersV0ResponseOwner) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetHistoricalOwnersV0ResponseOwner) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory struct {
-	// Date of the document
-	DocumentDate time.Time `json:"document_date" api:"required" format:"date-time"`
-	// Document where this ownership data was found
-	DocumentID string `json:"document_id" api:"required" format:"uuid"`
-	// Nominal value of shares in this document
-	NominalShares int64 `json:"nominal_shares" api:"required"`
-	// Percentage ownership in this document
-	PercentageShares float64 `json:"percentage_shares" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		DocumentDate     respjson.Field
-		DocumentID       respjson.Field
-		NominalShares    respjson.Field
-		PercentageShares respjson.Field
-		ExtraFields      map[string]respjson.Field
-		raw              string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
