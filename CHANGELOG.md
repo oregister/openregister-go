@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.0.3 (2026-03-12)
+
+Full Changelog: [v2.0.2...v2.0.3](https://github.com/oregister/openregister-go/compare/v2.0.2...v2.0.3)
+
+### Bug Fixes
+
+* **api:** historical owners v1 ([53091dd](https://github.com/oregister/openregister-go/commit/53091ddb87c5a3940f908b6b6808d0715c3fc234))
+* **api:** owner historical v1 ([65b4a50](https://github.com/oregister/openregister-go/commit/65b4a5059eb1169c3529353822e175a95314f872))
+
+
+### Chores
+
+* **internal:** minor cleanup ([446f0f6](https://github.com/oregister/openregister-go/commit/446f0f68859b551fa412a8de96537e74cd016939))
+* **internal:** use explicit returns ([455d959](https://github.com/oregister/openregister-go/commit/455d95930efb597042f1b6abac47c109e19f8021))
+* **internal:** use explicit returns in more places ([55b3458](https://github.com/oregister/openregister-go/commit/55b345894078f9c87585505167b6f32aab861968))
+
 ## 2.0.2 (2026-03-11)
 
 Full Changelog: [v2.0.1...v2.0.2](https://github.com/oregister/openregister-go/compare/v2.0.1...v2.0.2)
