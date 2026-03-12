@@ -40,7 +40,7 @@ func (r *SearchService) AutocompleteCompaniesV1(ctx context.Context, query Searc
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/autocomplete/company"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Search for companies
@@ -48,7 +48,7 @@ func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindComp
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/search/company"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Search for people
@@ -56,7 +56,7 @@ func (r *SearchService) FindPersonV1(ctx context.Context, body SearchFindPersonV
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/search/person"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Find company by website URL
@@ -64,7 +64,7 @@ func (r *SearchService) LookupCompanyByURL(ctx context.Context, query SearchLook
 	opts = slices.Concat(r.Options, opts)
 	path := "v0/search/lookup"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Legal form of the company. Common German legal forms:

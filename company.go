@@ -43,11 +43,11 @@ func (r *CompanyService) GetContactV0(ctx context.Context, companyID string, opt
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/company/%s/contact", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get detailed company information
@@ -55,11 +55,11 @@ func (r *CompanyService) GetDetailsV1(ctx context.Context, companyID string, que
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get financial reports
@@ -67,23 +67,23 @@ func (r *CompanyService) GetFinancialsV1(ctx context.Context, companyID string, 
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/financials", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get historical owner changes
-func (r *CompanyService) GetHistoricalOwnersV0(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetHistoricalOwnersV0Response, err error) {
+func (r *CompanyService) GetHistoricalOwnersV1(ctx context.Context, companyID string, opts ...option.RequestOption) (res *CompanyGetHistoricalOwnersV1Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
-	path := fmt.Sprintf("v0/company/%s/owners/historical", companyID)
+	path := fmt.Sprintf("v1/company/%s/owners/historical", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get company holdings
@@ -91,11 +91,11 @@ func (r *CompanyService) GetHoldingsV1(ctx context.Context, companyID string, op
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/holdings", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get company owners
@@ -103,11 +103,11 @@ func (r *CompanyService) GetOwnersV1(ctx context.Context, companyID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/owners", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get company end owners
@@ -115,11 +115,11 @@ func (r *CompanyService) GetUbosV1(ctx context.Context, companyID string, opts .
 	opts = slices.Concat(r.Options, opts)
 	if companyID == "" {
 		err = errors.New("missing required company_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v1/company/%s/ubo", companyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type CompanyAddress struct {
@@ -954,8 +954,8 @@ func (r *CompanyGetFinancialsV1ResponseReport) UnmarshalJSON(data []byte) error 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetHistoricalOwnersV0Response struct {
-	Owners []CompanyGetHistoricalOwnersV0ResponseOwner `json:"owners" api:"required"`
+type CompanyGetHistoricalOwnersV1Response struct {
+	Owners []CompanyGetHistoricalOwnersV1ResponseOwner `json:"owners" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Owners      respjson.Field
@@ -965,12 +965,12 @@ type CompanyGetHistoricalOwnersV0Response struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetHistoricalOwnersV0Response) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetHistoricalOwnersV0Response) UnmarshalJSON(data []byte) error {
+func (r CompanyGetHistoricalOwnersV1Response) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetHistoricalOwnersV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetHistoricalOwnersV0ResponseOwner struct {
+type CompanyGetHistoricalOwnersV1ResponseOwner struct {
 	// Unique identifier for the owner. For companies, this is the company register ID
 	// (e.g. DE-HRB-F1103-267645) which can be used to look up the company. For natural
 	// persons, this is the entity UUID. For other entity types (foreign companies,
@@ -986,7 +986,7 @@ type CompanyGetHistoricalOwnersV0ResponseOwner struct {
 	// Name of the owner
 	Name string `json:"name" api:"required"`
 	// Historical ownership data across all documents
-	OwnershipHistory []CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory `json:"ownership_history" api:"required"`
+	OwnershipHistory []CompanyGetHistoricalOwnersV1ResponseOwnerOwnershipHistory `json:"ownership_history" api:"required"`
 	// Current status of the owner
 	//
 	// Any of "active", "removed".
@@ -1011,12 +1011,12 @@ type CompanyGetHistoricalOwnersV0ResponseOwner struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetHistoricalOwnersV0ResponseOwner) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetHistoricalOwnersV0ResponseOwner) UnmarshalJSON(data []byte) error {
+func (r CompanyGetHistoricalOwnersV1ResponseOwner) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetHistoricalOwnersV1ResponseOwner) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory struct {
+type CompanyGetHistoricalOwnersV1ResponseOwnerOwnershipHistory struct {
 	// Date of the document
 	DocumentDate time.Time `json:"document_date" api:"required" format:"date-time"`
 	// Document where this ownership data was found
@@ -1037,10 +1037,10 @@ type CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory) RawJSON() string {
+func (r CompanyGetHistoricalOwnersV1ResponseOwnerOwnershipHistory) RawJSON() string {
 	return r.JSON.raw
 }
-func (r *CompanyGetHistoricalOwnersV0ResponseOwnerOwnershipHistory) UnmarshalJSON(data []byte) error {
+func (r *CompanyGetHistoricalOwnersV1ResponseOwnerOwnershipHistory) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -89,7 +89,7 @@ func TestCompanyGetFinancialsV1(t *testing.T) {
 	}
 }
 
-func TestCompanyGetHistoricalOwnersV0(t *testing.T) {
+func TestCompanyGetHistoricalOwnersV1(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -102,7 +102,7 @@ func TestCompanyGetHistoricalOwnersV0(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Company.GetHistoricalOwnersV0(context.TODO(), "company_id")
+	_, err := client.Company.GetHistoricalOwnersV1(context.TODO(), "company_id")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {
