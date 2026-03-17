@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.4 (2026-03-17)
+
+Full Changelog: [v2.0.3...v2.0.4](https://github.com/oregister/openregister-go/compare/v2.0.3...v2.0.4)
+
+### Chores
+
+* **internal:** tweak CI branches ([ec88099](https://github.com/oregister/openregister-go/commit/ec8809906ddcc6e04fecb8d1cf30713eff300185))
+
 ## 2.0.3 (2026-03-12)
 
 Full Changelog: [v2.0.2...v2.0.3](https://github.com/oregister/openregister-go/compare/v2.0.2...v2.0.3)
