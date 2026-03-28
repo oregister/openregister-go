@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.1.0 (2026-03-28)
+
+Full Changelog: [v2.0.3...v2.1.0](https://github.com/oregister/openregister-go/compare/v2.0.3...v2.1.0)
+
+### Features
+
+* **api:** monitoring endpoints ([97b3e7d](https://github.com/oregister/openregister-go/commit/97b3e7d8edb6aa213cf4968d3c3a019efafa7b83))
+* **internal:** support comma format in multipart form encoding ([f55f4a8](https://github.com/oregister/openregister-go/commit/f55f4a8ec4c7fa681acf85742a4aacd0c5ebad36))
+
+
+### Bug Fixes
+
+* prevent duplicate ? in query params ([d9e5cdd](https://github.com/oregister/openregister-go/commit/d9e5cdd6a8f42a5b5fb213d704f1ab6a83129e92))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([3179bf6](https://github.com/oregister/openregister-go/commit/3179bf6feb94db6d75142312488e0a8c5e6aa62e))
+* **ci:** support opting out of skipping builds on metadata-only commits ([1e500a0](https://github.com/oregister/openregister-go/commit/1e500a0a0d77e454bdf0dfe1ece9471251e7cd9e))
+* **client:** fix multipart serialisation of Default() fields ([921f8f1](https://github.com/oregister/openregister-go/commit/921f8f147425967511bf55a94c0e05eb885877e2))
+* **internal:** support default value struct tag ([dcace5e](https://github.com/oregister/openregister-go/commit/dcace5e612cd21d38dde8377f762b0e2063238e7))
+* **internal:** tweak CI branches ([ec88099](https://github.com/oregister/openregister-go/commit/ec8809906ddcc6e04fecb8d1cf30713eff300185))
+* **internal:** update gitignore ([c153194](https://github.com/oregister/openregister-go/commit/c1531944b3ece1dcfbdf9d8902207d1ac3677cb6))
+* remove unnecessary error check for url parsing ([180e955](https://github.com/oregister/openregister-go/commit/180e955f7f186dcb26eb14f97cccce2567f5448d))
+* update docs for api:"required" ([09b48d2](https://github.com/oregister/openregister-go/commit/09b48d21be7508d5cae76d7f85cbd7cfc7fd8545))
+
 ## 2.0.3 (2026-03-12)
 
 Full Changelog: [v2.0.2...v2.0.3](https://github.com/oregister/openregister-go/compare/v2.0.2...v2.0.3)
