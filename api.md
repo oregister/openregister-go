@@ -84,3 +84,16 @@ Methods:
 
 - <code title="get /v1/person/{person_id}">client.Person.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#PersonService.GetDetailsV1">GetDetailsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, personID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#PersonGetDetailsV1Response">PersonGetDetailsV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v1/person/{person_id}/holdings">client.Person.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#PersonService.GetHoldingsV1">GetHoldingsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, personID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#PersonGetHoldingsV1Response">PersonGetHoldingsV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+# Monitor
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#MonitorNewResponse">MonitorNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#MonitorListResponse">MonitorListResponse</a>
+
+Methods:
+
+- <code title="post /v1/monitor">client.Monitor.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#MonitorService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#MonitorNewParams">MonitorNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#MonitorNewResponse">MonitorNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v1/monitor">client.Monitor.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#MonitorService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#MonitorListResponse">MonitorListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /v1/monitor/{entity_id}">client.Monitor.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#MonitorService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, entityID <a href="https://pkg.go.dev/builtin#string">string</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
