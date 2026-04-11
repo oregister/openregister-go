@@ -587,6 +587,8 @@ type CompanyGetDetailsV1Response struct {
 	// Date when the company was officially terminated (if applicable). Format: ISO
 	// 8601 (YYYY-MM-DD) Example: "2022-01-01"
 	TerminatedAt string `json:"terminated_at" api:"required"`
+	// Legal Entity Identifier (LEI), if available.
+	Lei string `json:"lei"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID             respjson.Field
@@ -610,6 +612,7 @@ type CompanyGetDetailsV1Response struct {
 		Sources        respjson.Field
 		Status         respjson.Field
 		TerminatedAt   respjson.Field
+		Lei            respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
 	} `json:"-"`
