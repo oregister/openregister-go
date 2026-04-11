@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.2.0 (2026-04-11)
+
+Full Changelog: [v2.1.0...v2.2.0](https://github.com/oregister/openregister-go/compare/v2.1.0...v2.2.0)
+
+### Features
+
+* **api:** add lei ([20359e1](https://github.com/oregister/openregister-go/commit/20359e1c1ce8c514b53e9ac9abede1d9a750242b))
+
 ## 2.1.0 (2026-03-28)
 
 Full Changelog: [v2.0.3...v2.1.0](https://github.com/oregister/openregister-go/compare/v2.0.3...v2.1.0)
