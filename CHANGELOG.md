@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.3.0 (2026-04-14)
+
+Full Changelog: [v2.2.0...v2.3.0](https://github.com/oregister/openregister-go/compare/v2.2.0...v2.3.0)
+
+### Features
+
+* **api:** notarized_at & best_available ([282e616](https://github.com/oregister/openregister-go/commit/282e6164c66eb6f7c7f3d0efb5f05701c2b19f8a))
+
 ## 2.2.0 (2026-04-11)
 
 Full Changelog: [v2.1.0...v2.2.0](https://github.com/oregister/openregister-go/compare/v2.1.0...v2.2.0)
