@@ -152,8 +152,9 @@ func TestCompanyGetOwnersV1WithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"company_id",
 		openregister.CompanyGetOwnersV1Params{
-			Export:   openregister.Bool(true),
-			Realtime: openregister.Bool(true),
+			BestAvailable: openregister.Bool(true),
+			Export:        openregister.Bool(true),
+			Realtime:      openregister.Bool(true),
 		},
 	)
 	if err != nil {

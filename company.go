@@ -562,6 +562,9 @@ type CompanyGetDetailsV1Response struct {
 	Name CompanyName `json:"name" api:"required"`
 	// Historical company names. Shows how the company name changed over time.
 	Names []CompanyName `json:"names" api:"required"`
+	// Date of the notarized company agreement (Gesellschaftsvertrag or Satzung).
+	// Format: ISO 8601 (YYYY-MM-DD) Example: "2021-12-21"
+	NotarizedAt string `json:"notarized_at" api:"required"`
 	// Current official business purpose of the company.
 	Purpose CompanyPurpose `json:"purpose" api:"required"`
 	// Historical business purposes. Shows how the company purpose changed over time.
@@ -585,7 +588,7 @@ type CompanyGetDetailsV1Response struct {
 	// Any of "active", "inactive", "liquidation".
 	Status CompanyGetDetailsV1ResponseStatus `json:"status" api:"required"`
 	// Date when the company was officially terminated (if applicable). Format: ISO
-	// 8601 (YYYY-MM-DD) Example: "2022-01-01"
+	// 8601 (YYYY-MM-DD) Example: "2024-01-01"
 	TerminatedAt string `json:"terminated_at" api:"required"`
 	// Legal Entity Identifier (LEI), if available.
 	Lei string `json:"lei"`
@@ -604,6 +607,7 @@ type CompanyGetDetailsV1Response struct {
 		LegalForm      respjson.Field
 		Name           respjson.Field
 		Names          respjson.Field
+		NotarizedAt    respjson.Field
 		Purpose        respjson.Field
 		Purposes       respjson.Field
 		Register       respjson.Field
@@ -1107,6 +1111,11 @@ func (r *CompanyGetHoldingsV1ResponseHolding) UnmarshalJSON(data []byte) error {
 }
 
 type CompanyGetOwnersV1Response struct {
+	// When true, the returned owner data is the best available but may not reflect the
+	// most current ownership state. This applies to AG and SE companies where
+	// ownership data is sourced from Handelsregister decision and articles of
+	// association documents, which are not filed on every ownership change.
+	BestAvailable bool `json:"best_available" api:"required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string                            `json:"company_id" api:"required"`
 	Owners    []CompanyGetOwnersV1ResponseOwner `json:"owners" api:"required"`
@@ -1114,11 +1123,12 @@ type CompanyGetOwnersV1Response struct {
 	Sources []Source `json:"sources" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CompanyID   respjson.Field
-		Owners      respjson.Field
-		Sources     respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		BestAvailable respjson.Field
+		CompanyID     respjson.Field
+		Owners        respjson.Field
+		Sources       respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
 	} `json:"-"`
 }
 
@@ -1255,6 +1265,12 @@ func (r CompanyGetDetailsV1Params) URLQuery() (v url.Values, err error) {
 }
 
 type CompanyGetOwnersV1Params struct {
+	// When set to true, returns the best available owner data for AG and SE companies.
+	// This data is extracted from Handelsregister documents and may not reflect the
+	// most current ownership state, as these document types are not filed on every
+	// ownership change. Requests for AG/SE companies without this flag return 404.
+	// Note: realtime and best_available cannot be used together at the moment.
+	BestAvailable param.Opt[bool] `query:"best_available,omitzero" json:"-"`
 	// Setting this to true will return the owners of the company if they exist but
 	// will skip processing the documents in case they weren't processed yet.
 	Export param.Opt[bool] `query:"export,omitzero" json:"-"`
