@@ -16,12 +16,13 @@ import (
 // interacting with the openregister API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options  []option.RequestOption
-	Search   SearchService
-	Company  CompanyService
-	Document DocumentService
-	Person   PersonService
-	Monitor  MonitorService
+	Options             []option.RequestOption
+	Search              SearchService
+	Company             CompanyService
+	Document            DocumentService
+	Person              PersonService
+	Monitor             MonitorService
+	Transparenzregister TransparenzregisterService
 }
 
 // DefaultClientOptions read from the environment (OPENREGISTER_API_KEY,
@@ -51,6 +52,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Document = NewDocumentService(opts...)
 	r.Person = NewPersonService(opts...)
 	r.Monitor = NewMonitorService(opts...)
+	r.Transparenzregister = NewTransparenzregisterService(opts...)
 
 	return
 }
