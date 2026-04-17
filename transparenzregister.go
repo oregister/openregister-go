@@ -36,7 +36,9 @@ func NewTransparenzregisterService(opts ...option.RequestOption) (r Transparenzr
 
 // Store username and password credentials for accessing the Transparenzregister
 // API. These credentials will be used for subsequent requests to retrieve company
-// documents.
+// documents. Credential names are user-scoped; the reserved name `sandbox` cannot
+// be used. Credentials are validated against Transparenzregister before they are
+// persisted.
 func (r *TransparenzregisterService) SetCredentialsV1(ctx context.Context, body TransparenzregisterSetCredentialsV1Params, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -48,13 +50,13 @@ func (r *TransparenzregisterService) SetCredentialsV1(ctx context.Context, body 
 type TransparenzregisterSetCredentialsV1Params struct {
 	// Password for Transparenzregister API access.
 	Password string `json:"password" api:"required" format:"password"`
-	// Username for Transparenzregister API access. Example:
-	// "testnutzer-eis@transparenzregister.de"
+	// Username for Transparenzregister API access. Example: "compliance@example.com"
 	Username string `json:"username" api:"required"`
-	// Label to identify this set of credentials. Allows storing multiple
+	// Name to identify this set of credentials. Allows storing multiple
 	// Transparenzregister credentials per user (e.g., for different accounts or
-	// clients). Defaults to 'default' if not provided. Example: "client_a"
-	CredentialLabel param.Opt[string] `json:"credential_label,omitzero"`
+	// clients). Defaults to 'default' if not provided. Cannot be `sandbox` because
+	// that name is reserved for test-mode extracts. Example: "client_a"
+	Name param.Opt[string] `json:"name,omitzero"`
 	paramObj
 }
 
