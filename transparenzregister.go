@@ -21,7 +21,7 @@ import (
 // the [NewTransparenzregisterService] method instead.
 type TransparenzregisterService struct {
 	Options []option.RequestOption
-	Request TransparenzregisterRequestService
+	Extract TransparenzregisterExtractService
 }
 
 // NewTransparenzregisterService generates a new service that applies the given
@@ -30,7 +30,7 @@ type TransparenzregisterService struct {
 func NewTransparenzregisterService(opts ...option.RequestOption) (r TransparenzregisterService) {
 	r = TransparenzregisterService{}
 	r.Options = opts
-	r.Request = NewTransparenzregisterRequestService(opts...)
+	r.Extract = NewTransparenzregisterExtractService(opts...)
 	return
 }
 
