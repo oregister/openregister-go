@@ -53,7 +53,7 @@ func NewTransparenzregisterExtractService(opts ...option.RequestOption) (r Trans
 //   - Omit `X-Credential-Name` or use `default` / another stored credential name.
 //   - `company_id` is required and must resolve to exactly one Transparenzregister
 //     legal entity.
-func (r *TransparenzregisterExtractService) NewV1(ctx context.Context, params TransparenzregisterExtractNewV1Params, opts ...option.RequestOption) (res *TransparenzregisterExtractNewV1Response, err error) {
+func (r *TransparenzregisterExtractService) NewV1(ctx context.Context, params TransparenzregisterExtractNewV1Params, opts ...option.RequestOption) (res *TransparenzregisterExtract, err error) {
 	if !param.IsOmitted(params.XCredentialName) {
 		opts = append(opts, option.WithHeader("X-Credential-Name", fmt.Sprintf("%v", params.XCredentialName.Value)))
 	}
@@ -70,7 +70,7 @@ func (r *TransparenzregisterExtractService) NewV1(ctx context.Context, params Tr
 // pending status. Polling reuses the credential mode stored on the extract at
 // create time. Sandbox extracts keep using the Transparenzregister test client
 // automatically; no credential header is accepted on this endpoint.
-func (r *TransparenzregisterExtractService) GetV1(ctx context.Context, extractID string, opts ...option.RequestOption) (res *TransparenzregisterExtractGetV1Response, err error) {
+func (r *TransparenzregisterExtractService) GetV1(ctx context.Context, extractID string, opts ...option.RequestOption) (res *TransparenzregisterExtract, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if extractID == "" {
 		err = errors.New("missing required extract_id parameter")
@@ -81,63 +81,8 @@ func (r *TransparenzregisterExtractService) GetV1(ctx context.Context, extractID
 	return res, err
 }
 
-// Transparenzregister extract resource including processing state, parsed report,
-// and downloadable documents.
-type TransparenzregisterExtractNewV1Response struct {
-	// Stable extract identifier. Example: "tre_12345678"
-	ID string `json:"id" api:"required"`
-	// Status of the Transparenzregister extract.
-	//
-	// Any of "completed", "processing", "failed".
-	Status TransparenzregisterExtractNewV1ResponseStatus `json:"status" api:"required"`
-	// Company identifier associated with this extract request. May be null when using
-	// sandbox credentials.
-	CompanyID string `json:"company_id" api:"nullable"`
-	// Timestamp when extract processing completed.
-	CompletedAt time.Time `json:"completed_at" api:"nullable" format:"date-time"`
-	// URLs for downloading available extract documents.
-	Documents []TransparenzregisterExtractNewV1ResponseDocument `json:"documents"`
-	// EKRN used to request this extract.
-	Ekrn string `json:"ekrn" api:"nullable"`
-	// Transparenzregister reference number from the extract.
-	ReferenceNumber string `json:"reference_number" api:"nullable"`
-	// Parsed Transparenzregister extract report limited to UBO-relevant fields.
-	Report TransparenzregisterExtractNewV1ResponseReport `json:"report" api:"nullable"`
-	// Timestamp when extract submission started.
-	SubmittedAt time.Time `json:"submitted_at" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID              respjson.Field
-		Status          respjson.Field
-		CompanyID       respjson.Field
-		CompletedAt     respjson.Field
-		Documents       respjson.Field
-		Ekrn            respjson.Field
-		ReferenceNumber respjson.Field
-		Report          respjson.Field
-		SubmittedAt     respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1Response) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractNewV1Response) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the Transparenzregister extract.
-type TransparenzregisterExtractNewV1ResponseStatus string
-
-const (
-	TransparenzregisterExtractNewV1ResponseStatusCompleted  TransparenzregisterExtractNewV1ResponseStatus = "completed"
-	TransparenzregisterExtractNewV1ResponseStatusProcessing TransparenzregisterExtractNewV1ResponseStatus = "processing"
-	TransparenzregisterExtractNewV1ResponseStatusFailed     TransparenzregisterExtractNewV1ResponseStatus = "failed"
-)
-
 // Download URL for a document with format information.
-type TransparenzregisterExtractNewV1ResponseDocument struct {
+type TransparenzregisterDocument struct {
 	// Stable UUID for this document.
 	DocumentID string `json:"document_id" api:"required" format:"uuid"`
 	// Suggested filename for the download. Example: "registerauszug_company_12345.pdf"
@@ -159,23 +104,98 @@ type TransparenzregisterExtractNewV1ResponseDocument struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseDocument) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractNewV1ResponseDocument) UnmarshalJSON(data []byte) error {
+func (r TransparenzregisterDocument) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterDocument) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Transparenzregister extract resource including processing state, parsed report,
+// and downloadable documents.
+type TransparenzregisterExtract struct {
+	// Stable extract identifier. Example: "tre_12345678"
+	ID string `json:"id" api:"required"`
+	// Status of the Transparenzregister extract.
+	//
+	// Any of "completed", "processing", "failed".
+	Status TransparenzregisterExtractStatus `json:"status" api:"required"`
+	// Company identifier associated with this extract request. May be null when using
+	// sandbox credentials.
+	CompanyID string `json:"company_id" api:"nullable"`
+	// Timestamp when extract processing completed.
+	CompletedAt time.Time `json:"completed_at" api:"nullable" format:"date-time"`
+	// URLs for downloading available extract documents.
+	Documents []TransparenzregisterDocument `json:"documents"`
+	// EKRN used to request this extract.
+	Ekrn string `json:"ekrn" api:"nullable"`
+	// Transparenzregister reference number from the extract.
+	ReferenceNumber string `json:"reference_number" api:"nullable"`
+	// Parsed Transparenzregister extract report limited to UBO-relevant fields.
+	Report TransparenzregisterReport `json:"report" api:"nullable"`
+	// Timestamp when extract submission started.
+	SubmittedAt time.Time `json:"submitted_at" format:"date-time"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID              respjson.Field
+		Status          respjson.Field
+		CompanyID       respjson.Field
+		CompletedAt     respjson.Field
+		Documents       respjson.Field
+		Ekrn            respjson.Field
+		ReferenceNumber respjson.Field
+		Report          respjson.Field
+		SubmittedAt     respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r TransparenzregisterExtract) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterExtract) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the Transparenzregister extract.
+type TransparenzregisterExtractStatus string
+
+const (
+	TransparenzregisterExtractStatusCompleted  TransparenzregisterExtractStatus = "completed"
+	TransparenzregisterExtractStatusProcessing TransparenzregisterExtractStatus = "processing"
+	TransparenzregisterExtractStatusFailed     TransparenzregisterExtractStatus = "failed"
+)
+
+type TransparenzregisterGroup struct {
+	Description  string `json:"description" api:"nullable"`
+	InterestType string `json:"interest_type" api:"nullable"`
+	Position     int64  `json:"position"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Description  respjson.Field
+		InterestType respjson.Field
+		Position     respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r TransparenzregisterGroup) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterGroup) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Parsed Transparenzregister extract report limited to UBO-relevant fields.
-type TransparenzregisterExtractNewV1ResponseReport struct {
+type TransparenzregisterReport struct {
 	// Extract creation date.
 	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date"`
 	// Reason indicating no natural person UBO could be determined.
-	FictionalUboReason string                                               `json:"fictional_ubo_reason" api:"nullable"`
-	Groups             []TransparenzregisterExtractNewV1ResponseReportGroup `json:"groups"`
+	FictionalUboReason string                     `json:"fictional_ubo_reason" api:"nullable"`
+	Groups             []TransparenzregisterGroup `json:"groups"`
 	// Type of Transparenzregister notice.
-	NoticeType  string                                                   `json:"notice_type" api:"nullable"`
-	StatusFlags TransparenzregisterExtractNewV1ResponseReportStatusFlags `json:"status_flags" api:"nullable"`
-	Ubos        []TransparenzregisterExtractNewV1ResponseReportUbo       `json:"ubos"`
-	Validity    TransparenzregisterExtractNewV1ResponseReportValidity    `json:"validity" api:"nullable"`
+	NoticeType  string                         `json:"notice_type" api:"nullable"`
+	StatusFlags TransparenzregisterStatusFlags `json:"status_flags" api:"nullable"`
+	Ubos        []TransparenzregisterUbo       `json:"ubos"`
+	Validity    TransparenzregisterValidity    `json:"validity" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CreatedAt          respjson.Field
@@ -191,32 +211,12 @@ type TransparenzregisterExtractNewV1ResponseReport struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReport) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractNewV1ResponseReport) UnmarshalJSON(data []byte) error {
+func (r TransparenzregisterReport) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterReport) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TransparenzregisterExtractNewV1ResponseReportGroup struct {
-	Description  string `json:"description" api:"nullable"`
-	InterestType string `json:"interest_type" api:"nullable"`
-	Position     int64  `json:"position"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Description  respjson.Field
-		InterestType respjson.Field
-		Position     respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReportGroup) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractNewV1ResponseReportGroup) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractNewV1ResponseReportStatusFlags struct {
+type TransparenzregisterStatusFlags struct {
 	CorrectedByReference string    `json:"corrected_by_reference" api:"nullable"`
 	CorrectedReferences  []string  `json:"corrected_references"`
 	Deleted              bool      `json:"deleted"`
@@ -235,15 +235,15 @@ type TransparenzregisterExtractNewV1ResponseReportStatusFlags struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReportStatusFlags) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractNewV1ResponseReportStatusFlags) UnmarshalJSON(data []byte) error {
+func (r TransparenzregisterStatusFlags) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterStatusFlags) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TransparenzregisterExtractNewV1ResponseReportUbo struct {
-	Interest      TransparenzregisterExtractNewV1ResponseReportUboInterest      `json:"interest" api:"nullable"`
-	NaturalPerson TransparenzregisterExtractNewV1ResponseReportUboNaturalPerson `json:"natural_person" api:"nullable"`
-	Position      int64                                                         `json:"position"`
+type TransparenzregisterUbo struct {
+	Interest      TransparenzregisterUboInterest      `json:"interest" api:"nullable"`
+	NaturalPerson TransparenzregisterUboNaturalPerson `json:"natural_person" api:"nullable"`
+	Position      int64                               `json:"position"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Interest      respjson.Field
@@ -255,12 +255,12 @@ type TransparenzregisterExtractNewV1ResponseReportUbo struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReportUbo) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractNewV1ResponseReportUbo) UnmarshalJSON(data []byte) error {
+func (r TransparenzregisterUbo) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterUbo) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TransparenzregisterExtractNewV1ResponseReportUboInterest struct {
+type TransparenzregisterUboInterest struct {
 	Percentage float64 `json:"percentage" api:"nullable"`
 	Scope      string  `json:"scope" api:"nullable"`
 	Type       string  `json:"type" api:"nullable"`
@@ -275,12 +275,12 @@ type TransparenzregisterExtractNewV1ResponseReportUboInterest struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReportUboInterest) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractNewV1ResponseReportUboInterest) UnmarshalJSON(data []byte) error {
+func (r TransparenzregisterUboInterest) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterUboInterest) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TransparenzregisterExtractNewV1ResponseReportUboNaturalPerson struct {
+type TransparenzregisterUboNaturalPerson struct {
 	City        string    `json:"city" api:"nullable"`
 	Country     string    `json:"country" api:"nullable"`
 	DateOfBirth time.Time `json:"date_of_birth" api:"nullable" format:"date"`
@@ -306,16 +306,14 @@ type TransparenzregisterExtractNewV1ResponseReportUboNaturalPerson struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReportUboNaturalPerson) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *TransparenzregisterExtractNewV1ResponseReportUboNaturalPerson) UnmarshalJSON(data []byte) error {
+func (r TransparenzregisterUboNaturalPerson) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterUboNaturalPerson) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TransparenzregisterExtractNewV1ResponseReportValidity struct {
-	From  TransparenzregisterExtractNewV1ResponseReportValidityFrom  `json:"from" api:"nullable"`
-	Until TransparenzregisterExtractNewV1ResponseReportValidityUntil `json:"until" api:"nullable"`
+type TransparenzregisterValidity struct {
+	From  TransparenzregisterValidityPoint `json:"from" api:"nullable"`
+	Until TransparenzregisterValidityPoint `json:"until" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		From        respjson.Field
@@ -326,12 +324,12 @@ type TransparenzregisterExtractNewV1ResponseReportValidity struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReportValidity) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractNewV1ResponseReportValidity) UnmarshalJSON(data []byte) error {
+func (r TransparenzregisterValidity) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterValidity) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TransparenzregisterExtractNewV1ResponseReportValidityFrom struct {
+type TransparenzregisterValidityPoint struct {
 	Date time.Time `json:"date" api:"nullable" format:"date"`
 	Note string    `json:"note" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -344,320 +342,8 @@ type TransparenzregisterExtractNewV1ResponseReportValidityFrom struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReportValidityFrom) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *TransparenzregisterExtractNewV1ResponseReportValidityFrom) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractNewV1ResponseReportValidityUntil struct {
-	Date time.Time `json:"date" api:"nullable" format:"date"`
-	Note string    `json:"note" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Date        respjson.Field
-		Note        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractNewV1ResponseReportValidityUntil) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *TransparenzregisterExtractNewV1ResponseReportValidityUntil) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Transparenzregister extract resource including processing state, parsed report,
-// and downloadable documents.
-type TransparenzregisterExtractGetV1Response struct {
-	// Stable extract identifier. Example: "tre_12345678"
-	ID string `json:"id" api:"required"`
-	// Status of the Transparenzregister extract.
-	//
-	// Any of "completed", "processing", "failed".
-	Status TransparenzregisterExtractGetV1ResponseStatus `json:"status" api:"required"`
-	// Company identifier associated with this extract request. May be null when using
-	// sandbox credentials.
-	CompanyID string `json:"company_id" api:"nullable"`
-	// Timestamp when extract processing completed.
-	CompletedAt time.Time `json:"completed_at" api:"nullable" format:"date-time"`
-	// URLs for downloading available extract documents.
-	Documents []TransparenzregisterExtractGetV1ResponseDocument `json:"documents"`
-	// EKRN used to request this extract.
-	Ekrn string `json:"ekrn" api:"nullable"`
-	// Transparenzregister reference number from the extract.
-	ReferenceNumber string `json:"reference_number" api:"nullable"`
-	// Parsed Transparenzregister extract report limited to UBO-relevant fields.
-	Report TransparenzregisterExtractGetV1ResponseReport `json:"report" api:"nullable"`
-	// Timestamp when extract submission started.
-	SubmittedAt time.Time `json:"submitted_at" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID              respjson.Field
-		Status          respjson.Field
-		CompanyID       respjson.Field
-		CompletedAt     respjson.Field
-		Documents       respjson.Field
-		Ekrn            respjson.Field
-		ReferenceNumber respjson.Field
-		Report          respjson.Field
-		SubmittedAt     respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1Response) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractGetV1Response) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the Transparenzregister extract.
-type TransparenzregisterExtractGetV1ResponseStatus string
-
-const (
-	TransparenzregisterExtractGetV1ResponseStatusCompleted  TransparenzregisterExtractGetV1ResponseStatus = "completed"
-	TransparenzregisterExtractGetV1ResponseStatusProcessing TransparenzregisterExtractGetV1ResponseStatus = "processing"
-	TransparenzregisterExtractGetV1ResponseStatusFailed     TransparenzregisterExtractGetV1ResponseStatus = "failed"
-)
-
-// Download URL for a document with format information.
-type TransparenzregisterExtractGetV1ResponseDocument struct {
-	// Stable UUID for this document.
-	DocumentID string `json:"document_id" api:"required" format:"uuid"`
-	// Suggested filename for the download. Example: "registerauszug_company_12345.pdf"
-	Filename string `json:"filename" api:"required"`
-	// Format of the downloadable document. Example: "xml", "pdf", "json"
-	Format string `json:"format" api:"required"`
-	// Download URL for the document. Example:
-	// "https://api.example.com/download/abc123"
-	URL string `json:"url" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		DocumentID  respjson.Field
-		Filename    respjson.Field
-		Format      respjson.Field
-		URL         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseDocument) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractGetV1ResponseDocument) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Parsed Transparenzregister extract report limited to UBO-relevant fields.
-type TransparenzregisterExtractGetV1ResponseReport struct {
-	// Extract creation date.
-	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date"`
-	// Reason indicating no natural person UBO could be determined.
-	FictionalUboReason string                                               `json:"fictional_ubo_reason" api:"nullable"`
-	Groups             []TransparenzregisterExtractGetV1ResponseReportGroup `json:"groups"`
-	// Type of Transparenzregister notice.
-	NoticeType  string                                                   `json:"notice_type" api:"nullable"`
-	StatusFlags TransparenzregisterExtractGetV1ResponseReportStatusFlags `json:"status_flags" api:"nullable"`
-	Ubos        []TransparenzregisterExtractGetV1ResponseReportUbo       `json:"ubos"`
-	Validity    TransparenzregisterExtractGetV1ResponseReportValidity    `json:"validity" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CreatedAt          respjson.Field
-		FictionalUboReason respjson.Field
-		Groups             respjson.Field
-		NoticeType         respjson.Field
-		StatusFlags        respjson.Field
-		Ubos               respjson.Field
-		Validity           respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReport) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractGetV1ResponseReport) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractGetV1ResponseReportGroup struct {
-	Description  string `json:"description" api:"nullable"`
-	InterestType string `json:"interest_type" api:"nullable"`
-	Position     int64  `json:"position"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Description  respjson.Field
-		InterestType respjson.Field
-		Position     respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReportGroup) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractGetV1ResponseReportGroup) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractGetV1ResponseReportStatusFlags struct {
-	CorrectedByReference string    `json:"corrected_by_reference" api:"nullable"`
-	CorrectedReferences  []string  `json:"corrected_references"`
-	Deleted              bool      `json:"deleted"`
-	DeletionDate         time.Time `json:"deletion_date" api:"nullable" format:"date"`
-	DiscrepancyNote      string    `json:"discrepancy_note" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CorrectedByReference respjson.Field
-		CorrectedReferences  respjson.Field
-		Deleted              respjson.Field
-		DeletionDate         respjson.Field
-		DiscrepancyNote      respjson.Field
-		ExtraFields          map[string]respjson.Field
-		raw                  string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReportStatusFlags) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractGetV1ResponseReportStatusFlags) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractGetV1ResponseReportUbo struct {
-	Interest      TransparenzregisterExtractGetV1ResponseReportUboInterest      `json:"interest" api:"nullable"`
-	NaturalPerson TransparenzregisterExtractGetV1ResponseReportUboNaturalPerson `json:"natural_person" api:"nullable"`
-	Position      int64                                                         `json:"position"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Interest      respjson.Field
-		NaturalPerson respjson.Field
-		Position      respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReportUbo) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractGetV1ResponseReportUbo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractGetV1ResponseReportUboInterest struct {
-	Percentage float64 `json:"percentage" api:"nullable"`
-	Scope      string  `json:"scope" api:"nullable"`
-	Type       string  `json:"type" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Percentage  respjson.Field
-		Scope       respjson.Field
-		Type        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReportUboInterest) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractGetV1ResponseReportUboInterest) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractGetV1ResponseReportUboNaturalPerson struct {
-	City        string    `json:"city" api:"nullable"`
-	Country     string    `json:"country" api:"nullable"`
-	DateOfBirth time.Time `json:"date_of_birth" api:"nullable" format:"date"`
-	FirstName   string    `json:"first_name" api:"nullable"`
-	FullName    string    `json:"full_name" api:"nullable"`
-	LastName    string    `json:"last_name" api:"nullable"`
-	// ISO 3166-1 alpha-2 nationality codes where available.
-	Nationalities []string `json:"nationalities"`
-	Title         string   `json:"title" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		City          respjson.Field
-		Country       respjson.Field
-		DateOfBirth   respjson.Field
-		FirstName     respjson.Field
-		FullName      respjson.Field
-		LastName      respjson.Field
-		Nationalities respjson.Field
-		Title         respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReportUboNaturalPerson) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *TransparenzregisterExtractGetV1ResponseReportUboNaturalPerson) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractGetV1ResponseReportValidity struct {
-	From  TransparenzregisterExtractGetV1ResponseReportValidityFrom  `json:"from" api:"nullable"`
-	Until TransparenzregisterExtractGetV1ResponseReportValidityUntil `json:"until" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		From        respjson.Field
-		Until       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReportValidity) RawJSON() string { return r.JSON.raw }
-func (r *TransparenzregisterExtractGetV1ResponseReportValidity) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractGetV1ResponseReportValidityFrom struct {
-	Date time.Time `json:"date" api:"nullable" format:"date"`
-	Note string    `json:"note" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Date        respjson.Field
-		Note        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReportValidityFrom) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *TransparenzregisterExtractGetV1ResponseReportValidityFrom) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TransparenzregisterExtractGetV1ResponseReportValidityUntil struct {
-	Date time.Time `json:"date" api:"nullable" format:"date"`
-	Note string    `json:"note" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Date        respjson.Field
-		Note        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r TransparenzregisterExtractGetV1ResponseReportValidityUntil) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *TransparenzregisterExtractGetV1ResponseReportValidityUntil) UnmarshalJSON(data []byte) error {
+func (r TransparenzregisterValidityPoint) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterValidityPoint) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
