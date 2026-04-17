@@ -27,9 +27,9 @@ func TestTransparenzregisterSetCredentialsV1WithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	err := client.Transparenzregister.SetCredentialsV1(context.TODO(), openregister.TransparenzregisterSetCredentialsV1Params{
-		Password:        "password",
-		Username:        "username",
-		CredentialLabel: openregister.String("credential_label"),
+		Password: "password",
+		Username: "username",
+		Name:     openregister.String("name"),
 	})
 	if err != nil {
 		var apierr *openregister.Error
