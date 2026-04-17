@@ -104,4 +104,14 @@ Methods:
 
 - <code title="post /v1/transparenzregister/credentials">client.Transparenzregister.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterService.SetCredentialsV1">SetCredentialsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterSetCredentialsV1Params">TransparenzregisterSetCredentialsV1Params</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
 
-## Request
+## Extract
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractNewV1Response">TransparenzregisterExtractNewV1Response</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractGetV1Response">TransparenzregisterExtractGetV1Response</a>
+
+Methods:
+
+- <code title="post /v1/transparenzregister/extracts">client.Transparenzregister.Extract.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractService.NewV1">NewV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractNewV1Params">TransparenzregisterExtractNewV1Params</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractNewV1Response">TransparenzregisterExtractNewV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v1/transparenzregister/extracts/{extract_id}">client.Transparenzregister.Extract.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractService.GetV1">GetV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, extractID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractGetV1Response">TransparenzregisterExtractGetV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
