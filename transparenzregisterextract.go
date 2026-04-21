@@ -50,10 +50,10 @@ func NewTransparenzregisterExtractService(opts ...option.RequestOption) (r Trans
 //
 // Production usage:
 //
-//   - Omit `X-Credential-Name` or use `default` / another stored credential name.
+//   - Always set `X-Credential-Name` to `default` or another stored credential name.
 //   - `company_id` is required and must resolve to exactly one Transparenzregister
 //     legal entity.
-func (r *TransparenzregisterExtractService) NewV1(ctx context.Context, params TransparenzregisterExtractNewV1Params, opts ...option.RequestOption) (res *TransparenzregisterExtract, err error) {
+func (r *TransparenzregisterExtractService) NewV1(ctx context.Context, params TransparenzregisterExtractNewV1Params, opts ...option.RequestOption) (res *TransparenzregisterExtractNewV1Response, err error) {
 	if !param.IsOmitted(params.XCredentialName) {
 		opts = append(opts, option.WithHeader("X-Credential-Name", fmt.Sprintf("%v", params.XCredentialName.Value)))
 	}
@@ -346,6 +346,50 @@ func (r TransparenzregisterValidityPoint) RawJSON() string { return r.JSON.raw }
 func (r *TransparenzregisterValidityPoint) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Response from creating a Transparenzregister extract. Only fields known at
+// creation time are present. Poll
+// `GET /v1/transparenzregister/extracts/{extract_id}` to retrieve report and
+// documents.
+type TransparenzregisterExtractNewV1Response struct {
+	// Stable extract identifier. Use this to poll the get-extract endpoint. Example:
+	// "tre_12345678"
+	ID string `json:"id" api:"required"`
+	// Company identifier associated with this extract request. May be null when using
+	// sandbox credentials.
+	CompanyID string `json:"company_id" api:"required"`
+	// EKRN used to request this extract.
+	Ekrn string `json:"ekrn" api:"required"`
+	// Always `processing` on create. Poll the get-extract endpoint for terminal state.
+	//
+	// Any of "processing".
+	Status TransparenzregisterExtractNewV1ResponseStatus `json:"status" api:"required"`
+	// Timestamp when extract submission started.
+	SubmittedAt time.Time `json:"submitted_at" api:"required" format:"date-time"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID          respjson.Field
+		CompanyID   respjson.Field
+		Ekrn        respjson.Field
+		Status      respjson.Field
+		SubmittedAt respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r TransparenzregisterExtractNewV1Response) RawJSON() string { return r.JSON.raw }
+func (r *TransparenzregisterExtractNewV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Always `processing` on create. Poll the get-extract endpoint for terminal state.
+type TransparenzregisterExtractNewV1ResponseStatus string
+
+const (
+	TransparenzregisterExtractNewV1ResponseStatusProcessing TransparenzregisterExtractNewV1ResponseStatus = "processing"
+)
 
 type TransparenzregisterExtractNewV1Params struct {
 	// Unique company identifier. Required unless `X-Credential-Name` is set to
