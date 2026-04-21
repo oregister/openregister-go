@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.4.0 (2026-04-21)
+
+Full Changelog: [v2.3.0...v2.4.0](https://github.com/oregister/openregister-go/compare/v2.3.0...v2.4.0)
+
+### Features
+
+* **api:** manual updates ([a7a01db](https://github.com/oregister/openregister-go/commit/a7a01db3f287fa68e66c59eee7dc5eaecd86508a))
+* **api:** transparenzregister ([5cfa1a3](https://github.com/oregister/openregister-go/commit/5cfa1a331c13f0d698eac8d27f6db8aeb0e952eb))
+* **api:** transparenzregister ([7034805](https://github.com/oregister/openregister-go/commit/7034805c5ebdb0f00b3c6fc15c668d4b8af76e14))
+* **api:** transparenzregister ([17e3b18](https://github.com/oregister/openregister-go/commit/17e3b18d14091c47f763ea076a49b857fc0e9281))
+* **api:** transparenzregister endpoints ([a67519c](https://github.com/oregister/openregister-go/commit/a67519cbb6d188e11d3b71dc508e9bdee76dfa40))
+
 ## 2.3.0 (2026-04-14)
 
 Full Changelog: [v2.2.0...v2.3.0](https://github.com/oregister/openregister-go/compare/v2.2.0...v2.3.0)
