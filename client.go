@@ -28,7 +28,7 @@ type Client struct {
 // DefaultClientOptions read from the environment (OPENREGISTER_API_KEY,
 // OPENREGISTER_BASE_URL). This should be used to initialize new clients.
 func DefaultClientOptions() []option.RequestOption {
-	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
+	defaults := []option.RequestOption{option.WithHTTPClient(defaultHTTPClient()), option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("OPENREGISTER_BASE_URL"); ok {
 		defaults = append(defaults, option.WithBaseURL(o))
 	}
