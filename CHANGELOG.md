@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.5.0 (2026-04-30)
+
+Full Changelog: [v2.4.0...v2.5.0](https://github.com/oregister/openregister-go/compare/v2.4.0...v2.5.0)
+
+### Features
+
+* **go:** add default http client with timeout ([edfd5a9](https://github.com/oregister/openregister-go/commit/edfd5a93c6b544c3f9fb05688496f224deab9894))
+* support setting headers via env ([f34c774](https://github.com/oregister/openregister-go/commit/f34c7744cc2ecc73e87f3c8ae50b05c25dc30392))
+
+
+### Chores
+
+* **internal:** more robust bootstrap script ([73e843b](https://github.com/oregister/openregister-go/commit/73e843bb13a2c8cc0a504bf5617dbdbe91030b03))
+
 ## 2.4.0 (2026-04-21)
 
 Full Changelog: [v2.3.0...v2.4.0](https://github.com/oregister/openregister-go/compare/v2.3.0...v2.4.0)
