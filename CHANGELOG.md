@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.5.1 (2026-05-13)
+
+Full Changelog: [v2.5.0...v2.5.1](https://github.com/oregister/openregister-go/compare/v2.5.0...v2.5.1)
+
+### Bug Fixes
+
+* **go:** avoid panic when http.DefaultTransport is wrapped ([f1d1620](https://github.com/oregister/openregister-go/commit/f1d16203edcdc3d5bd06a8636622f019fee57b35))
+
+
+### Chores
+
+* avoid embedding reflect.Type for dead code elimination ([af1ca5c](https://github.com/oregister/openregister-go/commit/af1ca5c72d30d4457e0c7f1a8a633fd4060fd1e6))
+* redact api-key headers in debug logs ([2b80c0d](https://github.com/oregister/openregister-go/commit/2b80c0dc1d584894555ac0365ccfc825be50bcf6))
+
 ## 2.5.0 (2026-04-30)
 
 Full Changelog: [v2.4.0...v2.5.0](https://github.com/oregister/openregister-go/compare/v2.4.0...v2.5.0)
