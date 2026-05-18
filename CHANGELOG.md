@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.6.0 (2026-05-14)
+
+Full Changelog: [v2.5.1...v2.6.0](https://github.com/oregister/openregister-go/compare/v2.5.1...v2.6.0)
+
+### Features
+
+* **client:** optimize json encoder for internal types ([38d9656](https://github.com/oregister/openregister-go/commit/38d965620345ffb819f973a694e4585b4fa33ae1))
+
 ## 2.5.1 (2026-05-13)
 
 Full Changelog: [v2.5.0...v2.5.1](https://github.com/oregister/openregister-go/compare/v2.5.0...v2.5.1)
