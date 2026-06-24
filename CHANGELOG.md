@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.7.0 (2026-06-24)
+
+Full Changelog: [v2.6.0...v2.7.0](https://github.com/oregister/openregister-go/compare/v2.6.0...v2.7.0)
+
+### Features
+
+* **api:** update schema ([69c7cf0](https://github.com/oregister/openregister-go/commit/69c7cf09b3489d2d5d49d64d4b4c4a75816fbaa3))
+
 ## 2.6.0 (2026-05-14)
 
 Full Changelog: [v2.5.1...v2.6.0](https://github.com/oregister/openregister-go/compare/v2.5.1...v2.6.0)
