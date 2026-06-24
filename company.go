@@ -683,9 +683,10 @@ func (r *CompanyGetDetailsV1ResponseContactSocialMedia) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The indicators of the company for a given year. Values of the indicator are
-// given in the smallest currency unit (cents). Example: 2099 represents €20.99 for
-// monetary values For non-monetary values (e.g., employees), the actual number.
+// A focused subset of the key company indicators for a given year. Values of the
+// indicator are given in the smallest currency unit (cents). Example: 2099
+// represents €20.99 for monetary values. For non-monetary values (e.g.,
+// employees), the actual number.
 type CompanyGetDetailsV1ResponseIndicator struct {
 	// The balance sheet total of that year (in cents).
 	BalanceSheetTotal int64 `json:"balance_sheet_total" api:"required"`
@@ -888,11 +889,14 @@ const (
 )
 
 type CompanyGetFinancialsV1Response struct {
-	// All report periods merged into a single view
+	// Key financial indicators per fiscal year, sorted by date (latest first).
+	Indicators []CompanyGetFinancialsV1ResponseIndicator `json:"indicators" api:"required"`
+	// Financial data merged across all available report periods
 	Merged  CompanyGetFinancialsV1ResponseMerged   `json:"merged" api:"required"`
 	Reports []CompanyGetFinancialsV1ResponseReport `json:"reports" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
+		Indicators  respjson.Field
 		Merged      respjson.Field
 		Reports     respjson.Field
 		ExtraFields map[string]respjson.Field
@@ -906,7 +910,177 @@ func (r *CompanyGetFinancialsV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// All report periods merged into a single view
+// The indicators of the company for a given year. Values of the indicator are
+// given in the smallest currency unit (cents). Example: 2099 represents €20.99 for
+// monetary values For non-monetary values (e.g., employees), the actual number.
+type CompanyGetFinancialsV1ResponseIndicator struct {
+	// The active accruals of that year (in cents).
+	ActiveAccruals int64 `json:"active_accruals" api:"required"`
+	// The affiliated liabilities of that year (in cents).
+	AffiliatedLiabilities int64 `json:"affiliated_liabilities" api:"required"`
+	// The balance sheet total of that year (in cents).
+	BalanceSheetTotal int64 `json:"balance_sheet_total" api:"required"`
+	// The bank debt of that year (in cents).
+	BankDebt int64 `json:"bank_debt" api:"required"`
+	// The capital reserves of that year (in cents).
+	CapitalReserves int64 `json:"capital_reserves" api:"required"`
+	// The cash of that year (in cents).
+	Cash int64 `json:"cash" api:"required"`
+	// Commission expense (Provisionsaufwendungen) of that year (in cents).
+	CommissionExpense int64 `json:"commission_expense" api:"required"`
+	// Commission income (Provisionserträge) of that year (in cents).
+	CommissionIncome int64 `json:"commission_income" api:"required"`
+	// The current assets of that year (in cents).
+	CurrentAssets int64 `json:"current_assets" api:"required"`
+	// Date to which this financial indicators apply. Format: ISO 8601 (YYYY-MM-DD)
+	// Example: "2022-01-01"
+	Date string `json:"date" api:"required"`
+	// The earnings before interest and taxes of that year (in cents).
+	Ebit int64 `json:"ebit" api:"required"`
+	// The earnings before interest, taxes, depreciation, and amortization of that year
+	// (in cents).
+	Ebitda int64 `json:"ebitda" api:"required"`
+	// The number of employees of that year.
+	Employees int64 `json:"employees" api:"required"`
+	// The equity of that year (in cents).
+	Equity int64 `json:"equity" api:"required"`
+	// The financial assets of that year (in cents).
+	FinancialAssets int64 `json:"financial_assets" api:"required"`
+	// The financial debt of that year (in cents).
+	FinancialDebt int64 `json:"financial_debt" api:"required"`
+	// The signed financial asset depreciation, write-down, or reversal of that year
+	// (in cents).
+	FinancialDepreciation int64 `json:"financial_depreciation" api:"required"`
+	// The fixed assets of that year (in cents).
+	FixedAssets int64 `json:"fixed_assets" api:"required"`
+	// The gross profit (Rohergebnis) of that year (in cents).
+	GrossProfit int64 `json:"gross_profit" api:"required"`
+	// The income after income taxes of that year (in cents).
+	IncomeAfterTax int64 `json:"income_after_tax" api:"required"`
+	// The income before income taxes of that year (in cents).
+	IncomeBeforeTax int64 `json:"income_before_tax" api:"required"`
+	// The intangible assets of that year (in cents).
+	IntangibleAssets int64 `json:"intangible_assets" api:"required"`
+	// The interest expense of that year (in cents).
+	InterestExpense int64 `json:"interest_expense" api:"required"`
+	// The interest income of that year (in cents).
+	InterestIncome int64 `json:"interest_income" api:"required"`
+	// The inventory of that year (in cents).
+	Inventory int64 `json:"inventory" api:"required"`
+	// The liabilities of that year (in cents).
+	Liabilities int64 `json:"liabilities" api:"required"`
+	// The materials of that year (in cents).
+	Materials int64 `json:"materials" api:"required"`
+	// The net income of that year (in cents).
+	NetIncome int64 `json:"net_income" api:"required"`
+	// The operating depreciation and amortization of that year (in cents).
+	OperatingDepreciation int64 `json:"operating_depreciation" api:"required"`
+	// The other liabilities of that year (in cents).
+	OtherLiabilities int64 `json:"other_liabilities" api:"required"`
+	// The other operating expenses of that year (in cents).
+	OtherOperatingExpenses int64 `json:"other_operating_expenses" api:"required"`
+	// The other operating income of that year (in cents).
+	OtherOperatingIncome int64 `json:"other_operating_income" api:"required"`
+	// The other provisions of that year (in cents).
+	OtherProvisions int64 `json:"other_provisions" api:"required"`
+	// Other taxes (Sonstige Steuern) of that year (in cents).
+	OtherTaxes int64 `json:"other_taxes" api:"required"`
+	// The parent-attributed net income of that year (in cents).
+	ParentNetIncome int64 `json:"parent_net_income" api:"required"`
+	// The passive accruals of that year (in cents).
+	PassiveAccruals int64 `json:"passive_accruals" api:"required"`
+	// The pension provisions of that year (in cents).
+	PensionProvisions int64 `json:"pension_provisions" api:"required"`
+	// The profit carryforward of that year (in cents).
+	ProfitCarryforward int64 `json:"profit_carryforward" api:"required"`
+	// The provisions of that year (in cents).
+	Provisions int64 `json:"provisions" api:"required"`
+	// The real estate of that year (in cents).
+	RealEstate int64 `json:"real_estate" api:"required"`
+	// The receivables of that year (in cents).
+	Receivables int64 `json:"receivables" api:"required"`
+	// The report id (source) of the indicators.
+	ReportID string `json:"report_id" api:"required" format:"uuid"`
+	// The retained earnings of that year (in cents).
+	RetainedEarnings int64 `json:"retained_earnings" api:"required"`
+	// The revenue of that year (in cents).
+	Revenue int64 `json:"revenue" api:"required"`
+	// The salaries of that year (in cents).
+	Salaries int64 `json:"salaries" api:"required"`
+	// The shareholder liabilities of that year (in cents).
+	ShareholderLiabilities int64 `json:"shareholder_liabilities" api:"required"`
+	// The tangible assets of that year (in cents).
+	TangibleAssets int64 `json:"tangible_assets" api:"required"`
+	// The taxes of that year (in cents).
+	Taxes int64 `json:"taxes" api:"required"`
+	// The trade payables of that year (in cents).
+	TradePayables int64 `json:"trade_payables" api:"required"`
+	// The trade receivables of that year (in cents).
+	TradeReceivables int64 `json:"trade_receivables" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ActiveAccruals         respjson.Field
+		AffiliatedLiabilities  respjson.Field
+		BalanceSheetTotal      respjson.Field
+		BankDebt               respjson.Field
+		CapitalReserves        respjson.Field
+		Cash                   respjson.Field
+		CommissionExpense      respjson.Field
+		CommissionIncome       respjson.Field
+		CurrentAssets          respjson.Field
+		Date                   respjson.Field
+		Ebit                   respjson.Field
+		Ebitda                 respjson.Field
+		Employees              respjson.Field
+		Equity                 respjson.Field
+		FinancialAssets        respjson.Field
+		FinancialDebt          respjson.Field
+		FinancialDepreciation  respjson.Field
+		FixedAssets            respjson.Field
+		GrossProfit            respjson.Field
+		IncomeAfterTax         respjson.Field
+		IncomeBeforeTax        respjson.Field
+		IntangibleAssets       respjson.Field
+		InterestExpense        respjson.Field
+		InterestIncome         respjson.Field
+		Inventory              respjson.Field
+		Liabilities            respjson.Field
+		Materials              respjson.Field
+		NetIncome              respjson.Field
+		OperatingDepreciation  respjson.Field
+		OtherLiabilities       respjson.Field
+		OtherOperatingExpenses respjson.Field
+		OtherOperatingIncome   respjson.Field
+		OtherProvisions        respjson.Field
+		OtherTaxes             respjson.Field
+		ParentNetIncome        respjson.Field
+		PassiveAccruals        respjson.Field
+		PensionProvisions      respjson.Field
+		ProfitCarryforward     respjson.Field
+		Provisions             respjson.Field
+		RealEstate             respjson.Field
+		Receivables            respjson.Field
+		ReportID               respjson.Field
+		RetainedEarnings       respjson.Field
+		Revenue                respjson.Field
+		Salaries               respjson.Field
+		ShareholderLiabilities respjson.Field
+		TangibleAssets         respjson.Field
+		Taxes                  respjson.Field
+		TradePayables          respjson.Field
+		TradeReceivables       respjson.Field
+		ExtraFields            map[string]respjson.Field
+		raw                    string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseIndicator) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseIndicator) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Financial data merged across all available report periods
 type CompanyGetFinancialsV1ResponseMerged struct {
 	// Report table with data merged across multiple report periods
 	Aktiva MergedReportTable `json:"aktiva" api:"required"`
@@ -935,12 +1109,14 @@ type CompanyGetFinancialsV1ResponseReport struct {
 	// Whether the report is a consolidated report or not.
 	Consolidated  bool        `json:"consolidated" api:"required"`
 	Passiva       ReportTable `json:"passiva" api:"required"`
-	ReportEndDate string      `json:"report_end_date" api:"required" format:"date-only"`
+	ReportEndDate time.Time   `json:"report_end_date" api:"required" format:"date"`
 	// Unique identifier for the financial report. Example:
 	// f47ac10b-58cc-4372-a567-0e02b2c3d479
-	ReportID        string      `json:"report_id" api:"required"`
-	ReportStartDate string      `json:"report_start_date" api:"required" format:"date-only"`
-	Guv             ReportTable `json:"guv" api:"nullable"`
+	ReportID        string    `json:"report_id" api:"required"`
+	ReportStartDate time.Time `json:"report_start_date" api:"required" format:"date"`
+	// Sources of the report data. Presigned URLs accessible for 30 minutes.
+	Sources []CompanyGetFinancialsV1ResponseReportSource `json:"sources" api:"required"`
+	Guv     ReportTable                                  `json:"guv" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Aktiva          respjson.Field
@@ -949,6 +1125,7 @@ type CompanyGetFinancialsV1ResponseReport struct {
 		ReportEndDate   respjson.Field
 		ReportID        respjson.Field
 		ReportStartDate respjson.Field
+		Sources         respjson.Field
 		Guv             respjson.Field
 		ExtraFields     map[string]respjson.Field
 		raw             string
@@ -958,6 +1135,24 @@ type CompanyGetFinancialsV1ResponseReport struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetFinancialsV1ResponseReport) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetFinancialsV1ResponseReport) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsV1ResponseReportSource struct {
+	// Url of the rendered HTML report. In the form of a presigned url accessible for
+	// 30 minutes.
+	HTMLURL string `json:"html_url" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		HTMLURL     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseReportSource) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseReportSource) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
