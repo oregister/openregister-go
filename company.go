@@ -1122,11 +1122,11 @@ type CompanyGetFinancialsV1ResponseReport struct {
 	// Whether the report is a consolidated report or not.
 	Consolidated  bool        `json:"consolidated" api:"required"`
 	Passiva       ReportTable `json:"passiva" api:"required"`
-	ReportEndDate time.Time   `json:"report_end_date" api:"required" format:"date-time"`
+	ReportEndDate time.Time   `json:"report_end_date" api:"required" format:"date"`
 	// Unique identifier for the financial report. Example:
 	// f47ac10b-58cc-4372-a567-0e02b2c3d479
 	ReportID        string    `json:"report_id" api:"required"`
-	ReportStartDate time.Time `json:"report_start_date" api:"required" format:"date-time"`
+	ReportStartDate time.Time `json:"report_start_date" api:"required" format:"date"`
 	// Sources of the report data. Presigned URLs accessible for 30 minutes.
 	Sources []CompanyGetFinancialsV1ResponseReportSource `json:"sources" api:"required"`
 	Guv     ReportTable                                  `json:"guv" api:"nullable"`
