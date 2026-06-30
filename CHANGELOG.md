@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.8.0 (2026-06-30)
+
+Full Changelog: [v2.7.0...v2.8.0](https://github.com/oregister/openregister-go/compare/v2.7.0...v2.8.0)
+
+### Features
+
+* **api:** add represenation_rule & individual authority ([118b625](https://github.com/oregister/openregister-go/commit/118b625e2b445c99243929f1884e0f4c2bfe0b18))
+* **api:** date typed ([d5d35d4](https://github.com/oregister/openregister-go/commit/d5d35d4b53d6676ecba28c9ae01674f7d9acfe88))
+* **api:** date typed ([158fbe0](https://github.com/oregister/openregister-go/commit/158fbe0abb87b3d776fffb0d6702f41a70bcf844))
+
 ## 2.7.0 (2026-06-24)
 
 Full Changelog: [v2.6.0...v2.7.0](https://github.com/oregister/openregister-go/compare/v2.6.0...v2.7.0)

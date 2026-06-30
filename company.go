@@ -577,6 +577,12 @@ type CompanyGetDetailsV1Response struct {
 	// List of individuals or entities authorized to represent the company. Includes
 	// directors, officers, and authorized signatories.
 	Representation []CompanyGetDetailsV1ResponseRepresentation `json:"representation" api:"required"`
+	// The company's current general representation rule (allgemeine
+	// Vertretungsregelung), as published in the register. Example: "Ist nur ein
+	// Geschäftsführer bestellt, so vertritt er die Gesellschaft allein. Sind mehrere
+	// Geschäftsführer bestellt, so wird die Gesellschaft durch zwei Geschäftsführer
+	// oder durch einen Geschäftsführer gemeinsam mit einem Prokuristen vertreten."
+	RepresentationRule string `json:"representation_rule" api:"required"`
 	// Sources of the company data.
 	Sources []Source `json:"sources" api:"required"`
 	// Current status of the company:
@@ -594,31 +600,32 @@ type CompanyGetDetailsV1Response struct {
 	Lei string `json:"lei"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID             respjson.Field
-		Address        respjson.Field
-		Addresses      respjson.Field
-		Capital        respjson.Field
-		Capitals       respjson.Field
-		Contact        respjson.Field
-		Documents      respjson.Field
-		IncorporatedAt respjson.Field
-		Indicators     respjson.Field
-		IndustryCodes  respjson.Field
-		LegalForm      respjson.Field
-		Name           respjson.Field
-		Names          respjson.Field
-		NotarizedAt    respjson.Field
-		Purpose        respjson.Field
-		Purposes       respjson.Field
-		Register       respjson.Field
-		Registers      respjson.Field
-		Representation respjson.Field
-		Sources        respjson.Field
-		Status         respjson.Field
-		TerminatedAt   respjson.Field
-		Lei            respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
+		ID                 respjson.Field
+		Address            respjson.Field
+		Addresses          respjson.Field
+		Capital            respjson.Field
+		Capitals           respjson.Field
+		Contact            respjson.Field
+		Documents          respjson.Field
+		IncorporatedAt     respjson.Field
+		Indicators         respjson.Field
+		IndustryCodes      respjson.Field
+		LegalForm          respjson.Field
+		Name               respjson.Field
+		Names              respjson.Field
+		NotarizedAt        respjson.Field
+		Purpose            respjson.Field
+		Purposes           respjson.Field
+		Register           respjson.Field
+		Registers          respjson.Field
+		Representation     respjson.Field
+		RepresentationRule respjson.Field
+		Sources            respjson.Field
+		Status             respjson.Field
+		TerminatedAt       respjson.Field
+		Lei                respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
 	} `json:"-"`
 }
 
@@ -786,6 +793,11 @@ type CompanyGetDetailsV1ResponseRepresentation struct {
 	// company_id pattern For individuals: UUID Example: "DE-HRB-F1103-267645" or UUID
 	// May be null for certain representatives.
 	ID string `json:"id" api:"required"`
+	// The representative's current individual representation authority (individuelle
+	// Vertretungsbefugnis), as published in the register. Null if no special authority
+	// is recorded. Example: "einzelvertretungsberechtigt mit der Befugnis, im Namen
+	// der Gesellschaft mit sich im eigenen Namen Rechtsgeschäfte abzuschließen"
+	Authority string `json:"authority" api:"required"`
 	// Date when this representative role ended (if applicable). Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
 	EndDate string `json:"end_date" api:"required"`
@@ -808,6 +820,7 @@ type CompanyGetDetailsV1ResponseRepresentation struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID            respjson.Field
+		Authority     respjson.Field
 		EndDate       respjson.Field
 		Name          respjson.Field
 		Role          respjson.Field
