@@ -127,15 +127,15 @@ Methods:
 - <code title="post /v1/transparenzregister/extracts">client.Transparenzregister.Extract.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractService.NewV1">NewV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractNewV1Params">TransparenzregisterExtractNewV1Params</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractNewV1Response">TransparenzregisterExtractNewV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v1/transparenzregister/extracts/{extract_id}">client.Transparenzregister.Extract.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtractService.GetV1">GetV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, extractID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#TransparenzregisterExtract">TransparenzregisterExtract</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-# Credits
+# Usage
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#CreditGetResponse">CreditGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageGetUsageV1Response">UsageGetUsageV1Response</a>
 
 Methods:
 
-- <code title="get /v1/credits">client.Credits.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#CreditService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#CreditGetResponse">CreditGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v1/credits">client.Usage.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageService.GetUsageV1">GetUsageV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageGetUsageV1Response">UsageGetUsageV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Insolvency
 
@@ -145,8 +145,8 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyDebtorKind">InsolvencyDebtorKind</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyProceedingKind">InsolvencyProceedingKind</a>
 - <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyStatus">InsolvencyStatus</a>
-- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyGetResponse">InsolvencyGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyGetDetailsV1Response">InsolvencyGetDetailsV1Response</a>
 
 Methods:
 
-- <code title="get /v1/insolvency/{insolvency_id}">client.Insolvency.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, insolvencyID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyGetResponse">InsolvencyGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v1/insolvency/{insolvency_id}">client.Insolvency.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyService.GetDetailsV1">GetDetailsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, insolvencyID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyGetDetailsV1Response">InsolvencyGetDetailsV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>

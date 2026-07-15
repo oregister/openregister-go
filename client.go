@@ -24,7 +24,7 @@ type Client struct {
 	Person              PersonService
 	Monitor             MonitorService
 	Transparenzregister TransparenzregisterService
-	Credits             CreditService
+	Usage               UsageService
 	Insolvency          InsolvencyService
 }
 
@@ -64,7 +64,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Person = NewPersonService(opts...)
 	r.Monitor = NewMonitorService(opts...)
 	r.Transparenzregister = NewTransparenzregisterService(opts...)
-	r.Credits = NewCreditService(opts...)
+	r.Usage = NewUsageService(opts...)
 	r.Insolvency = NewInsolvencyService(opts...)
 
 	return
