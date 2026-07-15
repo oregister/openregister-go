@@ -533,6 +533,9 @@ func (r *CompanyGetContactV0Response) UnmarshalJSON(data []byte) error {
 type CompanyGetDetailsV1Response struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	ID string `json:"id" api:"required"`
+	// Companies that were merged into this company (Verschmelzung durch Aufnahme, as
+	// the acquiring entity).
+	Acquisitions []CompanyGetDetailsV1ResponseAcquisition `json:"acquisitions" api:"required"`
 	// Current registered address of the company.
 	Address CompanyAddress `json:"address" api:"required"`
 	// Historical addresses. Shows how the company address changed over time.
@@ -558,6 +561,9 @@ type CompanyGetDetailsV1Response struct {
 	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
 	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
 	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
+	// If the company ceased to exist through a merger (Verschmelzung), the company it
+	// was merged into.
+	MergedInto CompanyGetDetailsV1ResponseMergedInto `json:"merged_into" api:"required"`
 	// Current official name of the company.
 	Name CompanyName `json:"name" api:"required"`
 	// Historical company names. Shows how the company name changed over time.
@@ -565,6 +571,11 @@ type CompanyGetDetailsV1Response struct {
 	// Date of the notarized company agreement (Gesellschaftsvertrag or Satzung).
 	// Format: ISO 8601 (YYYY-MM-DD) Example: "2021-12-21"
 	NotarizedAt string `json:"notarized_at" api:"required"`
+	// The company's current profit and loss transfer agreement
+	// (Gewinnabführungsvertrag), if one exists. The referenced company is the parent
+	// receiving this company's profit (Organträger). Null if the company has no active
+	// agreement.
+	ProfitTransferAgreement CompanyGetDetailsV1ResponseProfitTransferAgreement `json:"profit_transfer_agreement" api:"required"`
 	// Current official business purpose of the company.
 	Purpose CompanyPurpose `json:"purpose" api:"required"`
 	// Historical business purposes. Shows how the company purpose changed over time.
@@ -596,42 +607,73 @@ type CompanyGetDetailsV1Response struct {
 	// Date when the company was officially terminated (if applicable). Format: ISO
 	// 8601 (YYYY-MM-DD) Example: "2024-01-01"
 	TerminatedAt string `json:"terminated_at" api:"required"`
+	// Insolvency proceedings of the company, if any. Contains basic information per
+	// proceeding; use the insolvency endpoint to retrieve all events of a proceeding.
+	Insolvencies []CompanyGetDetailsV1ResponseInsolvency `json:"insolvencies"`
 	// Legal Entity Identifier (LEI), if available.
 	Lei string `json:"lei"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID                 respjson.Field
-		Address            respjson.Field
-		Addresses          respjson.Field
-		Capital            respjson.Field
-		Capitals           respjson.Field
-		Contact            respjson.Field
-		Documents          respjson.Field
-		IncorporatedAt     respjson.Field
-		Indicators         respjson.Field
-		IndustryCodes      respjson.Field
-		LegalForm          respjson.Field
-		Name               respjson.Field
-		Names              respjson.Field
-		NotarizedAt        respjson.Field
-		Purpose            respjson.Field
-		Purposes           respjson.Field
-		Register           respjson.Field
-		Registers          respjson.Field
-		Representation     respjson.Field
-		RepresentationRule respjson.Field
-		Sources            respjson.Field
-		Status             respjson.Field
-		TerminatedAt       respjson.Field
-		Lei                respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
+		ID                      respjson.Field
+		Acquisitions            respjson.Field
+		Address                 respjson.Field
+		Addresses               respjson.Field
+		Capital                 respjson.Field
+		Capitals                respjson.Field
+		Contact                 respjson.Field
+		Documents               respjson.Field
+		IncorporatedAt          respjson.Field
+		Indicators              respjson.Field
+		IndustryCodes           respjson.Field
+		LegalForm               respjson.Field
+		MergedInto              respjson.Field
+		Name                    respjson.Field
+		Names                   respjson.Field
+		NotarizedAt             respjson.Field
+		ProfitTransferAgreement respjson.Field
+		Purpose                 respjson.Field
+		Purposes                respjson.Field
+		Register                respjson.Field
+		Registers               respjson.Field
+		Representation          respjson.Field
+		RepresentationRule      respjson.Field
+		Sources                 respjson.Field
+		Status                  respjson.Field
+		TerminatedAt            respjson.Field
+		Insolvencies            respjson.Field
+		Lei                     respjson.Field
+		ExtraFields             map[string]respjson.Field
+		raw                     string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
 func (r CompanyGetDetailsV1Response) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetDetailsV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetDetailsV1ResponseAcquisition struct {
+	// Unique company identifier of the company that was merged into this company.
+	// Example: DE-HRB-F1103-267645
+	CompanyID string `json:"company_id" api:"required"`
+	// Date the merger was registered. Format: ISO 8601 (YYYY-MM-DD)
+	Date string `json:"date" api:"required"`
+	// Current name of the company that was merged into this company.
+	Name string `json:"name" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CompanyID   respjson.Field
+		Date        respjson.Field
+		Name        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseAcquisition) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseAcquisition) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -788,6 +830,60 @@ func (r *CompanyGetDetailsV1ResponseIndustryCodesWz2025) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// If the company ceased to exist through a merger (Verschmelzung), the company it
+// was merged into.
+type CompanyGetDetailsV1ResponseMergedInto struct {
+	// Unique company identifier of the company this company was merged into. Example:
+	// DE-HRB-F1103-267645
+	CompanyID string `json:"company_id" api:"required"`
+	// Date the merger was registered. Format: ISO 8601 (YYYY-MM-DD)
+	Date string `json:"date" api:"required"`
+	// Current name of the company this company was merged into.
+	Name string `json:"name" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CompanyID   respjson.Field
+		Date        respjson.Field
+		Name        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseMergedInto) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseMergedInto) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The company's current profit and loss transfer agreement
+// (Gewinnabführungsvertrag), if one exists. The referenced company is the parent
+// receiving this company's profit (Organträger). Null if the company has no active
+// agreement.
+type CompanyGetDetailsV1ResponseProfitTransferAgreement struct {
+	// Unique company identifier of the parent company receiving this company's profit
+	// (Organträger). Example: DE-HRB-F1103-267645
+	CompanyID string `json:"company_id" api:"required"`
+	// Date the agreement was registered. Format: ISO 8601 (YYYY-MM-DD)
+	Date string `json:"date" api:"required"`
+	// Current name of the parent company.
+	Name string `json:"name" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CompanyID   respjson.Field
+		Date        respjson.Field
+		Name        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseProfitTransferAgreement) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseProfitTransferAgreement) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type CompanyGetDetailsV1ResponseRepresentation struct {
 	// Unique identifier for the representative. For companies: Format matches
 	// company_id pattern For individuals: UUID Example: "DE-HRB-F1103-267645" or UUID
@@ -900,6 +996,54 @@ const (
 	CompanyGetDetailsV1ResponseStatusInactive    CompanyGetDetailsV1ResponseStatus = "inactive"
 	CompanyGetDetailsV1ResponseStatusLiquidation CompanyGetDetailsV1ResponseStatus = "liquidation"
 )
+
+// Basic information about an insolvency proceeding of the company. Use the
+// insolvency endpoint to retrieve all events of the proceeding.
+type CompanyGetDetailsV1ResponseInsolvency struct {
+	// Unique identifier of the insolvency proceeding.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// Case number of the proceeding at the court. Example: "36d IN 3382/25"
+	CaseNumber string `json:"case_number" api:"required"`
+	// Insolvency court handling the proceeding.
+	Court string `json:"court" api:"required"`
+	// Current status of the insolvency proceeding.
+	//
+	// Any of "preliminary", "opened", "rejected_no_assets", "mass_insufficient",
+	// "plan_supervised", "lifted", "discontinued", "discharge_pending",
+	// "discharge_granted", "discharge_denied", "discharge_revoked", "unknown".
+	CurrentStatus InsolvencyStatus `json:"current_status" api:"required"`
+	// Kind of administration ordered for the proceeding.
+	//
+	// Any of "external_administration", "self_administration", "protective_shield".
+	AdministrationKind InsolvencyAdministrationKind `json:"administration_kind" api:"nullable"`
+	// Date the proceeding was closed.
+	ClosedAt time.Time `json:"closed_at" api:"nullable" format:"date-time"`
+	// Date the proceeding was opened.
+	OpenedAt time.Time `json:"opened_at" api:"nullable" format:"date-time"`
+	// Kind of insolvency proceeding.
+	//
+	// Any of "regular_insolvency", "consumer_insolvency".
+	ProceedingKind InsolvencyProceedingKind `json:"proceeding_kind" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID                 respjson.Field
+		CaseNumber         respjson.Field
+		Court              respjson.Field
+		CurrentStatus      respjson.Field
+		AdministrationKind respjson.Field
+		ClosedAt           respjson.Field
+		OpenedAt           respjson.Field
+		ProceedingKind     respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseInsolvency) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseInsolvency) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type CompanyGetFinancialsV1Response struct {
 	// Key financial indicators per fiscal year, sorted by date (latest first).

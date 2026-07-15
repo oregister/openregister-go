@@ -24,6 +24,8 @@ type Client struct {
 	Person              PersonService
 	Monitor             MonitorService
 	Transparenzregister TransparenzregisterService
+	Credits             CreditService
+	Insolvency          InsolvencyService
 }
 
 // DefaultClientOptions read from the environment (OPENREGISTER_API_KEY,
@@ -62,6 +64,8 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Person = NewPersonService(opts...)
 	r.Monitor = NewMonitorService(opts...)
 	r.Transparenzregister = NewTransparenzregisterService(opts...)
+	r.Credits = NewCreditService(opts...)
+	r.Insolvency = NewInsolvencyService(opts...)
 
 	return
 }

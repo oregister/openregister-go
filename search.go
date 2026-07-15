@@ -51,6 +51,14 @@ func (r *SearchService) FindCompaniesV1(ctx context.Context, body SearchFindComp
 	return res, err
 }
 
+// Search for insolvency proceedings
+func (r *SearchService) FindInsolvenciesV1(ctx context.Context, body SearchFindInsolvenciesV1Params, opts ...option.RequestOption) (res *SearchFindInsolvenciesV1Response, err error) {
+	opts = slices.Concat(r.Options, opts)
+	path := "v1/search/insolvency"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return res, err
+}
+
 // Search for people
 func (r *SearchService) FindPersonV1(ctx context.Context, body SearchFindPersonV1Params, opts ...option.RequestOption) (res *SearchFindPersonV1Response, err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -136,6 +144,8 @@ func (r *CompanySearch) UnmarshalJSON(data []byte) error {
 type CompanySearchResponseItem struct {
 	// Company status - true if active, false if inactive.
 	Active bool `json:"active" api:"required"`
+	// Current registered address of the company, taken from the search index.
+	Address CompanySearchResponseItemAddress `json:"address" api:"required"`
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
 	// Country where the company is registered using ISO 3166-1 alpha-2 code. Example:
@@ -149,6 +159,8 @@ type CompanySearchResponseItem struct {
 	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
 	// Official registered company name. Example: "Max Mustermann GmbH"
 	Name string `json:"name" api:"required"`
+	// Current official business purpose of the company, taken from the search index.
+	Purpose string `json:"purpose" api:"required"`
 	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
 	RegisterCourt string `json:"register_court" api:"required"`
 	// Registration number in the company register. Example: "230633"
@@ -160,10 +172,12 @@ type CompanySearchResponseItem struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Active         respjson.Field
+		Address        respjson.Field
 		CompanyID      respjson.Field
 		Country        respjson.Field
 		LegalForm      respjson.Field
 		Name           respjson.Field
+		Purpose        respjson.Field
 		RegisterCourt  respjson.Field
 		RegisterNumber respjson.Field
 		RegisterType   respjson.Field
@@ -175,6 +189,41 @@ type CompanySearchResponseItem struct {
 // Returns the unmodified JSON received from the API
 func (r CompanySearchResponseItem) RawJSON() string { return r.JSON.raw }
 func (r *CompanySearchResponseItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Current registered address of the company, taken from the search index.
+type CompanySearchResponseItemAddress struct {
+	// City or locality name. Example: "Berlin"
+	City string `json:"city" api:"required"`
+	// Country of the address using ISO 3166-1 alpha-2 code. Example: "DE" for Germany
+	Country string `json:"country" api:"required"`
+	// Complete address formatted as a single string. Example: "Musterstraße 1, 10117
+	// Berlin"
+	FormattedValue string `json:"formatted_value" api:"required"`
+	// Additional address information such as c/o or attention line. Example: "c/o Max
+	// Mustermann"
+	Extra string `json:"extra"`
+	// Postal or ZIP code. Example: "10117"
+	PostalCode string `json:"postal_code"`
+	// Street name and number. Example: "Musterstraße 1"
+	Street string `json:"street"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		City           respjson.Field
+		Country        respjson.Field
+		FormattedValue respjson.Field
+		Extra          respjson.Field
+		PostalCode     respjson.Field
+		Street         respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanySearchResponseItemAddress) RawJSON() string { return r.JSON.raw }
+func (r *CompanySearchResponseItemAddress) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -253,6 +302,108 @@ type SearchAutocompleteCompaniesV1Response struct {
 // Returns the unmodified JSON received from the API
 func (r SearchAutocompleteCompaniesV1Response) RawJSON() string { return r.JSON.raw }
 func (r *SearchAutocompleteCompaniesV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindInsolvenciesV1Response struct {
+	Pagination Pagination `json:"pagination" api:"required"`
+	// List of insolvency proceedings matching the search criteria.
+	Results []SearchFindInsolvenciesV1ResponseResult `json:"results" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Pagination  respjson.Field
+		Results     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindInsolvenciesV1Response) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindInsolvenciesV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindInsolvenciesV1ResponseResult struct {
+	// Unique insolvency proceeding identifier.
+	ID string `json:"id" api:"required"`
+	// Kind of administration ordered for the proceeding.
+	//
+	// Any of "external_administration", "self_administration", "protective_shield".
+	AdministrationKind InsolvencyAdministrationKind `json:"administration_kind" api:"required"`
+	// Name of the insolvency administrator.
+	AdministratorName string `json:"administrator_name" api:"required"`
+	// Case number of the proceeding at the insolvency court. Example: "36a IN 2792/24"
+	CaseNumber string `json:"case_number" api:"required"`
+	// City of the debtor. Example: "Berlin"
+	City string `json:"city" api:"required"`
+	// Date the proceeding was closed. Format: ISO 8601 (YYYY-MM-DD)
+	ClosedAt string `json:"closed_at" api:"required"`
+	// Unique company identifier of the debtor, if the debtor could be matched to a
+	// registered company. Example: DE-HRB-F1103-267645
+	CompanyID string `json:"company_id" api:"required"`
+	// Insolvency court handling the proceeding. Example: "Charlottenburg"
+	Court string `json:"court" api:"required"`
+	// Current status of the proceeding.
+	//
+	// Any of "preliminary", "opened", "rejected_no_assets", "mass_insufficient",
+	// "plan_supervised", "lifted", "discontinued", "discharge_pending",
+	// "discharge_granted", "discharge_denied", "discharge_revoked", "unknown".
+	CurrentStatus InsolvencyStatus `json:"current_status" api:"required"`
+	// Kind of debtor the proceeding concerns.
+	//
+	// - legal_person: legal entities (companies, associations, etc.)
+	// - natural_person: private individuals
+	//
+	// Any of "legal_person", "natural_person".
+	DebtorKind InsolvencyDebtorKind `json:"debtor_kind" api:"required"`
+	// Legal form of the debtor, if the debtor is a company. Example: "gmbh"
+	DebtorLegalForm string `json:"debtor_legal_form" api:"required"`
+	// Name of the debtor. Example: "Max Mustermann GmbH"
+	DebtorName string `json:"debtor_name" api:"required"`
+	// Whether the proceeding is currently open.
+	HasOpenInsolvency bool `json:"has_open_insolvency" api:"required"`
+	// Grounds for the insolvency, e.g. "illiquidity", "over_indebtedness".
+	InsolvencyGrounds []string `json:"insolvency_grounds" api:"required"`
+	// Date of the most recent event in the proceeding. Format: ISO 8601 (YYYY-MM-DD)
+	LastEventAt string `json:"last_event_at" api:"required"`
+	// Date the proceeding was opened. Format: ISO 8601 (YYYY-MM-DD)
+	OpenedAt string `json:"opened_at" api:"required"`
+	// Unique person identifier of the debtor, if the debtor could be matched to a
+	// person.
+	PersonID string `json:"person_id" api:"required"`
+	// Kind of insolvency proceeding.
+	//
+	// Any of "regular_insolvency", "consumer_insolvency".
+	ProceedingKind InsolvencyProceedingKind `json:"proceeding_kind" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID                 respjson.Field
+		AdministrationKind respjson.Field
+		AdministratorName  respjson.Field
+		CaseNumber         respjson.Field
+		City               respjson.Field
+		ClosedAt           respjson.Field
+		CompanyID          respjson.Field
+		Court              respjson.Field
+		CurrentStatus      respjson.Field
+		DebtorKind         respjson.Field
+		DebtorLegalForm    respjson.Field
+		DebtorName         respjson.Field
+		HasOpenInsolvency  respjson.Field
+		InsolvencyGrounds  respjson.Field
+		LastEventAt        respjson.Field
+		OpenedAt           respjson.Field
+		PersonID           respjson.Field
+		ProceedingKind     respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r SearchFindInsolvenciesV1ResponseResult) RawJSON() string { return r.JSON.raw }
+func (r *SearchFindInsolvenciesV1ResponseResult) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -416,6 +567,60 @@ func (r SearchFindCompaniesV1ParamsQuery) MarshalJSON() (data []byte, err error)
 	return param.MarshalObject(r, (*shadow)(&r))
 }
 func (r *SearchFindCompaniesV1ParamsQuery) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SearchFindInsolvenciesV1Params struct {
+	// Filters to filter insolvency proceedings.
+	Filters []SearchFindInsolvenciesV1ParamsFilter `json:"filters,omitzero"`
+	// Pagination parameters.
+	Pagination SearchRequestPaginationParam `json:"pagination,omitzero"`
+	// Search query to filter insolvency proceedings.
+	Query SearchFindInsolvenciesV1ParamsQuery `json:"query,omitzero"`
+	paramObj
+}
+
+func (r SearchFindInsolvenciesV1Params) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindInsolvenciesV1Params
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindInsolvenciesV1Params) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Filter by field. The property sets `value`, `values`, `keywords` and `min`/`max`
+// are mutually exclusive. Dates must be YYYY-MM-DD.
+type SearchFindInsolvenciesV1ParamsFilter struct {
+	// Field of the insolvency proceeding to filter on. Date fields (opened_at,
+	// closed_at, last_event_at, claims_filing_deadline) support min/max ranges with
+	// values in the format YYYY-MM-DD.
+	Field string `json:"field,omitzero" api:"required"`
+	SearchFilterBaseParam
+}
+
+func (r SearchFindInsolvenciesV1ParamsFilter) MarshalJSON() (data []byte, err error) {
+	type shadow struct {
+		*SearchFindInsolvenciesV1ParamsFilter
+		MarshalJSON bool `json:"-"` // Prevent inheriting [json.Marshaler] from the embedded field
+	}
+	return param.MarshalObject(r, shadow{&r, false})
+}
+
+// Search query to filter insolvency proceedings.
+//
+// The property Value is required.
+type SearchFindInsolvenciesV1ParamsQuery struct {
+	// Search query to filter insolvency proceedings. Matches against debtor name, case
+	// number, administrator name and court.
+	Value string `json:"value" api:"required"`
+	paramObj
+}
+
+func (r SearchFindInsolvenciesV1ParamsQuery) MarshalJSON() (data []byte, err error) {
+	type shadow SearchFindInsolvenciesV1ParamsQuery
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *SearchFindInsolvenciesV1ParamsQuery) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
