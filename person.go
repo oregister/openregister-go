@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/oregister/openregister-go/v2/internal/apijson"
 	"github.com/oregister/openregister-go/v2/internal/requestconfig"
@@ -66,7 +67,7 @@ type PersonGetDetailsV1Response struct {
 	// City of the person.
 	City string `json:"city" api:"required"`
 	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
-	DateOfBirth string `json:"date_of_birth" api:"required" format:"date-only"`
+	DateOfBirth time.Time `json:"date_of_birth" api:"required" format:"date"`
 	// First name of the person.
 	FirstName string `json:"first_name" api:"required"`
 	// Last name of the person.
@@ -103,10 +104,10 @@ type PersonGetDetailsV1ResponseManagementPosition struct {
 	Role string `json:"role" api:"required"`
 	// Date when the person started the management position. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
-	StartDate string `json:"start_date" api:"required" format:"date-only"`
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
 	// Date when the person ended the management position. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2023-01-01"
-	EndDate string `json:"end_date" format:"date-only"`
+	EndDate time.Time `json:"end_date" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CompanyName respjson.Field
