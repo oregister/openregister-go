@@ -79,7 +79,7 @@ type MonitorNewResponse struct {
 	// values when `entity_type` is `person`.
 	//
 	// Any of "basic", "representation", "financials", "documents", "ownership",
-	// "holdings", "management_positions".
+	// "holdings", "management_positions", "insolvencies".
 	Preferences []string `json:"preferences" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -138,7 +138,7 @@ type MonitorListResponseItem struct {
 	// values when `entity_type` is `person`.
 	//
 	// Any of "basic", "representation", "financials", "documents", "ownership",
-	// "holdings", "management_positions".
+	// "holdings", "management_positions", "insolvencies".
 	Preferences []string `json:"preferences" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -170,7 +170,7 @@ type MonitorNewParams struct {
 	// values when `entity_type` is `person`.
 	//
 	// Any of "basic", "representation", "financials", "documents", "ownership",
-	// "holdings", "management_positions".
+	// "holdings", "management_positions", "insolvencies".
 	Preferences []string `json:"preferences,omitzero" api:"required"`
 	paramObj
 }
