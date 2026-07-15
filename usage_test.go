@@ -13,7 +13,7 @@ import (
 	"github.com/oregister/openregister-go/v2/option"
 )
 
-func TestUsageGetUsageV1(t *testing.T) {
+func TestUsageGetCreditsV1(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,7 +26,7 @@ func TestUsageGetUsageV1(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Usage.GetUsageV1(context.TODO())
+	_, err := client.Usage.GetCreditsV1(context.TODO())
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {

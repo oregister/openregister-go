@@ -131,11 +131,11 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageGetUsageV1Response">UsageGetUsageV1Response</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageGetCreditsV1Response">UsageGetCreditsV1Response</a>
 
 Methods:
 
-- <code title="get /v1/credits">client.Usage.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageService.GetUsageV1">GetUsageV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageGetUsageV1Response">UsageGetUsageV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v1/credits">client.Usage.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageService.GetCreditsV1">GetCreditsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#UsageGetCreditsV1Response">UsageGetCreditsV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Insolvency
 
