@@ -13,7 +13,7 @@ import (
 	"github.com/oregister/openregister-go/v2/option"
 )
 
-func TestInsolvencyGet(t *testing.T) {
+func TestInsolvencyGetDetailsV1(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,7 +26,7 @@ func TestInsolvencyGet(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Insolvency.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+	_, err := client.Insolvency.GetDetailsV1(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
 		var apierr *openregister.Error
 		if errors.As(err, &apierr) {

@@ -14,39 +14,39 @@ import (
 	"github.com/oregister/openregister-go/v2/packages/respjson"
 )
 
-// CreditService contains methods and other services that help with interacting
-// with the openregister API.
+// UsageService contains methods and other services that help with interacting with
+// the openregister API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewCreditService] method instead.
-type CreditService struct {
+// the [NewUsageService] method instead.
+type UsageService struct {
 	Options []option.RequestOption
 }
 
-// NewCreditService generates a new service that applies the given options to each
+// NewUsageService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewCreditService(opts ...option.RequestOption) (r CreditService) {
-	r = CreditService{}
+func NewUsageService(opts ...option.RequestOption) (r UsageService) {
+	r = UsageService{}
 	r.Options = opts
 	return
 }
 
 // Retrieve public API credit usage
-func (r *CreditService) Get(ctx context.Context, opts ...option.RequestOption) (res *CreditGetResponse, err error) {
+func (r *UsageService) GetUsageV1(ctx context.Context, opts ...option.RequestOption) (res *UsageGetUsageV1Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/credits"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
 
-type CreditGetResponse struct {
+type UsageGetUsageV1Response struct {
 	IncludedCredits int64 `json:"included_credits" api:"required"`
 	// Credits above the included allowance.
-	OverageCredits int64                   `json:"overage_credits" api:"required"`
-	Paid           bool                    `json:"paid" api:"required"`
-	Period         CreditGetResponsePeriod `json:"period" api:"required"`
+	OverageCredits int64                         `json:"overage_credits" api:"required"`
+	Paid           bool                          `json:"paid" api:"required"`
+	Period         UsageGetUsageV1ResponsePeriod `json:"period" api:"required"`
 	// Never negative; zero once usage exceeds included credits.
 	RemainingCredits int64 `json:"remaining_credits" api:"required"`
 	UsedCredits      int64 `json:"used_credits" api:"required"`
@@ -64,12 +64,12 @@ type CreditGetResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CreditGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *CreditGetResponse) UnmarshalJSON(data []byte) error {
+func (r UsageGetUsageV1Response) RawJSON() string { return r.JSON.raw }
+func (r *UsageGetUsageV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CreditGetResponsePeriod struct {
+type UsageGetUsageV1ResponsePeriod struct {
 	ResetAt time.Time `json:"reset_at" api:"required" format:"date-time"`
 	// billing_cycle for paid plans; rolling_30_days for the free plan, where the
 	// window starts with the first request.
@@ -86,7 +86,7 @@ type CreditGetResponsePeriod struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CreditGetResponsePeriod) RawJSON() string { return r.JSON.raw }
-func (r *CreditGetResponsePeriod) UnmarshalJSON(data []byte) error {
+func (r UsageGetUsageV1ResponsePeriod) RawJSON() string { return r.JSON.raw }
+func (r *UsageGetUsageV1ResponsePeriod) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
