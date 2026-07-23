@@ -540,6 +540,9 @@ type CompanyGetDetailsV1Response struct {
 	Address CompanyAddress `json:"address" api:"required"`
 	// Historical addresses. Shows how the company address changed over time.
 	Addresses []CompanyAddress `json:"addresses" api:"required"`
+	// Spin-offs (Ausgliederung, § 123 Abs. 3 UmwG) in which this company transferred
+	// assets to another company as the transferring entity.
+	AssetSpinOffs []CompanyGetDetailsV1ResponseAssetSpinOff `json:"asset_spin_offs" api:"required"`
 	// Current registered capital of the company.
 	Capital CompanyCapital `json:"capital" api:"required"`
 	// Historical capital changes. Shows how the company capital changed over time.
@@ -618,6 +621,7 @@ type CompanyGetDetailsV1Response struct {
 		Acquisitions            respjson.Field
 		Address                 respjson.Field
 		Addresses               respjson.Field
+		AssetSpinOffs           respjson.Field
 		Capital                 respjson.Field
 		Capitals                respjson.Field
 		Contact                 respjson.Field
@@ -654,26 +658,62 @@ func (r *CompanyGetDetailsV1Response) UnmarshalJSON(data []byte) error {
 }
 
 type CompanyGetDetailsV1ResponseAcquisition struct {
+	// Date the underlying contract (Verschmelzungsvertrag) was concluded, as cited in
+	// the register entry. Null when the register text does not cite a contract date.
+	// Entries sharing an agreement_date belong to the same transaction. Format: ISO
+	// 8601 (YYYY-MM-DD)
+	AgreementDate string `json:"agreement_date" api:"required"`
 	// Unique company identifier of the company that was merged into this company.
 	// Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
-	// Date the merger was registered. Format: ISO 8601 (YYYY-MM-DD)
-	Date string `json:"date" api:"required"`
 	// Current name of the company that was merged into this company.
 	Name string `json:"name" api:"required"`
+	// Date the merger was registered. Format: ISO 8601 (YYYY-MM-DD)
+	RegistrationDate string `json:"registration_date" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CompanyID   respjson.Field
-		Date        respjson.Field
-		Name        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		AgreementDate    respjson.Field
+		CompanyID        respjson.Field
+		Name             respjson.Field
+		RegistrationDate respjson.Field
+		ExtraFields      map[string]respjson.Field
+		raw              string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
 func (r CompanyGetDetailsV1ResponseAcquisition) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetDetailsV1ResponseAcquisition) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetDetailsV1ResponseAssetSpinOff struct {
+	// Date the underlying contract (Ausgliederungsvertrag) was concluded, as cited in
+	// the register entry. Null when the register text does not cite a contract date.
+	// Entries sharing an agreement_date belong to the same transaction. Format: ISO
+	// 8601 (YYYY-MM-DD)
+	AgreementDate string `json:"agreement_date" api:"required"`
+	// Unique company identifier of the company that received the assets. Example:
+	// DE-HRB-F1103-267645
+	CompanyID string `json:"company_id" api:"required"`
+	// Current name of the company that received the assets.
+	Name string `json:"name" api:"required"`
+	// Date the spin-off was registered. Format: ISO 8601 (YYYY-MM-DD)
+	RegistrationDate string `json:"registration_date" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		AgreementDate    respjson.Field
+		CompanyID        respjson.Field
+		Name             respjson.Field
+		RegistrationDate respjson.Field
+		ExtraFields      map[string]respjson.Field
+		raw              string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseAssetSpinOff) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseAssetSpinOff) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -833,20 +873,26 @@ func (r *CompanyGetDetailsV1ResponseIndustryCodesWz2025) UnmarshalJSON(data []by
 // If the company ceased to exist through a merger (Verschmelzung), the company it
 // was merged into.
 type CompanyGetDetailsV1ResponseMergedInto struct {
+	// Date the underlying contract (Verschmelzungsvertrag) was concluded, as cited in
+	// the register entry. Null when the register text does not cite a contract date.
+	// Entries sharing an agreement_date belong to the same transaction. Format: ISO
+	// 8601 (YYYY-MM-DD)
+	AgreementDate string `json:"agreement_date" api:"required"`
 	// Unique company identifier of the company this company was merged into. Example:
 	// DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
-	// Date the merger was registered. Format: ISO 8601 (YYYY-MM-DD)
-	Date string `json:"date" api:"required"`
 	// Current name of the company this company was merged into.
 	Name string `json:"name" api:"required"`
+	// Date the merger was registered. Format: ISO 8601 (YYYY-MM-DD)
+	RegistrationDate string `json:"registration_date" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CompanyID   respjson.Field
-		Date        respjson.Field
-		Name        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		AgreementDate    respjson.Field
+		CompanyID        respjson.Field
+		Name             respjson.Field
+		RegistrationDate respjson.Field
+		ExtraFields      map[string]respjson.Field
+		raw              string
 	} `json:"-"`
 }
 
@@ -861,20 +907,26 @@ func (r *CompanyGetDetailsV1ResponseMergedInto) UnmarshalJSON(data []byte) error
 // receiving this company's profit (Organträger). Null if the company has no active
 // agreement.
 type CompanyGetDetailsV1ResponseProfitTransferAgreement struct {
+	// Date the underlying contract (Gewinnabführungsvertrag) was concluded, as cited
+	// in the register entry. Null when the register text does not cite a contract
+	// date. Entries sharing an agreement_date belong to the same transaction. Format:
+	// ISO 8601 (YYYY-MM-DD)
+	AgreementDate string `json:"agreement_date" api:"required"`
 	// Unique company identifier of the parent company receiving this company's profit
 	// (Organträger). Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
-	// Date the agreement was registered. Format: ISO 8601 (YYYY-MM-DD)
-	Date string `json:"date" api:"required"`
 	// Current name of the parent company.
 	Name string `json:"name" api:"required"`
+	// Date the agreement was registered. Format: ISO 8601 (YYYY-MM-DD)
+	RegistrationDate string `json:"registration_date" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CompanyID   respjson.Field
-		Date        respjson.Field
-		Name        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		AgreementDate    respjson.Field
+		CompanyID        respjson.Field
+		Name             respjson.Field
+		RegistrationDate respjson.Field
+		ExtraFields      map[string]respjson.Field
+		raw              string
 	} `json:"-"`
 }
 
@@ -1266,11 +1318,11 @@ type CompanyGetFinancialsV1ResponseReport struct {
 	// Whether the report is a consolidated report or not.
 	Consolidated  bool        `json:"consolidated" api:"required"`
 	Passiva       ReportTable `json:"passiva" api:"required"`
-	ReportEndDate time.Time   `json:"report_end_date" api:"required" format:"date"`
+	ReportEndDate string      `json:"report_end_date" api:"required" format:"date-only"`
 	// Unique identifier for the financial report. Example:
 	// f47ac10b-58cc-4372-a567-0e02b2c3d479
-	ReportID        string    `json:"report_id" api:"required"`
-	ReportStartDate time.Time `json:"report_start_date" api:"required" format:"date"`
+	ReportID        string `json:"report_id" api:"required"`
+	ReportStartDate string `json:"report_start_date" api:"required" format:"date-only"`
 	// Sources of the report data. Presigned URLs accessible for 30 minutes.
 	Sources []CompanyGetFinancialsV1ResponseReportSource `json:"sources" api:"required"`
 	Guv     ReportTable                                  `json:"guv" api:"nullable"`
