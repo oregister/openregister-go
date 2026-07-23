@@ -4,7 +4,6 @@ package openregister_test
 
 import (
 	"context"
-	"errors"
 	"os"
 	"testing"
 
@@ -13,7 +12,7 @@ import (
 	"github.com/oregister/openregister-go/v2/option"
 )
 
-func TestUsageGetCreditsV1(t *testing.T) {
+func TestUsage(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,12 +25,13 @@ func TestUsageGetCreditsV1(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Usage.GetCreditsV1(context.TODO())
+	response, err := client.Company.GetDetailsV1(
+		context.TODO(),
+		"DE-HRB-F1103-267645",
+		openregister.CompanyGetDetailsV1Params{},
+	)
 	if err != nil {
-		var apierr *openregister.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
+	t.Logf("%+v\n", response.ID)
 }

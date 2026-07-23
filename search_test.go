@@ -84,6 +84,47 @@ func TestSearchFindCompaniesV1WithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestSearchFindInsolvenciesV1WithOptionalParams(t *testing.T) {
+	t.Skip("Mock server tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := openregister.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	_, err := client.Search.FindInsolvenciesV1(context.TODO(), openregister.SearchFindInsolvenciesV1Params{
+		Filters: []openregister.SearchFindInsolvenciesV1ParamsFilter{{
+			SearchFilterBaseParam: openregister.SearchFilterBaseParam{
+				Keywords: []string{"string"},
+				Max:      openregister.String("max"),
+				Min:      openregister.String("min"),
+				Value:    openregister.String("value"),
+				Values:   []string{"string"},
+			},
+			Field: "debtor_kind",
+		}},
+		Pagination: openregister.SearchRequestPaginationParam{
+			Page:    openregister.Int(0),
+			PerPage: openregister.Int(0),
+		},
+		Query: openregister.SearchFindInsolvenciesV1ParamsQuery{
+			Value: "value",
+		},
+	})
+	if err != nil {
+		var apierr *openregister.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestSearchFindPersonV1WithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"

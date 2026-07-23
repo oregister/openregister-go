@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.9.0 (2026-07-23)
+
+Full Changelog: [v2.8.0...v2.9.0](https://github.com/oregister/openregister-go/compare/v2.8.0...v2.9.0)
+
+### Features
+
+* **api:** insolvencies & m&a ([13e7d0c](https://github.com/oregister/openregister-go/commit/13e7d0c6c38d7a3ea60365ca4228f4598941d194))
+* **api:** manual updates ([9ca1a7c](https://github.com/oregister/openregister-go/commit/9ca1a7c6ecacd63e3ec17295e6d17850f5345cf3))
+* **api:** manual updates ([efb1041](https://github.com/oregister/openregister-go/commit/efb10414c1fb8ce46202935c7715b119dc9a3f2d))
+* **api:** manual updates ([136cbd3](https://github.com/oregister/openregister-go/commit/136cbd392e4b9efefe8065531f07915b784208c7))
+* **api:** manual updates ([4fd7900](https://github.com/oregister/openregister-go/commit/4fd790021c4c518b18f45b769add98211512b86d))
+* **api:** manual updates ([cc6157d](https://github.com/oregister/openregister-go/commit/cc6157dd047dc773dfd701fd4a0812d72830dc37))
+* **api:** typed dates ([d738778](https://github.com/oregister/openregister-go/commit/d738778ed355b8c4071dfd358f35f7fe315f745d))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([f6e9dc9](https://github.com/oregister/openregister-go/commit/f6e9dc9ded6369ed3592a6a2f9380ffd0b0a3505))
+
 ## 2.8.0 (2026-06-30)
 
 Full Changelog: [v2.7.0...v2.8.0](https://github.com/oregister/openregister-go/compare/v2.7.0...v2.8.0)

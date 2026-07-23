@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/oregister/openregister-go/v2/internal/apijson"
 	"github.com/oregister/openregister-go/v2/internal/requestconfig"
@@ -66,7 +67,7 @@ type PersonGetDetailsV1Response struct {
 	// City of the person.
 	City string `json:"city" api:"required"`
 	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
-	DateOfBirth string `json:"date_of_birth" api:"required" format:"date-only"`
+	DateOfBirth time.Time `json:"date_of_birth" api:"required" format:"date"`
 	// First name of the person.
 	FirstName string `json:"first_name" api:"required"`
 	// Last name of the person.
@@ -103,10 +104,10 @@ type PersonGetDetailsV1ResponseManagementPosition struct {
 	Role string `json:"role" api:"required"`
 	// Date when the person started the management position. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
-	StartDate string `json:"start_date" api:"required" format:"date-only"`
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
 	// Date when the person ended the management position. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2023-01-01"
-	EndDate string `json:"end_date" format:"date-only"`
+	EndDate time.Time `json:"end_date" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CompanyName respjson.Field
@@ -151,7 +152,7 @@ type PersonGetHoldingsV1ResponseHolding struct {
 	CompanyID string `json:"company_id" api:"required"`
 	// Date when the ownership ended. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	End string `json:"end" api:"required"`
+	End time.Time `json:"end" api:"required" format:"date"`
 	// Name of the company.
 	Name string `json:"name" api:"required"`
 	// Amount of shares or capital in the company. Example: 100
@@ -164,7 +165,7 @@ type PersonGetHoldingsV1ResponseHolding struct {
 	RelationType CompanyRelationType `json:"relation_type" api:"required"`
 	// Date when the ownership started. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	Start string `json:"start" api:"required"`
+	Start time.Time `json:"start" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CompanyID       respjson.Field
