@@ -124,10 +124,10 @@ type InsolvencyGetDetailsV1Response struct {
 	AdministratorAddress string `json:"administrator_address" api:"nullable"`
 	// Name of the insolvency administrator.
 	AdministratorName string `json:"administrator_name" api:"nullable"`
-	// Deadline for creditors to file their claims.
-	ClaimsFilingDeadline time.Time `json:"claims_filing_deadline" api:"nullable" format:"date-time"`
-	// Date the proceeding was closed.
-	ClosedAt time.Time `json:"closed_at" api:"nullable" format:"date-time"`
+	// Deadline for creditors to file their claims. Format: ISO 8601 (YYYY-MM-DD)
+	ClaimsFilingDeadline time.Time `json:"claims_filing_deadline" api:"nullable" format:"date"`
+	// Date the proceeding was closed. Format: ISO 8601 (YYYY-MM-DD)
+	ClosedAt time.Time `json:"closed_at" api:"nullable" format:"date"`
 	// Kind of debtor the proceeding concerns.
 	//
 	// - legal_person: legal entities (companies, associations, etc.)
@@ -141,12 +141,14 @@ type InsolvencyGetDetailsV1Response struct {
 	DistributionAvailable float64 `json:"distribution_available" api:"nullable"`
 	// Total registered claims in the distribution, in euros.
 	DistributionClaimsTotal float64 `json:"distribution_claims_total" api:"nullable"`
-	// Publication date of the first known event of the proceeding.
-	FirstEventAt time.Time `json:"first_event_at" api:"nullable" format:"date-time"`
-	// Publication date of the most recent known event of the proceeding.
-	LastEventAt time.Time `json:"last_event_at" api:"nullable" format:"date-time"`
-	// Date the proceeding was opened.
-	OpenedAt time.Time `json:"opened_at" api:"nullable" format:"date-time"`
+	// Publication date of the first known event of the proceeding. Format: ISO 8601
+	// (YYYY-MM-DD)
+	FirstEventAt time.Time `json:"first_event_at" api:"nullable" format:"date"`
+	// Publication date of the most recent known event of the proceeding. Format: ISO
+	// 8601 (YYYY-MM-DD)
+	LastEventAt time.Time `json:"last_event_at" api:"nullable" format:"date"`
+	// Date the proceeding was opened. Format: ISO 8601 (YYYY-MM-DD)
+	OpenedAt time.Time `json:"opened_at" api:"nullable" format:"date"`
 	// Kind of insolvency proceeding.
 	//
 	// Any of "regular_insolvency", "consumer_insolvency".
@@ -204,8 +206,8 @@ type InsolvencyGetDetailsV1ResponseEvent struct {
 	// "discharge_revoked", "plan_confirmed", "plan_supervision_ordered",
 	// "plan_supervision_terminated", "other".
 	EventType string `json:"event_type" api:"required"`
-	// Date the event was published by the court.
-	PublishedAt time.Time `json:"published_at" api:"required" format:"date-time"`
+	// Date the event was published by the court. Format: ISO 8601 (YYYY-MM-DD)
+	PublishedAt time.Time `json:"published_at" api:"required" format:"date"`
 	// Category of the official publication the event was derived from.
 	//
 	// Any of "security_measures", "rejection_for_insufficiency_of_assets", "openings",
@@ -215,8 +217,8 @@ type InsolvencyGetDetailsV1ResponseEvent struct {
 	ReportType string `json:"report_type" api:"required"`
 	// Short summary of the publication.
 	Summary string `json:"summary" api:"required"`
-	// Date of the court decision, if published.
-	DecisionDate time.Time `json:"decision_date" api:"nullable" format:"date-time"`
+	// Date of the court decision, if published. Format: ISO 8601 (YYYY-MM-DD)
+	DecisionDate time.Time `json:"decision_date" api:"nullable" format:"date"`
 	// Date the decision takes effect, if published.
 	EffectiveAt time.Time `json:"effective_at" api:"nullable" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].

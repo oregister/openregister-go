@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
+	"time"
 
 	"github.com/oregister/openregister-go/v2/internal/apijson"
 	"github.com/oregister/openregister-go/v2/internal/apiquery"
@@ -338,7 +339,7 @@ type SearchFindInsolvenciesV1ResponseResult struct {
 	// City of the debtor. Example: "Berlin"
 	City string `json:"city" api:"required"`
 	// Date the proceeding was closed. Format: ISO 8601 (YYYY-MM-DD)
-	ClosedAt string `json:"closed_at" api:"required"`
+	ClosedAt time.Time `json:"closed_at" api:"required" format:"date"`
 	// Unique company identifier of the debtor, if the debtor could be matched to a
 	// registered company. Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
@@ -366,9 +367,9 @@ type SearchFindInsolvenciesV1ResponseResult struct {
 	// Grounds for the insolvency, e.g. "illiquidity", "over_indebtedness".
 	InsolvencyGrounds []string `json:"insolvency_grounds" api:"required"`
 	// Date of the most recent event in the proceeding. Format: ISO 8601 (YYYY-MM-DD)
-	LastEventAt string `json:"last_event_at" api:"required"`
+	LastEventAt time.Time `json:"last_event_at" api:"required" format:"date"`
 	// Date the proceeding was opened. Format: ISO 8601 (YYYY-MM-DD)
-	OpenedAt string `json:"opened_at" api:"required"`
+	OpenedAt time.Time `json:"opened_at" api:"required" format:"date"`
 	// Unique person identifier of the debtor, if the debtor could be matched to a
 	// person.
 	PersonID string `json:"person_id" api:"required"`
@@ -434,7 +435,7 @@ type SearchFindPersonV1ResponseResult struct {
 	// City of the person. Example: "Berlin"
 	City string `json:"city" api:"required"`
 	// Date of birth of the person. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
-	DateOfBirth string `json:"date_of_birth" api:"required"`
+	DateOfBirth time.Time `json:"date_of_birth" api:"required" format:"date"`
 	// Name of the person. Example: "Max Mustermann"
 	Name string `json:"name" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].

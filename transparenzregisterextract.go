@@ -186,7 +186,7 @@ func (r *TransparenzregisterGroup) UnmarshalJSON(data []byte) error {
 
 // Parsed Transparenzregister extract report limited to UBO-relevant fields.
 type TransparenzregisterReport struct {
-	// Extract creation date.
+	// Extract creation date. Format: ISO 8601 (YYYY-MM-DD)
 	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date"`
 	// Reason indicating no natural person UBO could be determined.
 	FictionalUboReason string                     `json:"fictional_ubo_reason" api:"nullable"`
@@ -217,11 +217,12 @@ func (r *TransparenzregisterReport) UnmarshalJSON(data []byte) error {
 }
 
 type TransparenzregisterStatusFlags struct {
-	CorrectedByReference string    `json:"corrected_by_reference" api:"nullable"`
-	CorrectedReferences  []string  `json:"corrected_references"`
-	Deleted              bool      `json:"deleted"`
-	DeletionDate         time.Time `json:"deletion_date" api:"nullable" format:"date"`
-	DiscrepancyNote      string    `json:"discrepancy_note" api:"nullable"`
+	CorrectedByReference string   `json:"corrected_by_reference" api:"nullable"`
+	CorrectedReferences  []string `json:"corrected_references"`
+	Deleted              bool     `json:"deleted"`
+	// Format: ISO 8601 (YYYY-MM-DD)
+	DeletionDate    time.Time `json:"deletion_date" api:"nullable" format:"date"`
+	DiscrepancyNote string    `json:"discrepancy_note" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CorrectedByReference respjson.Field
@@ -281,8 +282,9 @@ func (r *TransparenzregisterUboInterest) UnmarshalJSON(data []byte) error {
 }
 
 type TransparenzregisterUboNaturalPerson struct {
-	City        string    `json:"city" api:"nullable"`
-	Country     string    `json:"country" api:"nullable"`
+	City    string `json:"city" api:"nullable"`
+	Country string `json:"country" api:"nullable"`
+	// Format: ISO 8601 (YYYY-MM-DD)
 	DateOfBirth time.Time `json:"date_of_birth" api:"nullable" format:"date"`
 	FirstName   string    `json:"first_name" api:"nullable"`
 	FullName    string    `json:"full_name" api:"nullable"`
@@ -330,6 +332,7 @@ func (r *TransparenzregisterValidity) UnmarshalJSON(data []byte) error {
 }
 
 type TransparenzregisterValidityPoint struct {
+	// Format: ISO 8601 (YYYY-MM-DD)
 	Date time.Time `json:"date" api:"nullable" format:"date"`
 	Note string    `json:"note" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
