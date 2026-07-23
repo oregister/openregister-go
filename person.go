@@ -152,7 +152,7 @@ type PersonGetHoldingsV1ResponseHolding struct {
 	CompanyID string `json:"company_id" api:"required"`
 	// Date when the ownership ended. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	End string `json:"end" api:"required"`
+	End time.Time `json:"end" api:"required" format:"date"`
 	// Name of the company.
 	Name string `json:"name" api:"required"`
 	// Amount of shares or capital in the company. Example: 100
@@ -165,7 +165,7 @@ type PersonGetHoldingsV1ResponseHolding struct {
 	RelationType CompanyRelationType `json:"relation_type" api:"required"`
 	// Date when the ownership started. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	Start string `json:"start" api:"required"`
+	Start time.Time `json:"start" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CompanyID       respjson.Field

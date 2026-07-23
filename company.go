@@ -132,7 +132,7 @@ type CompanyAddress struct {
 	FormattedValue string `json:"formatted_value" api:"required"`
 	// Date when this address became effective. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	StartDate string `json:"start_date" api:"required"`
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
 	// Additional address information such as c/o or attention line. Example: "c/o Max
 	// Mustermann"
 	Extra string `json:"extra"`
@@ -170,7 +170,7 @@ type CompanyCapital struct {
 	Currency CompanyCapitalCurrency `json:"currency" api:"required"`
 	// Date when this capital amount became effective. Format: ISO 8601 (YYYY-MM-DD)
 	// Example: "2023-01-01"
-	StartDate string `json:"start_date" api:"required"`
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Amount      respjson.Field
@@ -202,7 +202,7 @@ type CompanyDocument struct {
 	ID string `json:"id" api:"required"`
 	// Document publication or filing date. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	Date string `json:"date" api:"required"`
+	Date time.Time `json:"date" api:"required" format:"date"`
 	// Whether this is the latest version of the document_type.
 	Latest bool `json:"latest" api:"required"`
 	// Categorization of the document:
@@ -255,7 +255,7 @@ type CompanyName struct {
 	Name string `json:"name" api:"required"`
 	// Date when this name became effective. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	StartDate string `json:"start_date" api:"required"`
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		LegalForm   respjson.Field
@@ -326,7 +326,7 @@ type CompanyPurpose struct {
 	Purpose string `json:"purpose" api:"required"`
 	// Date when this purpose became effective. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	StartDate string `json:"start_date" api:"required"`
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Purpose     respjson.Field
@@ -356,7 +356,7 @@ type CompanyRegister struct {
 	CompanyID string `json:"company_id"`
 	// Date when this registration information became effective. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
-	StartDate string `json:"start_date"`
+	StartDate time.Time `json:"start_date" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		RegisterCourt  respjson.Field
@@ -553,7 +553,7 @@ type CompanyGetDetailsV1Response struct {
 	Documents []CompanyDocument `json:"documents" api:"required"`
 	// Date when the company was officially registered. Format: ISO 8601 (YYYY-MM-DD)
 	// Example: "2022-01-01"
-	IncorporatedAt string `json:"incorporated_at" api:"required"`
+	IncorporatedAt time.Time `json:"incorporated_at" api:"required" format:"date"`
 	// Key company indicators like net income, employee count, revenue, etc..
 	Indicators []CompanyGetDetailsV1ResponseIndicator `json:"indicators" api:"required"`
 	// Industry codes of the company.
@@ -573,7 +573,7 @@ type CompanyGetDetailsV1Response struct {
 	Names []CompanyName `json:"names" api:"required"`
 	// Date of the notarized company agreement (Gesellschaftsvertrag or Satzung).
 	// Format: ISO 8601 (YYYY-MM-DD) Example: "2021-12-21"
-	NotarizedAt string `json:"notarized_at" api:"required"`
+	NotarizedAt time.Time `json:"notarized_at" api:"required" format:"date"`
 	// The company's current profit and loss transfer agreement
 	// (Gewinnabführungsvertrag), if one exists. The referenced company is the parent
 	// receiving this company's profit (Organträger). Null if the company has no active
@@ -609,7 +609,7 @@ type CompanyGetDetailsV1Response struct {
 	Status CompanyGetDetailsV1ResponseStatus `json:"status" api:"required"`
 	// Date when the company was officially terminated (if applicable). Format: ISO
 	// 8601 (YYYY-MM-DD) Example: "2024-01-01"
-	TerminatedAt string `json:"terminated_at" api:"required"`
+	TerminatedAt time.Time `json:"terminated_at" api:"required" format:"date"`
 	// Insolvency proceedings of the company, if any. Contains basic information per
 	// proceeding; use the insolvency endpoint to retrieve all events of a proceeding.
 	Insolvencies []CompanyGetDetailsV1ResponseInsolvency `json:"insolvencies"`
@@ -662,14 +662,14 @@ type CompanyGetDetailsV1ResponseAcquisition struct {
 	// the register entry. Null when the register text does not cite a contract date.
 	// Entries sharing an agreement_date belong to the same transaction. Format: ISO
 	// 8601 (YYYY-MM-DD)
-	AgreementDate string `json:"agreement_date" api:"required"`
+	AgreementDate time.Time `json:"agreement_date" api:"required" format:"date"`
 	// Unique company identifier of the company that was merged into this company.
 	// Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
 	// Current name of the company that was merged into this company.
 	Name string `json:"name" api:"required"`
 	// Date the merger was registered. Format: ISO 8601 (YYYY-MM-DD)
-	RegistrationDate string `json:"registration_date" api:"required"`
+	RegistrationDate time.Time `json:"registration_date" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AgreementDate    respjson.Field
@@ -692,14 +692,14 @@ type CompanyGetDetailsV1ResponseAssetSpinOff struct {
 	// the register entry. Null when the register text does not cite a contract date.
 	// Entries sharing an agreement_date belong to the same transaction. Format: ISO
 	// 8601 (YYYY-MM-DD)
-	AgreementDate string `json:"agreement_date" api:"required"`
+	AgreementDate time.Time `json:"agreement_date" api:"required" format:"date"`
 	// Unique company identifier of the company that received the assets. Example:
 	// DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
 	// Current name of the company that received the assets.
 	Name string `json:"name" api:"required"`
 	// Date the spin-off was registered. Format: ISO 8601 (YYYY-MM-DD)
-	RegistrationDate string `json:"registration_date" api:"required"`
+	RegistrationDate time.Time `json:"registration_date" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AgreementDate    respjson.Field
@@ -785,7 +785,7 @@ type CompanyGetDetailsV1ResponseIndicator struct {
 	Cash int64 `json:"cash" api:"required"`
 	// Date to which this financial indicators apply. Format: ISO 8601 (YYYY-MM-DD)
 	// Example: "2022-01-01"
-	Date string `json:"date" api:"required"`
+	Date time.Time `json:"date" api:"required" format:"date"`
 	// The number of employees of that year.
 	Employees int64 `json:"employees" api:"required"`
 	// The equity of that year (in cents).
@@ -877,14 +877,14 @@ type CompanyGetDetailsV1ResponseMergedInto struct {
 	// the register entry. Null when the register text does not cite a contract date.
 	// Entries sharing an agreement_date belong to the same transaction. Format: ISO
 	// 8601 (YYYY-MM-DD)
-	AgreementDate string `json:"agreement_date" api:"required"`
+	AgreementDate time.Time `json:"agreement_date" api:"required" format:"date"`
 	// Unique company identifier of the company this company was merged into. Example:
 	// DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
 	// Current name of the company this company was merged into.
 	Name string `json:"name" api:"required"`
 	// Date the merger was registered. Format: ISO 8601 (YYYY-MM-DD)
-	RegistrationDate string `json:"registration_date" api:"required"`
+	RegistrationDate time.Time `json:"registration_date" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AgreementDate    respjson.Field
@@ -911,14 +911,14 @@ type CompanyGetDetailsV1ResponseProfitTransferAgreement struct {
 	// in the register entry. Null when the register text does not cite a contract
 	// date. Entries sharing an agreement_date belong to the same transaction. Format:
 	// ISO 8601 (YYYY-MM-DD)
-	AgreementDate string `json:"agreement_date" api:"required"`
+	AgreementDate time.Time `json:"agreement_date" api:"required" format:"date"`
 	// Unique company identifier of the parent company receiving this company's profit
 	// (Organträger). Example: DE-HRB-F1103-267645
 	CompanyID string `json:"company_id" api:"required"`
 	// Current name of the parent company.
 	Name string `json:"name" api:"required"`
 	// Date the agreement was registered. Format: ISO 8601 (YYYY-MM-DD)
-	RegistrationDate string `json:"registration_date" api:"required"`
+	RegistrationDate time.Time `json:"registration_date" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AgreementDate    respjson.Field
@@ -948,7 +948,7 @@ type CompanyGetDetailsV1ResponseRepresentation struct {
 	Authority string `json:"authority" api:"required"`
 	// Date when this representative role ended (if applicable). Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
-	EndDate string `json:"end_date" api:"required"`
+	EndDate time.Time `json:"end_date" api:"required" format:"date"`
 	// The name of the representative. E.g. "Max Mustermann" or "Max Mustermann GmbH"
 	Name string `json:"name" api:"required"`
 	// The role of the representation. E.g. "DIRECTOR"
@@ -958,7 +958,7 @@ type CompanyGetDetailsV1ResponseRepresentation struct {
 	Role RepresentationRole `json:"role" api:"required"`
 	// Date when this representative role became effective. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
-	StartDate string `json:"start_date" api:"required"`
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
 	// Whether the representation is a natural person or a legal entity.
 	//
 	// Any of "natural_person", "legal_person".
@@ -1014,7 +1014,7 @@ type CompanyGetDetailsV1ResponseRepresentationNaturalPerson struct {
 	City string `json:"city" api:"required"`
 	// Date of birth of the representative. May still be null for natural persons if it
 	// is not available. Format: ISO 8601 (YYYY-MM-DD) Example: "1990-01-01"
-	DateOfBirth string `json:"date_of_birth" api:"required"`
+	DateOfBirth time.Time `json:"date_of_birth" api:"required" format:"date"`
 	// First name of the representative. Example: "Max"
 	FirstName string `json:"first_name" api:"required"`
 	// Last name of the representative. Example: "Mustermann"
@@ -1068,10 +1068,10 @@ type CompanyGetDetailsV1ResponseInsolvency struct {
 	//
 	// Any of "external_administration", "self_administration", "protective_shield".
 	AdministrationKind InsolvencyAdministrationKind `json:"administration_kind" api:"nullable"`
-	// Date the proceeding was closed.
-	ClosedAt time.Time `json:"closed_at" api:"nullable" format:"date-time"`
-	// Date the proceeding was opened.
-	OpenedAt time.Time `json:"opened_at" api:"nullable" format:"date-time"`
+	// Date the proceeding was closed. Format: ISO 8601 (YYYY-MM-DD)
+	ClosedAt time.Time `json:"closed_at" api:"nullable" format:"date"`
+	// Date the proceeding was opened. Format: ISO 8601 (YYYY-MM-DD)
+	OpenedAt time.Time `json:"opened_at" api:"nullable" format:"date"`
 	// Kind of insolvency proceeding.
 	//
 	// Any of "regular_insolvency", "consumer_insolvency".
@@ -1143,7 +1143,7 @@ type CompanyGetFinancialsV1ResponseIndicator struct {
 	CurrentAssets int64 `json:"current_assets" api:"required"`
 	// Date to which this financial indicators apply. Format: ISO 8601 (YYYY-MM-DD)
 	// Example: "2022-01-01"
-	Date string `json:"date" api:"required"`
+	Date time.Time `json:"date" api:"required" format:"date"`
 	// The earnings before interest and taxes of that year (in cents).
 	Ebit int64 `json:"ebit" api:"required"`
 	// The earnings before interest, taxes, depreciation, and amortization of that year
@@ -1316,12 +1316,14 @@ func (r *CompanyGetFinancialsV1ResponseMerged) UnmarshalJSON(data []byte) error 
 type CompanyGetFinancialsV1ResponseReport struct {
 	Aktiva ReportTable `json:"aktiva" api:"required"`
 	// Whether the report is a consolidated report or not.
-	Consolidated  bool        `json:"consolidated" api:"required"`
-	Passiva       ReportTable `json:"passiva" api:"required"`
-	ReportEndDate time.Time   `json:"report_end_date" api:"required" format:"date"`
+	Consolidated bool        `json:"consolidated" api:"required"`
+	Passiva      ReportTable `json:"passiva" api:"required"`
+	// Format: ISO 8601 (YYYY-MM-DD)
+	ReportEndDate time.Time `json:"report_end_date" api:"required" format:"date"`
 	// Unique identifier for the financial report. Example:
 	// f47ac10b-58cc-4372-a567-0e02b2c3d479
-	ReportID        string    `json:"report_id" api:"required"`
+	ReportID string `json:"report_id" api:"required"`
+	// Format: ISO 8601 (YYYY-MM-DD)
 	ReportStartDate time.Time `json:"report_start_date" api:"required" format:"date"`
 	// Sources of the report data. Presigned URLs accessible for 30 minutes.
 	Sources []CompanyGetFinancialsV1ResponseReportSource `json:"sources" api:"required"`
@@ -1480,7 +1482,7 @@ type CompanyGetHoldingsV1ResponseHolding struct {
 	CompanyID string `json:"company_id" api:"required"`
 	// Date when the ownership ended. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	End string `json:"end" api:"required"`
+	End time.Time `json:"end" api:"required" format:"date"`
 	// Name of the company.
 	Name string `json:"name" api:"required"`
 	// Amount of shares or capital in the company. Example: 100
@@ -1493,7 +1495,7 @@ type CompanyGetHoldingsV1ResponseHolding struct {
 	RelationType CompanyRelationType `json:"relation_type" api:"required"`
 	// Date when the ownership started. Format: ISO 8601 (YYYY-MM-DD) Example:
 	// "2022-01-01"
-	Start string `json:"start" api:"required"`
+	Start time.Time `json:"start" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CompanyID       respjson.Field
@@ -1563,7 +1565,7 @@ type CompanyGetOwnersV1ResponseOwner struct {
 	RelationType CompanyRelationType `json:"relation_type" api:"required"`
 	// Date when the relation started. Only available for some types of owners. Format:
 	// ISO 8601 (YYYY-MM-DD) Example: "2022-01-01"
-	Start string `json:"start" api:"required"`
+	Start time.Time `json:"start" api:"required" format:"date"`
 	// The type of shareholder.
 	//
 	// Any of "natural_person", "legal_person".
