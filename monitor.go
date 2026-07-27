@@ -81,14 +81,20 @@ type MonitorNewResponse struct {
 	// Any of "basic", "representation", "financials", "documents", "ownership",
 	// "holdings", "management_positions", "insolvencies".
 	Preferences []string `json:"preferences" api:"required"`
+	// How often the monitored company is checked for register updates. Always `weekly`
+	// for `person` monitors.
+	//
+	// Any of "daily", "weekly".
+	UpdateFrequency MonitorNewResponseUpdateFrequency `json:"update_frequency" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Disabled    respjson.Field
-		EntityID    respjson.Field
-		EntityType  respjson.Field
-		Preferences respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		Disabled        respjson.Field
+		EntityID        respjson.Field
+		EntityType      respjson.Field
+		Preferences     respjson.Field
+		UpdateFrequency respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
 	} `json:"-"`
 }
 
@@ -104,6 +110,15 @@ type MonitorNewResponseEntityType string
 const (
 	MonitorNewResponseEntityTypeCompany MonitorNewResponseEntityType = "company"
 	MonitorNewResponseEntityTypePerson  MonitorNewResponseEntityType = "person"
+)
+
+// How often the monitored company is checked for register updates. Always `weekly`
+// for `person` monitors.
+type MonitorNewResponseUpdateFrequency string
+
+const (
+	MonitorNewResponseUpdateFrequencyDaily  MonitorNewResponseUpdateFrequency = "daily"
+	MonitorNewResponseUpdateFrequencyWeekly MonitorNewResponseUpdateFrequency = "weekly"
 )
 
 type MonitorListResponse struct {
@@ -140,14 +155,20 @@ type MonitorListResponseItem struct {
 	// Any of "basic", "representation", "financials", "documents", "ownership",
 	// "holdings", "management_positions", "insolvencies".
 	Preferences []string `json:"preferences" api:"required"`
+	// How often the monitored company is checked for register updates. Always `weekly`
+	// for `person` monitors.
+	//
+	// Any of "daily", "weekly".
+	UpdateFrequency string `json:"update_frequency" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Disabled    respjson.Field
-		EntityID    respjson.Field
-		EntityType  respjson.Field
-		Preferences respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		Disabled        respjson.Field
+		EntityID        respjson.Field
+		EntityType      respjson.Field
+		Preferences     respjson.Field
+		UpdateFrequency respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
 	} `json:"-"`
 }
 
@@ -172,6 +193,17 @@ type MonitorNewParams struct {
 	// Any of "basic", "representation", "financials", "documents", "ownership",
 	// "holdings", "management_positions", "insolvencies".
 	Preferences []string `json:"preferences,omitzero" api:"required"`
+	// How often the monitored company is checked for register updates. Defaults to
+	// `weekly` if not provided.
+	//
+	// Only supported when `entity_type` is `company`. Requests for `person` monitors
+	// that include this field are rejected with a validation error.
+	//
+	// Daily monitors are billed at a premium: 50 credits at creation and 50 credits
+	// per month while active, instead of the standard 25.
+	//
+	// Any of "daily", "weekly".
+	UpdateFrequency MonitorNewParamsUpdateFrequency `json:"update_frequency,omitzero"`
 	paramObj
 }
 
@@ -189,4 +221,19 @@ type MonitorNewParamsEntityType string
 const (
 	MonitorNewParamsEntityTypeCompany MonitorNewParamsEntityType = "company"
 	MonitorNewParamsEntityTypePerson  MonitorNewParamsEntityType = "person"
+)
+
+// How often the monitored company is checked for register updates. Defaults to
+// `weekly` if not provided.
+//
+// Only supported when `entity_type` is `company`. Requests for `person` monitors
+// that include this field are rejected with a validation error.
+//
+// Daily monitors are billed at a premium: 50 credits at creation and 50 credits
+// per month while active, instead of the standard 25.
+type MonitorNewParamsUpdateFrequency string
+
+const (
+	MonitorNewParamsUpdateFrequencyDaily  MonitorNewParamsUpdateFrequency = "daily"
+	MonitorNewParamsUpdateFrequencyWeekly MonitorNewParamsUpdateFrequency = "weekly"
 )
