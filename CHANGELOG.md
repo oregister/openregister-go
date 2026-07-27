@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.10.0 (2026-07-27)
+
+Full Changelog: [v2.9.0...v2.10.0](https://github.com/oregister/openregister-go/compare/v2.9.0...v2.10.0)
+
+### Features
+
+* **api:** daily monitor updates for companies ([920c7d1](https://github.com/oregister/openregister-go/commit/920c7d1aaa1f4d076452e5e58739a0eb66cd7420))
+
 ## 2.9.0 (2026-07-23)
 
 Full Changelog: [v2.8.0...v2.9.0](https://github.com/oregister/openregister-go/compare/v2.8.0...v2.9.0)
