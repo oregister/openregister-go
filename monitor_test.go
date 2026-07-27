@@ -13,7 +13,7 @@ import (
 	"github.com/oregister/openregister-go/v2/option"
 )
 
-func TestMonitorNew(t *testing.T) {
+func TestMonitorNewWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,9 +27,10 @@ func TestMonitorNew(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Monitor.New(context.TODO(), openregister.MonitorNewParams{
-		EntityID:    "entity_id",
-		EntityType:  openregister.MonitorNewParamsEntityTypeCompany,
-		Preferences: []string{"basic"},
+		EntityID:        "entity_id",
+		EntityType:      openregister.MonitorNewParamsEntityTypeCompany,
+		Preferences:     []string{"basic"},
+		UpdateFrequency: openregister.MonitorNewParamsUpdateFrequencyDaily,
 	})
 	if err != nil {
 		var apierr *openregister.Error
