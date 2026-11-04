@@ -14,7 +14,6 @@ import (
 )
 
 func TestSearchAutocompleteCompaniesV1(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -39,7 +38,6 @@ func TestSearchAutocompleteCompaniesV1(t *testing.T) {
 }
 
 func TestSearchFindCompaniesV1WithOptionalParams(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -85,7 +83,6 @@ func TestSearchFindCompaniesV1WithOptionalParams(t *testing.T) {
 }
 
 func TestSearchFindInsolvenciesV1WithOptionalParams(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -126,7 +123,6 @@ func TestSearchFindInsolvenciesV1WithOptionalParams(t *testing.T) {
 }
 
 func TestSearchFindPersonV1WithOptionalParams(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -167,7 +163,6 @@ func TestSearchFindPersonV1WithOptionalParams(t *testing.T) {
 }
 
 func TestSearchLookupCompanyByURL(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

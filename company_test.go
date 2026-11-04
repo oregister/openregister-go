@@ -14,7 +14,6 @@ import (
 )
 
 func TestCompanyGetContactV0(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -37,7 +36,6 @@ func TestCompanyGetContactV0(t *testing.T) {
 }
 
 func TestCompanyGetDetailsV1WithOptionalParams(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -67,7 +65,6 @@ func TestCompanyGetDetailsV1WithOptionalParams(t *testing.T) {
 }
 
 func TestCompanyGetFinancialsV1(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,7 +87,6 @@ func TestCompanyGetFinancialsV1(t *testing.T) {
 }
 
 func TestCompanyGetHistoricalOwnersV1(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -113,7 +109,6 @@ func TestCompanyGetHistoricalOwnersV1(t *testing.T) {
 }
 
 func TestCompanyGetHoldingsV1(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -136,7 +131,6 @@ func TestCompanyGetHoldingsV1(t *testing.T) {
 }
 
 func TestCompanyGetOwnersV1WithOptionalParams(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -167,7 +161,6 @@ func TestCompanyGetOwnersV1WithOptionalParams(t *testing.T) {
 }
 
 func TestCompanyGetUbosV1(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

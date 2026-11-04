@@ -41,10 +41,16 @@ To use a local version of this library from source in another project, edit the 
 directive. This can be done through the CLI with the following:
 
 ```sh
-$ go mod edit -replace github.com/oregister/openregister-go=/path/to/openregister-go
+$ go mod edit -replace github.com/oregister/openregister-go/v2=/path/to/openregister-go
 ```
 
 ## Running tests
+
+Most tests require you to [set up a mock server](https://github.com/dgellow/steady) against the OpenAPI spec to run the tests.
+
+```sh
+$ ./scripts/mock
+```
 
 ```sh
 $ ./scripts/test

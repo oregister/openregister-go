@@ -14,7 +14,6 @@ import (
 )
 
 func TestPersonGetDetailsV1(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -37,7 +36,6 @@ func TestPersonGetDetailsV1(t *testing.T) {
 }
 
 func TestPersonGetHoldingsV1(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
