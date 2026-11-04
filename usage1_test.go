@@ -13,6 +13,7 @@ import (
 )
 
 func TestUsage(t *testing.T) {
+	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -24,9 +25,13 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	companySearch, err := client.Search.FindCompaniesV1(context.TODO(), openregister.SearchFindCompaniesV1Params{})
+	response, err := client.Company.GetDetailsV1(
+		context.TODO(),
+		"DE-HRB-F1103-267645",
+		openregister.CompanyGetDetailsV1Params{},
+	)
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", companySearch.Pagination)
+	t.Logf("%+v\n", response.ID)
 }

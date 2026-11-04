@@ -56,11 +56,15 @@ func main() {
 	client := openregister.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("OPENREGISTER_API_KEY")
 	)
-	companySearch, err := client.Search.FindCompaniesV1(context.TODO(), openregister.SearchFindCompaniesV1Params{})
+	response, err := client.Company.GetDetailsV1(
+		context.TODO(),
+		"DE-HRB-F1103-267645",
+		openregister.CompanyGetDetailsV1Params{},
+	)
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", companySearch.Pagination)
+	fmt.Printf("%+v\n", response.ID)
 }
 
 ```
@@ -266,7 +270,7 @@ client := openregister.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.Search.FindCompaniesV1(context.TODO(), ...,
+client.Company.GetDetailsV1(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -297,14 +301,18 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Search.FindCompaniesV1(context.TODO(), openregister.SearchFindCompaniesV1Params{})
+_, err := client.Company.GetDetailsV1(
+	context.TODO(),
+	"DE-HRB-F1103-267645",
+	openregister.CompanyGetDetailsV1Params{},
+)
 if err != nil {
 	var apierr *openregister.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v1/search/company": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/v1/company/{company_id}": 400 Bad Request { ... }
 }
 ```
 
@@ -322,9 +330,10 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Search.FindCompaniesV1(
+client.Company.GetDetailsV1(
 	ctx,
-	openregister.SearchFindCompaniesV1Params{},
+	"DE-HRB-F1103-267645",
+	openregister.CompanyGetDetailsV1Params{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -358,9 +367,10 @@ client := openregister.NewClient(
 )
 
 // Override per-request:
-client.Search.FindCompaniesV1(
+client.Company.GetDetailsV1(
 	context.TODO(),
-	openregister.SearchFindCompaniesV1Params{},
+	"DE-HRB-F1103-267645",
+	openregister.CompanyGetDetailsV1Params{},
 	option.WithMaxRetries(5),
 )
 ```
@@ -373,15 +383,16 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-companySearch, err := client.Search.FindCompaniesV1(
+response, err := client.Company.GetDetailsV1(
 	context.TODO(),
-	openregister.SearchFindCompaniesV1Params{},
+	"DE-HRB-F1103-267645",
+	openregister.CompanyGetDetailsV1Params{},
 	option.WithResponseInto(&response),
 )
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", companySearch)
+fmt.Printf("%+v\n", response)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
