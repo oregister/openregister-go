@@ -100,8 +100,16 @@ type PersonGetDetailsV1ResponseManagementPosition struct {
 	CompanyName string `json:"company_name" api:"required"`
 	// Register ID of the company. Example: DE-HRB-F1103-267645
 	RegisterID string `json:"register_id" api:"required"`
-	// Role of the person in the company. Example: "DIRECTOR"
+	// Raw role string as stored, kept for backwards compatibility. It is
+	// register-level rather than bucketed, and for Prokura it carries a German string
+	// ("Einzelprokura", "Gesamtprokura", "Prokura"). Prefer `role_detail`. Example:
+	// "EXECUTIVE"
+	//
+	// Deprecated: deprecated
 	Role string `json:"role" api:"required"`
+	// The precise role as recorded in the register, plus ready-to-display titles. A
+	// Vorstand and a Geschäftsführer differ here.
+	RoleDetail PersonGetDetailsV1ResponseManagementPositionRoleDetail `json:"role_detail" api:"required"`
 	// Date when the person started the management position. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
 	StartDate time.Time `json:"start_date" api:"required" format:"date"`
@@ -113,6 +121,7 @@ type PersonGetDetailsV1ResponseManagementPosition struct {
 		CompanyName respjson.Field
 		RegisterID  respjson.Field
 		Role        respjson.Field
+		RoleDetail  respjson.Field
 		StartDate   respjson.Field
 		EndDate     respjson.Field
 		ExtraFields map[string]respjson.Field
@@ -123,6 +132,49 @@ type PersonGetDetailsV1ResponseManagementPosition struct {
 // Returns the unmodified JSON received from the API
 func (r PersonGetDetailsV1ResponseManagementPosition) RawJSON() string { return r.JSON.raw }
 func (r *PersonGetDetailsV1ResponseManagementPosition) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The precise role as recorded in the register, plus ready-to-display titles. A
+// Vorstand and a Geschäftsführer differ here.
+type PersonGetDetailsV1ResponseManagementPositionRoleDetail struct {
+	// The precise role as recorded in the register. Example: "EXECUTIVE" for a
+	// Vorstand, "DIRECTOR" for a Geschäftsführer — both have role "DIRECTOR".
+	//
+	// Any of "DIRECTOR", "EMERGENCY_DIRECTOR", "EXECUTIVE", "CHAIRMAN",
+	// "DEPUTY_CHAIRMAN", "BOARD", "PRESIDENT_BOARD", "VICE_PRESIDENT_BOARD",
+	// "PRESIDENT", "MEMBER", "NON_EXECUTIVE_DIRECTOR", "BOARD_SECRETARY",
+	// "BOARD_TREASURER", "BOARD_SPORTS", "BOARD_OTHER", "REPRESENTATIVE",
+	// "SECONDARY_REPRESENTATIVE", "COURT_ORDERED_REPRESENTATIVE", "PROKURA",
+	// "PROKURA_SINGLE", "PROKURA_JOINT", "LIQUIDATOR", "INSOLVENCY_DIRECTOR",
+	// "PRELIMINARY_INSOLVENCY_DIRECTOR", "OWNER", "SHAREHOLDER", "PARTNER",
+	// "PERSONAL_LIABLE_DIRECTOR", "LIMITED_PARTNER", "OTHER".
+	Code string `json:"code" api:"required"`
+	// German title, gender-neutral, as shown on openregister.de. Example: "Vorstand"
+	LabelDe string `json:"label_de" api:"required"`
+	// Abbreviated German title, for dense layouts such as tables. Example: "Vst."
+	LabelDeShort string `json:"label_de_short" api:"required"`
+	// English title. A translation for display, not a legal term — the German title is
+	// the one the register uses. Example: "Executive Board Member"
+	LabelEn string `json:"label_en" api:"required"`
+	// Abbreviated English title, for dense layouts such as tables. Example: "Exec.
+	// Board"
+	LabelEnShort string `json:"label_en_short" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Code         respjson.Field
+		LabelDe      respjson.Field
+		LabelDeShort respjson.Field
+		LabelEn      respjson.Field
+		LabelEnShort respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r PersonGetDetailsV1ResponseManagementPositionRoleDetail) RawJSON() string { return r.JSON.raw }
+func (r *PersonGetDetailsV1ResponseManagementPositionRoleDetail) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -247,8 +247,8 @@ type CompanyName struct {
 	// Legal form of the company at this point in time. Example: "gmbh" for
 	// Gesellschaft mit beschränkter Haftung
 	//
-	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
-	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
+	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "foundation", "gbr", "ggmbh",
+	// "gmbh", "kg", "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
 	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
 	// Official company name including any legal form designations. Example: "Descartes
 	// Technologies UG (haftungsbeschränkt)"
@@ -472,6 +472,8 @@ func (r *ReportTable) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Coarse role bucket. This set is stable: new register roles are folded into an
+// existing bucket rather than added here, so it is safe to match on exhaustively.
 type RepresentationRole string
 
 const (
@@ -551,18 +553,23 @@ type CompanyGetDetailsV1Response struct {
 	Contact CompanyGetDetailsV1ResponseContact `json:"contact" api:"required"`
 	// Available official documents related to the company.
 	Documents []CompanyDocument `json:"documents" api:"required"`
+	// Modelled revenue, EBITDA and employees for companies that do not report them.
+	// One estimate per metric, for the latest fiscal year.
+	Estimates CompanyGetDetailsV1ResponseEstimates `json:"estimates" api:"required"`
 	// Date when the company was officially registered. Format: ISO 8601 (YYYY-MM-DD)
 	// Example: "2022-01-01"
 	IncorporatedAt time.Time `json:"incorporated_at" api:"required" format:"date"`
 	// Key company indicators like net income, employee count, revenue, etc..
 	Indicators []CompanyGetDetailsV1ResponseIndicator `json:"indicators" api:"required"`
-	// Industry codes of the company.
+	// Industry codes of the company, classified from its current purpose
+	// (Unternehmensgegenstand). Empty when the purpose has not been classified or
+	// describes no codable activity.
 	IndustryCodes CompanyGetDetailsV1ResponseIndustryCodes `json:"industry_codes" api:"required"`
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
-	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
-	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
+	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "foundation", "gbr", "ggmbh",
+	// "gmbh", "kg", "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
 	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
 	// If the company ceased to exist through a merger (Verschmelzung), the company it
 	// was merged into.
@@ -626,6 +633,7 @@ type CompanyGetDetailsV1Response struct {
 		Capitals                respjson.Field
 		Contact                 respjson.Field
 		Documents               respjson.Field
+		Estimates               respjson.Field
 		IncorporatedAt          respjson.Field
 		Indicators              respjson.Field
 		IndustryCodes           respjson.Field
@@ -772,6 +780,145 @@ func (r *CompanyGetDetailsV1ResponseContactSocialMedia) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Modelled revenue, EBITDA and employees for companies that do not report them.
+// One estimate per metric, for the latest fiscal year.
+type CompanyGetDetailsV1ResponseEstimates struct {
+	// A modelled value for one fiscal year. min and max are not hard limits: the true
+	// value lies between them with 80% probability.
+	Ebitda CompanyGetDetailsV1ResponseEstimatesEbitda `json:"ebitda" api:"required"`
+	// A modelled value for one fiscal year. min and max are not hard limits: the true
+	// value lies between them with 80% probability.
+	Employees CompanyGetDetailsV1ResponseEstimatesEmployees `json:"employees" api:"required"`
+	// A modelled value for one fiscal year. min and max are not hard limits: the true
+	// value lies between them with 80% probability.
+	Revenue CompanyGetDetailsV1ResponseEstimatesRevenue `json:"revenue" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Ebitda      respjson.Field
+		Employees   respjson.Field
+		Revenue     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseEstimates) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseEstimates) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A modelled value for one fiscal year. min and max are not hard limits: the true
+// value lies between them with 80% probability.
+type CompanyGetDetailsV1ResponseEstimatesEbitda struct {
+	// How narrow the 80% range is, the same tiers the search filters
+	// estimated\_\*\_confidence use. Revenue and employees are judged by the ratio of
+	// max to min, EBITDA by the range relative to the latest reported balance sheet
+	// total (low when there is none).
+	//
+	// Any of "high", "medium", "low".
+	Confidence string `json:"confidence" api:"required"`
+	// End of the fiscal year the estimate applies to, matching the company's reporting
+	// year end. Format: ISO 8601 (YYYY-MM-DD) Example: "2024-12-31"
+	Date time.Time `json:"date" api:"required" format:"date"`
+	// Upper end of the 80% range.
+	Max int64 `json:"max" api:"required"`
+	// Lower end of the 80% range.
+	Min int64 `json:"min" api:"required"`
+	// The estimated figure, the middle of the modelled range.
+	Value int64 `json:"value" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Confidence  respjson.Field
+		Date        respjson.Field
+		Max         respjson.Field
+		Min         respjson.Field
+		Value       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseEstimatesEbitda) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseEstimatesEbitda) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A modelled value for one fiscal year. min and max are not hard limits: the true
+// value lies between them with 80% probability.
+type CompanyGetDetailsV1ResponseEstimatesEmployees struct {
+	// How narrow the 80% range is, the same tiers the search filters
+	// estimated\_\*\_confidence use. Revenue and employees are judged by the ratio of
+	// max to min, EBITDA by the range relative to the latest reported balance sheet
+	// total (low when there is none).
+	//
+	// Any of "high", "medium", "low".
+	Confidence string `json:"confidence" api:"required"`
+	// End of the fiscal year the estimate applies to, matching the company's reporting
+	// year end. Format: ISO 8601 (YYYY-MM-DD) Example: "2024-12-31"
+	Date time.Time `json:"date" api:"required" format:"date"`
+	// Upper end of the 80% range.
+	Max int64 `json:"max" api:"required"`
+	// Lower end of the 80% range.
+	Min int64 `json:"min" api:"required"`
+	// The estimated figure, the middle of the modelled range.
+	Value int64 `json:"value" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Confidence  respjson.Field
+		Date        respjson.Field
+		Max         respjson.Field
+		Min         respjson.Field
+		Value       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseEstimatesEmployees) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseEstimatesEmployees) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A modelled value for one fiscal year. min and max are not hard limits: the true
+// value lies between them with 80% probability.
+type CompanyGetDetailsV1ResponseEstimatesRevenue struct {
+	// How narrow the 80% range is, the same tiers the search filters
+	// estimated\_\*\_confidence use. Revenue and employees are judged by the ratio of
+	// max to min, EBITDA by the range relative to the latest reported balance sheet
+	// total (low when there is none).
+	//
+	// Any of "high", "medium", "low".
+	Confidence string `json:"confidence" api:"required"`
+	// End of the fiscal year the estimate applies to, matching the company's reporting
+	// year end. Format: ISO 8601 (YYYY-MM-DD) Example: "2024-12-31"
+	Date time.Time `json:"date" api:"required" format:"date"`
+	// Upper end of the 80% range.
+	Max int64 `json:"max" api:"required"`
+	// Lower end of the 80% range.
+	Min int64 `json:"min" api:"required"`
+	// The estimated figure, the middle of the modelled range.
+	Value int64 `json:"value" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Confidence  respjson.Field
+		Date        respjson.Field
+		Max         respjson.Field
+		Min         respjson.Field
+		Value       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseEstimatesRevenue) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseEstimatesRevenue) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // A focused subset of the key company indicators for a given year. Values of the
 // indicator are given in the smallest currency unit (cents). Example: 2099
 // represents €20.99 for monetary values. For non-monetary values (e.g.,
@@ -806,6 +953,8 @@ type CompanyGetDetailsV1ResponseIndicator struct {
 	Revenue int64 `json:"revenue" api:"required"`
 	// The salaries of that year (in cents).
 	Salaries int64 `json:"salaries" api:"required"`
+	// A short fiscal year (Rumpfgeschäftsjahr), shorter than twelve months
+	ShortYear bool `json:"short_year" api:"required"`
 	// The taxes of that year (in cents).
 	Taxes int64 `json:"taxes" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -824,6 +973,7 @@ type CompanyGetDetailsV1ResponseIndicator struct {
 		ReportID          respjson.Field
 		Revenue           respjson.Field
 		Salaries          respjson.Field
+		ShortYear         respjson.Field
 		Taxes             respjson.Field
 		ExtraFields       map[string]respjson.Field
 		raw               string
@@ -836,7 +986,9 @@ func (r *CompanyGetDetailsV1ResponseIndicator) UnmarshalJSON(data []byte) error 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Industry codes of the company.
+// Industry codes of the company, classified from its current purpose
+// (Unternehmensgegenstand). Empty when the purpose has not been classified or
+// describes no codable activity.
 type CompanyGetDetailsV1ResponseIndustryCodes struct {
 	Wz2025 []CompanyGetDetailsV1ResponseIndustryCodesWz2025 `json:"WZ2025" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -853,12 +1005,26 @@ func (r *CompanyGetDetailsV1ResponseIndustryCodes) UnmarshalJSON(data []byte) er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Industry codes from WZ 2025.
+// A WZ 2025 class (Klasse) the company is active in, with the subclasses
+// (Unterklassen) behind it. The class of the company's main activity comes first.
 type CompanyGetDetailsV1ResponseIndustryCodesWz2025 struct {
+	// WZ 2025 class. Example: "64.19"
 	Code string `json:"code" api:"required"`
+	// Official German title of the class. Example: "Kreditinstitute, ohne
+	// Spezialkreditinstitute"
+	LabelDe string `json:"label_de" api:"required"`
+	// Whether the company's main activity falls in this class. True for at most one
+	// class. The main activity is classified from the purpose, not recorded in the
+	// register.
+	Primary bool `json:"primary" api:"required"`
+	// The WZ 2025 subclasses within this class, the main activity first.
+	Subclasses []CompanyGetDetailsV1ResponseIndustryCodesWz2025Subclass `json:"subclasses" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Code        respjson.Field
+		LabelDe     respjson.Field
+		Primary     respjson.Field
+		Subclasses  respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -867,6 +1033,32 @@ type CompanyGetDetailsV1ResponseIndustryCodesWz2025 struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetDetailsV1ResponseIndustryCodesWz2025) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetDetailsV1ResponseIndustryCodesWz2025) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A WZ 2025 subclass (Unterklasse).
+type CompanyGetDetailsV1ResponseIndustryCodesWz2025Subclass struct {
+	// WZ 2025 subclass. Example: "64.19.1"
+	Code string `json:"code" api:"required"`
+	// Official German title of the subclass. Example: "Kreditbanken einschließlich
+	// Zweigstellen ausländischer Banken"
+	LabelDe string `json:"label_de" api:"required"`
+	// Whether this is the company's main activity. True for at most one subclass. The
+	// main activity is classified from the purpose, not recorded in the register.
+	Primary bool `json:"primary" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Code        respjson.Field
+		LabelDe     respjson.Field
+		Primary     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseIndustryCodesWz2025Subclass) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseIndustryCodesWz2025Subclass) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -946,16 +1138,22 @@ type CompanyGetDetailsV1ResponseRepresentation struct {
 	// is recorded. Example: "einzelvertretungsberechtigt mit der Befugnis, im Namen
 	// der Gesellschaft mit sich im eigenen Namen Rechtsgeschäfte abzuschließen"
 	Authority string `json:"authority" api:"required"`
+	// Structured facts read from `authority`. Null when none are stated.
+	AuthorityDetail CompanyGetDetailsV1ResponseRepresentationAuthorityDetail `json:"authority_detail" api:"required"`
 	// Date when this representative role ended (if applicable). Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
 	EndDate time.Time `json:"end_date" api:"required" format:"date"`
 	// The name of the representative. E.g. "Max Mustermann" or "Max Mustermann GmbH"
 	Name string `json:"name" api:"required"`
-	// The role of the representation. E.g. "DIRECTOR"
+	// Coarse role bucket. Stable set of values, safe to switch on exhaustively. Use
+	// `role_detail` for the precise register role. E.g. "DIRECTOR"
 	//
 	// Any of "DIRECTOR", "PROKURA", "SHAREHOLDER", "OWNER", "PARTNER",
 	// "PERSONAL_LIABLE_DIRECTOR", "LIQUIDATOR", "OTHER".
 	Role RepresentationRole `json:"role" api:"required"`
+	// The precise role as recorded in the register, plus ready-to-display titles. A
+	// Vorstand and a Geschäftsführer both have role "DIRECTOR" but differ here.
+	RoleDetail CompanyGetDetailsV1ResponseRepresentationRoleDetail `json:"role_detail" api:"required"`
 	// Date when this representative role became effective. Format: ISO 8601
 	// (YYYY-MM-DD) Example: "2022-01-01"
 	StartDate time.Time `json:"start_date" api:"required" format:"date"`
@@ -967,23 +1165,93 @@ type CompanyGetDetailsV1ResponseRepresentation struct {
 	NaturalPerson CompanyGetDetailsV1ResponseRepresentationNaturalPerson `json:"natural_person" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID            respjson.Field
-		Authority     respjson.Field
-		EndDate       respjson.Field
-		Name          respjson.Field
-		Role          respjson.Field
-		StartDate     respjson.Field
-		Type          respjson.Field
-		LegalPerson   respjson.Field
-		NaturalPerson respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
+		ID              respjson.Field
+		Authority       respjson.Field
+		AuthorityDetail respjson.Field
+		EndDate         respjson.Field
+		Name            respjson.Field
+		Role            respjson.Field
+		RoleDetail      respjson.Field
+		StartDate       respjson.Field
+		Type            respjson.Field
+		LegalPerson     respjson.Field
+		NaturalPerson   respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
 func (r CompanyGetDetailsV1ResponseRepresentation) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetDetailsV1ResponseRepresentation) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Structured facts read from `authority`. Null when none are stated.
+type CompanyGetDetailsV1ResponseRepresentationAuthorityDetail struct {
+	// Fully exempt from self-dealing restrictions (in Germany § 181 BGB). Null when
+	// not stated or only partly exempt.
+	SelfDealingAllowed bool `json:"self_dealing_allowed" api:"required"`
+	// SOLE may represent alone, JOINT only together with others, NONE is excluded from
+	// representation, GENERAL follows the general representation rule.
+	//
+	// Any of "SOLE", "JOINT", "NONE", "GENERAL".
+	Type string `json:"type" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		SelfDealingAllowed respjson.Field
+		Type               respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseRepresentationAuthorityDetail) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseRepresentationAuthorityDetail) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The precise role as recorded in the register, plus ready-to-display titles. A
+// Vorstand and a Geschäftsführer both have role "DIRECTOR" but differ here.
+type CompanyGetDetailsV1ResponseRepresentationRoleDetail struct {
+	// The precise role as recorded in the register. Example: "EXECUTIVE" for a
+	// Vorstand, "DIRECTOR" for a Geschäftsführer — both have role "DIRECTOR".
+	//
+	// Any of "DIRECTOR", "EMERGENCY_DIRECTOR", "EXECUTIVE", "CHAIRMAN",
+	// "DEPUTY_CHAIRMAN", "BOARD", "PRESIDENT_BOARD", "VICE_PRESIDENT_BOARD",
+	// "PRESIDENT", "MEMBER", "NON_EXECUTIVE_DIRECTOR", "BOARD_SECRETARY",
+	// "BOARD_TREASURER", "BOARD_SPORTS", "BOARD_OTHER", "REPRESENTATIVE",
+	// "SECONDARY_REPRESENTATIVE", "COURT_ORDERED_REPRESENTATIVE", "PROKURA",
+	// "PROKURA_SINGLE", "PROKURA_JOINT", "LIQUIDATOR", "INSOLVENCY_DIRECTOR",
+	// "PRELIMINARY_INSOLVENCY_DIRECTOR", "OWNER", "SHAREHOLDER", "PARTNER",
+	// "PERSONAL_LIABLE_DIRECTOR", "LIMITED_PARTNER", "OTHER".
+	Code string `json:"code" api:"required"`
+	// German title, gender-neutral, as shown on openregister.de. Example: "Vorstand"
+	LabelDe string `json:"label_de" api:"required"`
+	// Abbreviated German title, for dense layouts such as tables. Example: "Vst."
+	LabelDeShort string `json:"label_de_short" api:"required"`
+	// English title. A translation for display, not a legal term — the German title is
+	// the one the register uses. Example: "Executive Board Member"
+	LabelEn string `json:"label_en" api:"required"`
+	// Abbreviated English title, for dense layouts such as tables. Example: "Exec.
+	// Board"
+	LabelEnShort string `json:"label_en_short" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Code         respjson.Field
+		LabelDe      respjson.Field
+		LabelDeShort respjson.Field
+		LabelEn      respjson.Field
+		LabelEnShort respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetDetailsV1ResponseRepresentationRoleDetail) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetDetailsV1ResponseRepresentationRoleDetail) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1019,12 +1287,15 @@ type CompanyGetDetailsV1ResponseRepresentationNaturalPerson struct {
 	FirstName string `json:"first_name" api:"required"`
 	// Last name of the representative. Example: "Mustermann"
 	LastName string `json:"last_name" api:"required"`
+	// Academic or professional title of the representative. Example: "Dr."
+	Title string `json:"title" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		City        respjson.Field
 		DateOfBirth respjson.Field
 		FirstName   respjson.Field
 		LastName    respjson.Field
+		Title       respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -1098,6 +1369,9 @@ func (r *CompanyGetDetailsV1ResponseInsolvency) UnmarshalJSON(data []byte) error
 }
 
 type CompanyGetFinancialsV1Response struct {
+	// Modelled revenue, EBITDA and employees for companies that do not report them.
+	// One estimate per metric, for the latest fiscal year.
+	Estimates CompanyGetFinancialsV1ResponseEstimates `json:"estimates" api:"required"`
 	// Key financial indicators per fiscal year, sorted by date (latest first).
 	Indicators []CompanyGetFinancialsV1ResponseIndicator `json:"indicators" api:"required"`
 	// Financial data merged across all available report periods
@@ -1105,6 +1379,7 @@ type CompanyGetFinancialsV1Response struct {
 	Reports []CompanyGetFinancialsV1ResponseReport `json:"reports" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
+		Estimates   respjson.Field
 		Indicators  respjson.Field
 		Merged      respjson.Field
 		Reports     respjson.Field
@@ -1119,6 +1394,145 @@ func (r *CompanyGetFinancialsV1Response) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Modelled revenue, EBITDA and employees for companies that do not report them.
+// One estimate per metric, for the latest fiscal year.
+type CompanyGetFinancialsV1ResponseEstimates struct {
+	// A modelled value for one fiscal year. min and max are not hard limits: the true
+	// value lies between them with 80% probability.
+	Ebitda CompanyGetFinancialsV1ResponseEstimatesEbitda `json:"ebitda" api:"required"`
+	// A modelled value for one fiscal year. min and max are not hard limits: the true
+	// value lies between them with 80% probability.
+	Employees CompanyGetFinancialsV1ResponseEstimatesEmployees `json:"employees" api:"required"`
+	// A modelled value for one fiscal year. min and max are not hard limits: the true
+	// value lies between them with 80% probability.
+	Revenue CompanyGetFinancialsV1ResponseEstimatesRevenue `json:"revenue" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Ebitda      respjson.Field
+		Employees   respjson.Field
+		Revenue     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseEstimates) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseEstimates) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A modelled value for one fiscal year. min and max are not hard limits: the true
+// value lies between them with 80% probability.
+type CompanyGetFinancialsV1ResponseEstimatesEbitda struct {
+	// How narrow the 80% range is, the same tiers the search filters
+	// estimated\_\*\_confidence use. Revenue and employees are judged by the ratio of
+	// max to min, EBITDA by the range relative to the latest reported balance sheet
+	// total (low when there is none).
+	//
+	// Any of "high", "medium", "low".
+	Confidence string `json:"confidence" api:"required"`
+	// End of the fiscal year the estimate applies to, matching the company's reporting
+	// year end. Format: ISO 8601 (YYYY-MM-DD) Example: "2024-12-31"
+	Date time.Time `json:"date" api:"required" format:"date"`
+	// Upper end of the 80% range.
+	Max int64 `json:"max" api:"required"`
+	// Lower end of the 80% range.
+	Min int64 `json:"min" api:"required"`
+	// The estimated figure, the middle of the modelled range.
+	Value int64 `json:"value" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Confidence  respjson.Field
+		Date        respjson.Field
+		Max         respjson.Field
+		Min         respjson.Field
+		Value       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseEstimatesEbitda) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseEstimatesEbitda) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A modelled value for one fiscal year. min and max are not hard limits: the true
+// value lies between them with 80% probability.
+type CompanyGetFinancialsV1ResponseEstimatesEmployees struct {
+	// How narrow the 80% range is, the same tiers the search filters
+	// estimated\_\*\_confidence use. Revenue and employees are judged by the ratio of
+	// max to min, EBITDA by the range relative to the latest reported balance sheet
+	// total (low when there is none).
+	//
+	// Any of "high", "medium", "low".
+	Confidence string `json:"confidence" api:"required"`
+	// End of the fiscal year the estimate applies to, matching the company's reporting
+	// year end. Format: ISO 8601 (YYYY-MM-DD) Example: "2024-12-31"
+	Date time.Time `json:"date" api:"required" format:"date"`
+	// Upper end of the 80% range.
+	Max int64 `json:"max" api:"required"`
+	// Lower end of the 80% range.
+	Min int64 `json:"min" api:"required"`
+	// The estimated figure, the middle of the modelled range.
+	Value int64 `json:"value" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Confidence  respjson.Field
+		Date        respjson.Field
+		Max         respjson.Field
+		Min         respjson.Field
+		Value       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseEstimatesEmployees) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseEstimatesEmployees) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A modelled value for one fiscal year. min and max are not hard limits: the true
+// value lies between them with 80% probability.
+type CompanyGetFinancialsV1ResponseEstimatesRevenue struct {
+	// How narrow the 80% range is, the same tiers the search filters
+	// estimated\_\*\_confidence use. Revenue and employees are judged by the ratio of
+	// max to min, EBITDA by the range relative to the latest reported balance sheet
+	// total (low when there is none).
+	//
+	// Any of "high", "medium", "low".
+	Confidence string `json:"confidence" api:"required"`
+	// End of the fiscal year the estimate applies to, matching the company's reporting
+	// year end. Format: ISO 8601 (YYYY-MM-DD) Example: "2024-12-31"
+	Date time.Time `json:"date" api:"required" format:"date"`
+	// Upper end of the 80% range.
+	Max int64 `json:"max" api:"required"`
+	// Lower end of the 80% range.
+	Min int64 `json:"min" api:"required"`
+	// The estimated figure, the middle of the modelled range.
+	Value int64 `json:"value" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Confidence  respjson.Field
+		Date        respjson.Field
+		Max         respjson.Field
+		Min         respjson.Field
+		Value       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseEstimatesRevenue) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseEstimatesRevenue) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // The indicators of the company for a given year. Values of the indicator are
 // given in the smallest currency unit (cents). Example: 2099 represents €20.99 for
 // monetary values For non-monetary values (e.g., employees), the actual number.
@@ -1127,6 +1541,9 @@ type CompanyGetFinancialsV1ResponseIndicator struct {
 	ActiveAccruals int64 `json:"active_accruals" api:"required"`
 	// The affiliated liabilities of that year (in cents).
 	AffiliatedLiabilities int64 `json:"affiliated_liabilities" api:"required"`
+	// The number of apprentices (Auszubildende) of that year, where the report states
+	// it.
+	Apprentices int64 `json:"apprentices" api:"required"`
 	// The balance sheet total of that year (in cents).
 	BalanceSheetTotal int64 `json:"balance_sheet_total" api:"required"`
 	// The bank debt of that year (in cents).
@@ -1216,8 +1633,12 @@ type CompanyGetFinancialsV1ResponseIndicator struct {
 	Revenue int64 `json:"revenue" api:"required"`
 	// The salaries of that year (in cents).
 	Salaries int64 `json:"salaries" api:"required"`
+	// The securities of that year (in cents).
+	Securities int64 `json:"securities" api:"required"`
 	// The shareholder liabilities of that year (in cents).
 	ShareholderLiabilities int64 `json:"shareholder_liabilities" api:"required"`
+	// A short fiscal year (Rumpfgeschäftsjahr), shorter than twelve months
+	ShortYear bool `json:"short_year" api:"required"`
 	// The tangible assets of that year (in cents).
 	TangibleAssets int64 `json:"tangible_assets" api:"required"`
 	// The taxes of that year (in cents).
@@ -1230,6 +1651,7 @@ type CompanyGetFinancialsV1ResponseIndicator struct {
 	JSON struct {
 		ActiveAccruals         respjson.Field
 		AffiliatedLiabilities  respjson.Field
+		Apprentices            respjson.Field
 		BalanceSheetTotal      respjson.Field
 		BankDebt               respjson.Field
 		CapitalReserves        respjson.Field
@@ -1273,7 +1695,9 @@ type CompanyGetFinancialsV1ResponseIndicator struct {
 		RetainedEarnings       respjson.Field
 		Revenue                respjson.Field
 		Salaries               respjson.Field
+		Securities             respjson.Field
 		ShareholderLiabilities respjson.Field
+		ShortYear              respjson.Field
 		TangibleAssets         respjson.Field
 		Taxes                  respjson.Field
 		TradePayables          respjson.Field
@@ -1315,9 +1739,15 @@ func (r *CompanyGetFinancialsV1ResponseMerged) UnmarshalJSON(data []byte) error 
 
 type CompanyGetFinancialsV1ResponseReport struct {
 	Aktiva ReportTable `json:"aktiva" api:"required"`
+	// The auditor who signed the audit opinion. Null for unaudited reports and reports
+	// whose auditor could not be read.
+	Auditor CompanyGetFinancialsV1ResponseReportAuditor `json:"auditor" api:"required"`
 	// Whether the report is a consolidated report or not.
 	Consolidated bool        `json:"consolidated" api:"required"`
 	Passiva      ReportTable `json:"passiva" api:"required"`
+	// Date the report was published. A complement or correction is a separate report
+	// with the same period and a later date. Format: ISO 8601 (YYYY-MM-DD)
+	PublishedAt time.Time `json:"published_at" api:"required" format:"date"`
 	// Format: ISO 8601 (YYYY-MM-DD)
 	ReportEndDate time.Time `json:"report_end_date" api:"required" format:"date"`
 	// Unique identifier for the financial report. Example:
@@ -1327,25 +1757,63 @@ type CompanyGetFinancialsV1ResponseReport struct {
 	ReportStartDate time.Time `json:"report_start_date" api:"required" format:"date"`
 	// Sources of the report data. Presigned URLs accessible for 30 minutes.
 	Sources []CompanyGetFinancialsV1ResponseReportSource `json:"sources" api:"required"`
-	Guv     ReportTable                                  `json:"guv" api:"nullable"`
+	// Activity statements (Tätigkeitsabschlüsse) of an energy network operator: a
+	// separate balance sheet and income statement for each activity § 6b Abs. 3 EnWG
+	// unbundles, such as electricity distribution. Empty for reports that publish
+	// none.
+	ActivityStatements []CompanyGetFinancialsV1ResponseReportActivityStatement `json:"activity_statements"`
+	Guv                ReportTable                                             `json:"guv" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Aktiva          respjson.Field
-		Consolidated    respjson.Field
-		Passiva         respjson.Field
-		ReportEndDate   respjson.Field
-		ReportID        respjson.Field
-		ReportStartDate respjson.Field
-		Sources         respjson.Field
-		Guv             respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
+		Aktiva             respjson.Field
+		Auditor            respjson.Field
+		Consolidated       respjson.Field
+		Passiva            respjson.Field
+		PublishedAt        respjson.Field
+		ReportEndDate      respjson.Field
+		ReportID           respjson.Field
+		ReportStartDate    respjson.Field
+		Sources            respjson.Field
+		ActivityStatements respjson.Field
+		Guv                respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
 func (r CompanyGetFinancialsV1ResponseReport) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetFinancialsV1ResponseReport) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The auditor who signed the audit opinion. Null for unaudited reports and reports
+// whose auditor could not be read.
+type CompanyGetFinancialsV1ResponseReportAuditor struct {
+	// Name of the audit firm or sole auditor as the report prints it. Example: "KPMG
+	// AG Wirtschaftsprüfungsgesellschaft"
+	Name string `json:"name" api:"required"`
+	// Names of the auditors who signed the opinion.
+	Signatories []string `json:"signatories" api:"required"`
+	// City the audit opinion was signed in. Example: "München"
+	City string `json:"city" api:"nullable"`
+	// Unique company identifier of the audit firm, if it matches exactly one
+	// registered company. Example: DE-HRB-F1103-267645
+	CompanyID string `json:"company_id" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Name        respjson.Field
+		Signatories respjson.Field
+		City        respjson.Field
+		CompanyID   respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseReportAuditor) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseReportAuditor) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1364,6 +1832,38 @@ type CompanyGetFinancialsV1ResponseReportSource struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetFinancialsV1ResponseReportSource) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetFinancialsV1ResponseReportSource) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetFinancialsV1ResponseReportActivityStatement struct {
+	// The unbundled activity. `meter_operation` is the metering business § 3 Abs. 4
+	// MsbG separates; `other` is any further activity the company reports separately,
+	// named in `label`.
+	//
+	// Any of "electricity_transmission", "electricity_distribution",
+	// "gas_transmission", "gas_distribution", "gas_storage", "lng_facility",
+	// "meter_operation", "other".
+	Activity string      `json:"activity" api:"required"`
+	Aktiva   ReportTable `json:"aktiva" api:"required"`
+	// The activity's name as the report prints it. Example: "Stromnetz"
+	Label   string      `json:"label" api:"required"`
+	Passiva ReportTable `json:"passiva" api:"required"`
+	Guv     ReportTable `json:"guv" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Activity    respjson.Field
+		Aktiva      respjson.Field
+		Label       respjson.Field
+		Passiva     respjson.Field
+		Guv         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetFinancialsV1ResponseReportActivityStatement) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetFinancialsV1ResponseReportActivityStatement) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1559,10 +2059,15 @@ type CompanyGetOwnersV1ResponseOwner struct {
 	NominalShare float64 `json:"nominal_share" api:"required"`
 	// Percentage of company ownership. Example: 5.36 represents 5.36% ownership
 	PercentageShare float64 `json:"percentage_share" api:"required"`
-	// Type of relationship between the entity and the company.
+	// Type of relationship between the entity and the company. Use `role_detail` for
+	// the precise register role.
 	//
 	// Any of "shareholder", "stockholder", "limited_partner", "general_partner".
 	RelationType CompanyRelationType `json:"relation_type" api:"required"`
+	// The precise role as recorded in the register, plus ready-to-display titles. A
+	// Kommanditist and a Gesellschafter both appear here with their register-level
+	// role, while `relation_type` only carries the coarse bucket.
+	RoleDetail CompanyGetOwnersV1ResponseOwnerRoleDetail `json:"role_detail" api:"required"`
 	// Date when the relation started. Only available for some types of owners. Format:
 	// ISO 8601 (YYYY-MM-DD) Example: "2022-01-01"
 	Start time.Time `json:"start" api:"required" format:"date"`
@@ -1579,6 +2084,7 @@ type CompanyGetOwnersV1ResponseOwner struct {
 		NominalShare    respjson.Field
 		PercentageShare respjson.Field
 		RelationType    respjson.Field
+		RoleDetail      respjson.Field
 		Start           respjson.Field
 		Type            respjson.Field
 		ExtraFields     map[string]respjson.Field
@@ -1589,6 +2095,50 @@ type CompanyGetOwnersV1ResponseOwner struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetOwnersV1ResponseOwner) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetOwnersV1ResponseOwner) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The precise role as recorded in the register, plus ready-to-display titles. A
+// Kommanditist and a Gesellschafter both appear here with their register-level
+// role, while `relation_type` only carries the coarse bucket.
+type CompanyGetOwnersV1ResponseOwnerRoleDetail struct {
+	// The precise role as recorded in the register. Example: "EXECUTIVE" for a
+	// Vorstand, "DIRECTOR" for a Geschäftsführer — both have role "DIRECTOR".
+	//
+	// Any of "DIRECTOR", "EMERGENCY_DIRECTOR", "EXECUTIVE", "CHAIRMAN",
+	// "DEPUTY_CHAIRMAN", "BOARD", "PRESIDENT_BOARD", "VICE_PRESIDENT_BOARD",
+	// "PRESIDENT", "MEMBER", "NON_EXECUTIVE_DIRECTOR", "BOARD_SECRETARY",
+	// "BOARD_TREASURER", "BOARD_SPORTS", "BOARD_OTHER", "REPRESENTATIVE",
+	// "SECONDARY_REPRESENTATIVE", "COURT_ORDERED_REPRESENTATIVE", "PROKURA",
+	// "PROKURA_SINGLE", "PROKURA_JOINT", "LIQUIDATOR", "INSOLVENCY_DIRECTOR",
+	// "PRELIMINARY_INSOLVENCY_DIRECTOR", "OWNER", "SHAREHOLDER", "PARTNER",
+	// "PERSONAL_LIABLE_DIRECTOR", "LIMITED_PARTNER", "OTHER".
+	Code string `json:"code" api:"required"`
+	// German title, gender-neutral, as shown on openregister.de. Example: "Vorstand"
+	LabelDe string `json:"label_de" api:"required"`
+	// Abbreviated German title, for dense layouts such as tables. Example: "Vst."
+	LabelDeShort string `json:"label_de_short" api:"required"`
+	// English title. A translation for display, not a legal term — the German title is
+	// the one the register uses. Example: "Executive Board Member"
+	LabelEn string `json:"label_en" api:"required"`
+	// Abbreviated English title, for dense layouts such as tables. Example: "Exec.
+	// Board"
+	LabelEnShort string `json:"label_en_short" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Code         respjson.Field
+		LabelDe      respjson.Field
+		LabelDeShort respjson.Field
+		LabelEn      respjson.Field
+		LabelEnShort respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetOwnersV1ResponseOwnerRoleDetail) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetOwnersV1ResponseOwnerRoleDetail) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

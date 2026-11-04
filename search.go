@@ -84,26 +84,28 @@ func (r *SearchService) LookupCompanyByURL(ctx context.Context, query SearchLook
 // - ohg: Offene Handelsgesellschaft (General Partnership)
 // - kg: Kommanditgesellschaft (Limited Partnership)
 // - ev: Eingetragener Verein (Registered Association)
+// - foundation: Stiftung (Foundation)
 type CompanyLegalForm string
 
 const (
-	CompanyLegalFormAg        CompanyLegalForm = "ag"
-	CompanyLegalFormEg        CompanyLegalForm = "eg"
-	CompanyLegalFormEk        CompanyLegalForm = "ek"
-	CompanyLegalFormEv        CompanyLegalForm = "ev"
-	CompanyLegalFormEwiv      CompanyLegalForm = "ewiv"
-	CompanyLegalFormForeign   CompanyLegalForm = "foreign"
-	CompanyLegalFormGbr       CompanyLegalForm = "gbr"
-	CompanyLegalFormGgmbh     CompanyLegalForm = "ggmbh"
-	CompanyLegalFormGmbh      CompanyLegalForm = "gmbh"
-	CompanyLegalFormKg        CompanyLegalForm = "kg"
-	CompanyLegalFormKgaa      CompanyLegalForm = "kgaa"
-	CompanyLegalFormUnknown   CompanyLegalForm = "unknown"
-	CompanyLegalFormLlp       CompanyLegalForm = "llp"
-	CompanyLegalFormMunicipal CompanyLegalForm = "municipal"
-	CompanyLegalFormOhg       CompanyLegalForm = "ohg"
-	CompanyLegalFormSe        CompanyLegalForm = "se"
-	CompanyLegalFormUg        CompanyLegalForm = "ug"
+	CompanyLegalFormAg         CompanyLegalForm = "ag"
+	CompanyLegalFormEg         CompanyLegalForm = "eg"
+	CompanyLegalFormEk         CompanyLegalForm = "ek"
+	CompanyLegalFormEv         CompanyLegalForm = "ev"
+	CompanyLegalFormEwiv       CompanyLegalForm = "ewiv"
+	CompanyLegalFormForeign    CompanyLegalForm = "foreign"
+	CompanyLegalFormFoundation CompanyLegalForm = "foundation"
+	CompanyLegalFormGbr        CompanyLegalForm = "gbr"
+	CompanyLegalFormGgmbh      CompanyLegalForm = "ggmbh"
+	CompanyLegalFormGmbh       CompanyLegalForm = "gmbh"
+	CompanyLegalFormKg         CompanyLegalForm = "kg"
+	CompanyLegalFormKgaa       CompanyLegalForm = "kgaa"
+	CompanyLegalFormUnknown    CompanyLegalForm = "unknown"
+	CompanyLegalFormLlp        CompanyLegalForm = "llp"
+	CompanyLegalFormMunicipal  CompanyLegalForm = "municipal"
+	CompanyLegalFormOhg        CompanyLegalForm = "ohg"
+	CompanyLegalFormSe         CompanyLegalForm = "se"
+	CompanyLegalFormUg         CompanyLegalForm = "ug"
 )
 
 // Type of company register where the entity is recorded. Common types:
@@ -155,8 +157,8 @@ type CompanySearchResponseItem struct {
 	// Legal form of the company. Example: "gmbh" for Gesellschaft mit beschränkter
 	// Haftung
 	//
-	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "gbr", "ggmbh", "gmbh", "kg",
-	// "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
+	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "foundation", "gbr", "ggmbh",
+	// "gmbh", "kg", "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
 	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
 	// Official registered company name. Example: "Max Mustermann GmbH"
 	Name string `json:"name" api:"required"`
