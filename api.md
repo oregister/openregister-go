@@ -150,3 +150,21 @@ Response Types:
 Methods:
 
 - <code title="get /v1/insolvency/{insolvency_id}">client.Insolvency.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyService.GetDetailsV1">GetDetailsV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, insolvencyID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#InsolvencyGetDetailsV1Response">InsolvencyGetDetailsV1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+# Job
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#JobDocumentCategory">JobDocumentCategory</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#JobType">JobType</a>
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#Job">Job</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#JobDocumentCategory">JobDocumentCategory</a>
+- <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#JobType">JobType</a>
+
+Methods:
+
+- <code title="post /v1/jobs">client.Job.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#JobService.NewV1">NewV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#JobNewV1Params">JobNewV1Params</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#Job">Job</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v1/jobs/{job_id}">client.Job.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#JobService.GetV1">GetV1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, jobID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2">openregister</a>.<a href="https://pkg.go.dev/github.com/oregister/openregister-go/v2#Job">Job</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
