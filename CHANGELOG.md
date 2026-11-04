@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.0](https://github.com/oregister/openregister-go/compare/v2.10.0...v2.11.0) (2026-11-04)
+
+
+### Features
+
+* regenerate SDK ([#38](https://github.com/oregister/openregister-go/issues/38)) ([b374d86](https://github.com/oregister/openregister-go/commit/b374d860df61ecd0a689179a856144abbdc3f9eb))
+
 ## 2.10.0 (2026-07-27)
 
 Full Changelog: [v2.9.0...v2.10.0](https://github.com/oregister/openregister-go/compare/v2.9.0...v2.10.0)
