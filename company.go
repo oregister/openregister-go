@@ -243,295 +243,6 @@ const (
 	CompanyDocumentTypeShareholderList       CompanyDocumentType = "shareholder_list"
 )
 
-type CompanyName struct {
-	// Legal form of the company at this point in time. Example: "gmbh" for
-	// Gesellschaft mit beschränkter Haftung
-	//
-	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "foundation", "gbr", "ggmbh",
-	// "gmbh", "kg", "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
-	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
-	// Official company name including any legal form designations. Example: "Descartes
-	// Technologies UG (haftungsbeschränkt)"
-	Name string `json:"name" api:"required"`
-	// Date when this name became effective. Format: ISO 8601 (YYYY-MM-DD) Example:
-	// "2022-01-01"
-	StartDate time.Time `json:"start_date" api:"required" format:"date"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		LegalForm   respjson.Field
-		Name        respjson.Field
-		StartDate   respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyName) RawJSON() string { return r.JSON.raw }
-func (r *CompanyName) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyOwnerLegalPerson struct {
-	City string `json:"city" api:"required"`
-	// Country where the owner is located, in ISO 3166-1 alpha-2 format. Example: "DE"
-	// for Germany
-	Country string `json:"country" api:"required"`
-	Name    string `json:"name" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		City        respjson.Field
-		Country     respjson.Field
-		Name        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyOwnerLegalPerson) RawJSON() string { return r.JSON.raw }
-func (r *CompanyOwnerLegalPerson) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyOwnerNaturalPerson struct {
-	City        string `json:"city" api:"required"`
-	Country     string `json:"country" api:"required"`
-	DateOfBirth string `json:"date_of_birth" api:"required"`
-	FirstName   string `json:"first_name" api:"required"`
-	FullName    string `json:"full_name" api:"required"`
-	LastName    string `json:"last_name" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		City        respjson.Field
-		Country     respjson.Field
-		DateOfBirth respjson.Field
-		FirstName   respjson.Field
-		FullName    respjson.Field
-		LastName    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyOwnerNaturalPerson) RawJSON() string { return r.JSON.raw }
-func (r *CompanyOwnerNaturalPerson) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyPurpose struct {
-	// Official description of the company's business activities and objectives. This
-	// is the registered purpose as stated in official documents.
-	Purpose string `json:"purpose" api:"required"`
-	// Date when this purpose became effective. Format: ISO 8601 (YYYY-MM-DD) Example:
-	// "2022-01-01"
-	StartDate time.Time `json:"start_date" api:"required" format:"date"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Purpose     respjson.Field
-		StartDate   respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyPurpose) RawJSON() string { return r.JSON.raw }
-func (r *CompanyPurpose) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyRegister struct {
-	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
-	RegisterCourt string `json:"register_court" api:"required"`
-	// Registration number in the company register. Example: "230633"
-	RegisterNumber string `json:"register_number" api:"required"`
-	// Type of register where the company is recorded. Example: "HRB" (Commercial
-	// Register B)
-	//
-	// Any of "HRB", "HRA", "PR", "GnR", "VR".
-	RegisterType CompanyRegisterType `json:"register_type" api:"required"`
-	// Unique company identifier. Example: DE-HRB-F1103-267645
-	CompanyID string `json:"company_id"`
-	// Date when this registration information became effective. Format: ISO 8601
-	// (YYYY-MM-DD) Example: "2022-01-01"
-	StartDate time.Time `json:"start_date" format:"date"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		RegisterCourt  respjson.Field
-		RegisterNumber respjson.Field
-		RegisterType   respjson.Field
-		CompanyID      respjson.Field
-		StartDate      respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyRegister) RawJSON() string { return r.JSON.raw }
-func (r *CompanyRegister) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyRelationType string
-
-const (
-	CompanyRelationTypeShareholder    CompanyRelationType = "shareholder"
-	CompanyRelationTypeStockholder    CompanyRelationType = "stockholder"
-	CompanyRelationTypeLimitedPartner CompanyRelationType = "limited_partner"
-	CompanyRelationTypeGeneralPartner CompanyRelationType = "general_partner"
-)
-
-type EntityType string
-
-const (
-	EntityTypeNaturalPerson EntityType = "natural_person"
-	EntityTypeLegalPerson   EntityType = "legal_person"
-)
-
-// Report row with values from multiple report periods
-type MergedReportRow struct {
-	Children      []MergedReportRow `json:"children" api:"required"`
-	FormattedName string            `json:"formatted_name" api:"required"`
-	Name          string            `json:"name" api:"required"`
-	// Report end date to value mapping (ISO date string as key)
-	Values map[string]int64 `json:"values" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Children      respjson.Field
-		FormattedName respjson.Field
-		Name          respjson.Field
-		Values        respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r MergedReportRow) RawJSON() string { return r.JSON.raw }
-func (r *MergedReportRow) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Report table with data merged across multiple report periods
-type MergedReportTable struct {
-	Rows []MergedReportRow `json:"rows" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r MergedReportTable) RawJSON() string { return r.JSON.raw }
-func (r *MergedReportTable) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ReportRow struct {
-	Children      []ReportRow `json:"children" api:"required"`
-	CurrentValue  int64       `json:"current_value" api:"required"`
-	FormattedName string      `json:"formatted_name" api:"required"`
-	Name          string      `json:"name" api:"required"`
-	PreviousValue int64       `json:"previous_value" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Children      respjson.Field
-		CurrentValue  respjson.Field
-		FormattedName respjson.Field
-		Name          respjson.Field
-		PreviousValue respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ReportRow) RawJSON() string { return r.JSON.raw }
-func (r *ReportRow) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ReportTable struct {
-	Rows []ReportRow `json:"rows" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Rows        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ReportTable) RawJSON() string { return r.JSON.raw }
-func (r *ReportTable) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Coarse role bucket. This set is stable: new register roles are folded into an
-// existing bucket rather than added here, so it is safe to match on exhaustively.
-type RepresentationRole string
-
-const (
-	RepresentationRoleDirector               RepresentationRole = "DIRECTOR"
-	RepresentationRoleProkura                RepresentationRole = "PROKURA"
-	RepresentationRoleShareholder            RepresentationRole = "SHAREHOLDER"
-	RepresentationRoleOwner                  RepresentationRole = "OWNER"
-	RepresentationRolePartner                RepresentationRole = "PARTNER"
-	RepresentationRolePersonalLiableDirector RepresentationRole = "PERSONAL_LIABLE_DIRECTOR"
-	RepresentationRoleLiquidator             RepresentationRole = "LIQUIDATOR"
-	RepresentationRoleOther                  RepresentationRole = "OTHER"
-)
-
-type Source struct {
-	// Url of the source document. In the form of a presigned url accessible for 30
-	// minutes.
-	DocumentURL string `json:"document_url" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		DocumentURL respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r Source) RawJSON() string { return r.JSON.raw }
-func (r *Source) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetContactV0Response struct {
-	// Where the contact information was found. Example: "https://openregister.de"
-	SourceURL string `json:"source_url" api:"required" format:"uri"`
-	// Company contact email address. Example: "founders@openregister.de"
-	Email string `json:"email"`
-	// Company phone number. Example: "+49 030 12345678"
-	Phone string `json:"phone"`
-	// Value Added Tax identification number. (Umsatzsteuer-Identifikationsnummer)
-	// Example: "DE370146530"
-	VatID string `json:"vat_id"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		SourceURL   respjson.Field
-		Email       respjson.Field
-		Phone       respjson.Field
-		VatID       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetContactV0Response) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetContactV0Response) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type CompanyGetDetailsV1Response struct {
 	// Unique company identifier. Example: DE-HRB-F1103-267645
 	ID string `json:"id" api:"required"`
@@ -1368,6 +1079,421 @@ func (r *CompanyGetDetailsV1ResponseInsolvency) UnmarshalJSON(data []byte) error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type CompanyGetOwnersV1Response struct {
+	// When true, the returned owner data is the best available but may not reflect the
+	// most current ownership state. This applies to AG and SE companies where
+	// ownership data is sourced from Handelsregister decision and articles of
+	// association documents, which are not filed on every ownership change.
+	BestAvailable bool `json:"best_available" api:"required"`
+	// Unique company identifier. Example: DE-HRB-F1103-267645
+	CompanyID string                            `json:"company_id" api:"required"`
+	Owners    []CompanyGetOwnersV1ResponseOwner `json:"owners" api:"required"`
+	// Sources of the company owners data.
+	Sources []Source `json:"sources" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		BestAvailable respjson.Field
+		CompanyID     respjson.Field
+		Owners        respjson.Field
+		Sources       respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetOwnersV1Response) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetOwnersV1Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetOwnersV1ResponseOwner struct {
+	// Unique identifier for the shareholder. For companies: Format matches company_id
+	// pattern For individuals: UUID Example: "DE-HRB-F1103-267645" or UUID May be null
+	// for certain shareholders.
+	ID string `json:"id" api:"required"`
+	// Details about the legal person.
+	LegalPerson CompanyOwnerLegalPerson `json:"legal_person" api:"required"`
+	// The name of the shareholder. E.g. "Max Mustermann" or "Max Mustermann GmbH"
+	Name string `json:"name" api:"required"`
+	// Details about the natural person.
+	NaturalPerson CompanyOwnerNaturalPerson `json:"natural_person" api:"required"`
+	// Nominal value of shares in Euro. Example: 100
+	NominalShare float64 `json:"nominal_share" api:"required"`
+	// Percentage of company ownership. Example: 5.36 represents 5.36% ownership
+	PercentageShare float64 `json:"percentage_share" api:"required"`
+	// Type of relationship between the entity and the company. Use `role_detail` for
+	// the precise register role.
+	//
+	// Any of "shareholder", "stockholder", "limited_partner", "general_partner".
+	RelationType CompanyRelationType `json:"relation_type" api:"required"`
+	// The precise role as recorded in the register, plus ready-to-display titles. A
+	// Kommanditist and a Gesellschafter both appear here with their register-level
+	// role, while `relation_type` only carries the coarse bucket.
+	RoleDetail CompanyGetOwnersV1ResponseOwnerRoleDetail `json:"role_detail" api:"required"`
+	// Date when the relation started. Only available for some types of owners. Format:
+	// ISO 8601 (YYYY-MM-DD) Example: "2022-01-01"
+	Start time.Time `json:"start" api:"required" format:"date"`
+	// The type of shareholder.
+	//
+	// Any of "natural_person", "legal_person".
+	Type EntityType `json:"type" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID              respjson.Field
+		LegalPerson     respjson.Field
+		Name            respjson.Field
+		NaturalPerson   respjson.Field
+		NominalShare    respjson.Field
+		PercentageShare respjson.Field
+		RelationType    respjson.Field
+		RoleDetail      respjson.Field
+		Start           respjson.Field
+		Type            respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetOwnersV1ResponseOwner) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetOwnersV1ResponseOwner) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The precise role as recorded in the register, plus ready-to-display titles. A
+// Kommanditist and a Gesellschafter both appear here with their register-level
+// role, while `relation_type` only carries the coarse bucket.
+type CompanyGetOwnersV1ResponseOwnerRoleDetail struct {
+	// The precise role as recorded in the register. Example: "EXECUTIVE" for a
+	// Vorstand, "DIRECTOR" for a Geschäftsführer — both have role "DIRECTOR".
+	//
+	// Any of "DIRECTOR", "EMERGENCY_DIRECTOR", "EXECUTIVE", "CHAIRMAN",
+	// "DEPUTY_CHAIRMAN", "BOARD", "PRESIDENT_BOARD", "VICE_PRESIDENT_BOARD",
+	// "PRESIDENT", "MEMBER", "NON_EXECUTIVE_DIRECTOR", "BOARD_SECRETARY",
+	// "BOARD_TREASURER", "BOARD_SPORTS", "BOARD_OTHER", "REPRESENTATIVE",
+	// "SECONDARY_REPRESENTATIVE", "COURT_ORDERED_REPRESENTATIVE", "PROKURA",
+	// "PROKURA_SINGLE", "PROKURA_JOINT", "LIQUIDATOR", "INSOLVENCY_DIRECTOR",
+	// "PRELIMINARY_INSOLVENCY_DIRECTOR", "OWNER", "SHAREHOLDER", "PARTNER",
+	// "PERSONAL_LIABLE_DIRECTOR", "LIMITED_PARTNER", "OTHER".
+	Code string `json:"code" api:"required"`
+	// German title, gender-neutral, as shown on openregister.de. Example: "Vorstand"
+	LabelDe string `json:"label_de" api:"required"`
+	// Abbreviated German title, for dense layouts such as tables. Example: "Vst."
+	LabelDeShort string `json:"label_de_short" api:"required"`
+	// English title. A translation for display, not a legal term — the German title is
+	// the one the register uses. Example: "Executive Board Member"
+	LabelEn string `json:"label_en" api:"required"`
+	// Abbreviated English title, for dense layouts such as tables. Example: "Exec.
+	// Board"
+	LabelEnShort string `json:"label_en_short" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Code         respjson.Field
+		LabelDe      respjson.Field
+		LabelDeShort respjson.Field
+		LabelEn      respjson.Field
+		LabelEnShort respjson.Field
+		ExtraFields  map[string]respjson.Field
+		raw          string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetOwnersV1ResponseOwnerRoleDetail) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetOwnersV1ResponseOwnerRoleDetail) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyName struct {
+	// Legal form of the company at this point in time. Example: "gmbh" for
+	// Gesellschaft mit beschränkter Haftung
+	//
+	// Any of "ag", "eg", "ek", "ev", "ewiv", "foreign", "foundation", "gbr", "ggmbh",
+	// "gmbh", "kg", "kgaa", "unknown", "llp", "municipal", "ohg", "se", "ug".
+	LegalForm CompanyLegalForm `json:"legal_form" api:"required"`
+	// Official company name including any legal form designations. Example: "Descartes
+	// Technologies UG (haftungsbeschränkt)"
+	Name string `json:"name" api:"required"`
+	// Date when this name became effective. Format: ISO 8601 (YYYY-MM-DD) Example:
+	// "2022-01-01"
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		LegalForm   respjson.Field
+		Name        respjson.Field
+		StartDate   respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyName) RawJSON() string { return r.JSON.raw }
+func (r *CompanyName) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyOwnerLegalPerson struct {
+	City string `json:"city" api:"required"`
+	// Country where the owner is located, in ISO 3166-1 alpha-2 format. Example: "DE"
+	// for Germany
+	Country string `json:"country" api:"required"`
+	Name    string `json:"name" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		City        respjson.Field
+		Country     respjson.Field
+		Name        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyOwnerLegalPerson) RawJSON() string { return r.JSON.raw }
+func (r *CompanyOwnerLegalPerson) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyOwnerNaturalPerson struct {
+	City        string `json:"city" api:"required"`
+	Country     string `json:"country" api:"required"`
+	DateOfBirth string `json:"date_of_birth" api:"required"`
+	FirstName   string `json:"first_name" api:"required"`
+	FullName    string `json:"full_name" api:"required"`
+	LastName    string `json:"last_name" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		City        respjson.Field
+		Country     respjson.Field
+		DateOfBirth respjson.Field
+		FirstName   respjson.Field
+		FullName    respjson.Field
+		LastName    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyOwnerNaturalPerson) RawJSON() string { return r.JSON.raw }
+func (r *CompanyOwnerNaturalPerson) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyPurpose struct {
+	// Official description of the company's business activities and objectives. This
+	// is the registered purpose as stated in official documents.
+	Purpose string `json:"purpose" api:"required"`
+	// Date when this purpose became effective. Format: ISO 8601 (YYYY-MM-DD) Example:
+	// "2022-01-01"
+	StartDate time.Time `json:"start_date" api:"required" format:"date"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Purpose     respjson.Field
+		StartDate   respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyPurpose) RawJSON() string { return r.JSON.raw }
+func (r *CompanyPurpose) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyRegister struct {
+	// Court where the company is registered. Example: "Berlin (Charlottenburg)"
+	RegisterCourt string `json:"register_court" api:"required"`
+	// Registration number in the company register. Example: "230633"
+	RegisterNumber string `json:"register_number" api:"required"`
+	// Type of register where the company is recorded. Example: "HRB" (Commercial
+	// Register B)
+	//
+	// Any of "HRB", "HRA", "PR", "GnR", "VR".
+	RegisterType CompanyRegisterType `json:"register_type" api:"required"`
+	// Unique company identifier. Example: DE-HRB-F1103-267645
+	CompanyID string `json:"company_id"`
+	// Date when this registration information became effective. Format: ISO 8601
+	// (YYYY-MM-DD) Example: "2022-01-01"
+	StartDate time.Time `json:"start_date" format:"date"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		RegisterCourt  respjson.Field
+		RegisterNumber respjson.Field
+		RegisterType   respjson.Field
+		CompanyID      respjson.Field
+		StartDate      respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyRegister) RawJSON() string { return r.JSON.raw }
+func (r *CompanyRegister) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyRelationType string
+
+const (
+	CompanyRelationTypeShareholder    CompanyRelationType = "shareholder"
+	CompanyRelationTypeStockholder    CompanyRelationType = "stockholder"
+	CompanyRelationTypeLimitedPartner CompanyRelationType = "limited_partner"
+	CompanyRelationTypeGeneralPartner CompanyRelationType = "general_partner"
+)
+
+type EntityType string
+
+const (
+	EntityTypeNaturalPerson EntityType = "natural_person"
+	EntityTypeLegalPerson   EntityType = "legal_person"
+)
+
+// Report row with values from multiple report periods
+type MergedReportRow struct {
+	Children      []MergedReportRow `json:"children" api:"required"`
+	FormattedName string            `json:"formatted_name" api:"required"`
+	Name          string            `json:"name" api:"required"`
+	// Report end date to value mapping (ISO date string as key)
+	Values map[string]int64 `json:"values" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		Values        respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r MergedReportRow) RawJSON() string { return r.JSON.raw }
+func (r *MergedReportRow) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Report table with data merged across multiple report periods
+type MergedReportTable struct {
+	Rows []MergedReportRow `json:"rows" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r MergedReportTable) RawJSON() string { return r.JSON.raw }
+func (r *MergedReportTable) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ReportRow struct {
+	Children      []ReportRow `json:"children" api:"required"`
+	CurrentValue  int64       `json:"current_value" api:"required"`
+	FormattedName string      `json:"formatted_name" api:"required"`
+	Name          string      `json:"name" api:"required"`
+	PreviousValue int64       `json:"previous_value" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Children      respjson.Field
+		CurrentValue  respjson.Field
+		FormattedName respjson.Field
+		Name          respjson.Field
+		PreviousValue respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ReportRow) RawJSON() string { return r.JSON.raw }
+func (r *ReportRow) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ReportTable struct {
+	Rows []ReportRow `json:"rows" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Rows        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ReportTable) RawJSON() string { return r.JSON.raw }
+func (r *ReportTable) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Coarse role bucket. This set is stable: new register roles are folded into an
+// existing bucket rather than added here, so it is safe to match on exhaustively.
+type RepresentationRole string
+
+const (
+	RepresentationRoleDirector               RepresentationRole = "DIRECTOR"
+	RepresentationRoleProkura                RepresentationRole = "PROKURA"
+	RepresentationRoleShareholder            RepresentationRole = "SHAREHOLDER"
+	RepresentationRoleOwner                  RepresentationRole = "OWNER"
+	RepresentationRolePartner                RepresentationRole = "PARTNER"
+	RepresentationRolePersonalLiableDirector RepresentationRole = "PERSONAL_LIABLE_DIRECTOR"
+	RepresentationRoleLiquidator             RepresentationRole = "LIQUIDATOR"
+	RepresentationRoleOther                  RepresentationRole = "OTHER"
+)
+
+type Source struct {
+	// Url of the source document. In the form of a presigned url accessible for 30
+	// minutes.
+	DocumentURL string `json:"document_url" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		DocumentURL respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r Source) RawJSON() string { return r.JSON.raw }
+func (r *Source) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CompanyGetContactV0Response struct {
+	// Where the contact information was found. Example: "https://openregister.de"
+	SourceURL string `json:"source_url" api:"required" format:"uri"`
+	// Company contact email address. Example: "founders@openregister.de"
+	Email string `json:"email"`
+	// Company phone number. Example: "+49 030 12345678"
+	Phone string `json:"phone"`
+	// Value Added Tax identification number. (Umsatzsteuer-Identifikationsnummer)
+	// Example: "DE370146530"
+	VatID string `json:"vat_id"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		SourceURL   respjson.Field
+		Email       respjson.Field
+		Phone       respjson.Field
+		VatID       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CompanyGetContactV0Response) RawJSON() string { return r.JSON.raw }
+func (r *CompanyGetContactV0Response) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type CompanyGetFinancialsV1Response struct {
 	// Modelled revenue, EBITDA and employees for companies that do not report them.
 	// One estimate per metric, for the latest fiscal year.
@@ -2013,132 +2139,6 @@ type CompanyGetHoldingsV1ResponseHolding struct {
 // Returns the unmodified JSON received from the API
 func (r CompanyGetHoldingsV1ResponseHolding) RawJSON() string { return r.JSON.raw }
 func (r *CompanyGetHoldingsV1ResponseHolding) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetOwnersV1Response struct {
-	// When true, the returned owner data is the best available but may not reflect the
-	// most current ownership state. This applies to AG and SE companies where
-	// ownership data is sourced from Handelsregister decision and articles of
-	// association documents, which are not filed on every ownership change.
-	BestAvailable bool `json:"best_available" api:"required"`
-	// Unique company identifier. Example: DE-HRB-F1103-267645
-	CompanyID string                            `json:"company_id" api:"required"`
-	Owners    []CompanyGetOwnersV1ResponseOwner `json:"owners" api:"required"`
-	// Sources of the company owners data.
-	Sources []Source `json:"sources" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		BestAvailable respjson.Field
-		CompanyID     respjson.Field
-		Owners        respjson.Field
-		Sources       respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetOwnersV1Response) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetOwnersV1Response) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CompanyGetOwnersV1ResponseOwner struct {
-	// Unique identifier for the shareholder. For companies: Format matches company_id
-	// pattern For individuals: UUID Example: "DE-HRB-F1103-267645" or UUID May be null
-	// for certain shareholders.
-	ID string `json:"id" api:"required"`
-	// Details about the legal person.
-	LegalPerson CompanyOwnerLegalPerson `json:"legal_person" api:"required"`
-	// The name of the shareholder. E.g. "Max Mustermann" or "Max Mustermann GmbH"
-	Name string `json:"name" api:"required"`
-	// Details about the natural person.
-	NaturalPerson CompanyOwnerNaturalPerson `json:"natural_person" api:"required"`
-	// Nominal value of shares in Euro. Example: 100
-	NominalShare float64 `json:"nominal_share" api:"required"`
-	// Percentage of company ownership. Example: 5.36 represents 5.36% ownership
-	PercentageShare float64 `json:"percentage_share" api:"required"`
-	// Type of relationship between the entity and the company. Use `role_detail` for
-	// the precise register role.
-	//
-	// Any of "shareholder", "stockholder", "limited_partner", "general_partner".
-	RelationType CompanyRelationType `json:"relation_type" api:"required"`
-	// The precise role as recorded in the register, plus ready-to-display titles. A
-	// Kommanditist and a Gesellschafter both appear here with their register-level
-	// role, while `relation_type` only carries the coarse bucket.
-	RoleDetail CompanyGetOwnersV1ResponseOwnerRoleDetail `json:"role_detail" api:"required"`
-	// Date when the relation started. Only available for some types of owners. Format:
-	// ISO 8601 (YYYY-MM-DD) Example: "2022-01-01"
-	Start time.Time `json:"start" api:"required" format:"date"`
-	// The type of shareholder.
-	//
-	// Any of "natural_person", "legal_person".
-	Type EntityType `json:"type" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID              respjson.Field
-		LegalPerson     respjson.Field
-		Name            respjson.Field
-		NaturalPerson   respjson.Field
-		NominalShare    respjson.Field
-		PercentageShare respjson.Field
-		RelationType    respjson.Field
-		RoleDetail      respjson.Field
-		Start           respjson.Field
-		Type            respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetOwnersV1ResponseOwner) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetOwnersV1ResponseOwner) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The precise role as recorded in the register, plus ready-to-display titles. A
-// Kommanditist and a Gesellschafter both appear here with their register-level
-// role, while `relation_type` only carries the coarse bucket.
-type CompanyGetOwnersV1ResponseOwnerRoleDetail struct {
-	// The precise role as recorded in the register. Example: "EXECUTIVE" for a
-	// Vorstand, "DIRECTOR" for a Geschäftsführer — both have role "DIRECTOR".
-	//
-	// Any of "DIRECTOR", "EMERGENCY_DIRECTOR", "EXECUTIVE", "CHAIRMAN",
-	// "DEPUTY_CHAIRMAN", "BOARD", "PRESIDENT_BOARD", "VICE_PRESIDENT_BOARD",
-	// "PRESIDENT", "MEMBER", "NON_EXECUTIVE_DIRECTOR", "BOARD_SECRETARY",
-	// "BOARD_TREASURER", "BOARD_SPORTS", "BOARD_OTHER", "REPRESENTATIVE",
-	// "SECONDARY_REPRESENTATIVE", "COURT_ORDERED_REPRESENTATIVE", "PROKURA",
-	// "PROKURA_SINGLE", "PROKURA_JOINT", "LIQUIDATOR", "INSOLVENCY_DIRECTOR",
-	// "PRELIMINARY_INSOLVENCY_DIRECTOR", "OWNER", "SHAREHOLDER", "PARTNER",
-	// "PERSONAL_LIABLE_DIRECTOR", "LIMITED_PARTNER", "OTHER".
-	Code string `json:"code" api:"required"`
-	// German title, gender-neutral, as shown on openregister.de. Example: "Vorstand"
-	LabelDe string `json:"label_de" api:"required"`
-	// Abbreviated German title, for dense layouts such as tables. Example: "Vst."
-	LabelDeShort string `json:"label_de_short" api:"required"`
-	// English title. A translation for display, not a legal term — the German title is
-	// the one the register uses. Example: "Executive Board Member"
-	LabelEn string `json:"label_en" api:"required"`
-	// Abbreviated English title, for dense layouts such as tables. Example: "Exec.
-	// Board"
-	LabelEnShort string `json:"label_en_short" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Code         respjson.Field
-		LabelDe      respjson.Field
-		LabelDeShort respjson.Field
-		LabelEn      respjson.Field
-		LabelEnShort respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r CompanyGetOwnersV1ResponseOwnerRoleDetail) RawJSON() string { return r.JSON.raw }
-func (r *CompanyGetOwnersV1ResponseOwnerRoleDetail) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

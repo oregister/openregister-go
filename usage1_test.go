@@ -25,7 +25,7 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	response, err := client.Company.GetDetailsV1(
+	companyGetDetailsV1Response, err := client.Company.GetDetailsV1(
 		context.TODO(),
 		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
@@ -33,5 +33,5 @@ func TestUsage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.ID)
+	t.Logf("%+v\n", companyGetDetailsV1Response.ID)
 }
