@@ -158,11 +158,11 @@ const (
 // The result of a completed job. Only the field of the job's type is set.
 type JobResults struct {
 	// The refreshed company of a `company` job.
-	Company CompanyV1 `json:"company" api:"required"`
+	Company CompanyGetDetailsV1Response `json:"company" api:"required"`
 	// The fetched document of a `document` job.
 	Document JobResultsDocument `json:"document" api:"required"`
 	// The refreshed owners of an `owners` job.
-	Owners CompanyOwners `json:"owners" api:"required"`
+	Owners CompanyGetOwnersV1Response `json:"owners" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Company     respjson.Field
