@@ -56,7 +56,7 @@ func main() {
 	client := openregister.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("OPENREGISTER_API_KEY")
 	)
-	companyGetDetailsV1Response, err := client.Company.GetDetailsV1(
+	response, err := client.Company.GetDetailsV1(
 		context.TODO(),
 		"DE-HRB-F1103-267645",
 		openregister.CompanyGetDetailsV1Params{},
@@ -64,7 +64,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", companyGetDetailsV1Response.ID)
+	fmt.Printf("%+v\n", response.ID)
 }
 
 ```
@@ -383,7 +383,7 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-companyGetDetailsV1Response, err := client.Company.GetDetailsV1(
+response, err := client.Company.GetDetailsV1(
 	context.TODO(),
 	"DE-HRB-F1103-267645",
 	openregister.CompanyGetDetailsV1Params{},
@@ -392,7 +392,7 @@ companyGetDetailsV1Response, err := client.Company.GetDetailsV1(
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", companyGetDetailsV1Response)
+fmt.Printf("%+v\n", response)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
