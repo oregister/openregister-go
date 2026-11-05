@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.0](https://github.com/oregister/openregister-go/compare/v2.11.0...v2.12.0) (2026-11-05)
+
+
+### Features
+
+* add jobs ([#40](https://github.com/oregister/openregister-go/issues/40)) ([dfd3924](https://github.com/oregister/openregister-go/commit/dfd3924357f9ec03193a38533faa485967cfb098))
+
 ## [2.11.0](https://github.com/oregister/openregister-go/compare/v2.10.0...v2.11.0) (2026-11-04)
 
 
